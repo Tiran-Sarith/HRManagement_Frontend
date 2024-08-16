@@ -12,7 +12,7 @@ import MainHR from "./HRPages/MainHR";
 function App() {
   return (
     <div>
-      <Router>
+      {/* <Router>
         <div className="App">
           <Navbar/>
           <Routes>
@@ -20,7 +20,8 @@ function App() {
           </Routes>
           <Footer/>
         </div>
-      </Router>
+      </Router> */}
+      <MainHR/>
     </div>
   );
 }
