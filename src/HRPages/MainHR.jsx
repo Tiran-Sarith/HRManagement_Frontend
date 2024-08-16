@@ -176,7 +176,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
         <Main open={open}>
             <DrawerHeader />
             {/* ------------------------------------------------- */}
-                    <Vacancies/>
+                    <Vacancies />
             {/* ------------------------------------------------- */}
         </Main>
         </Box>
