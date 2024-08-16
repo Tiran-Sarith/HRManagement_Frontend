@@ -123,7 +123,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
             open={open}
         >
             <DrawerHeader>
-            <p className='text-[#1A7A08] font-bold text-xl text-right mr-32'>LOGO</p>
+            <p className='text-[#1A7A08] font-bold text-xl text-right mr-28'>LOGO</p>
             <IconButton onClick={handleDrawerClose}>
                 {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
             </IconButton>
@@ -159,7 +159,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
                 </ListItem>
             ))}
             </List>
-            <Card sx={{ display: 'flex' }} className='mt-64'>
+            <Card sx={{ display: 'flex' }} className='mt-40'>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ flex: '1 0 auto' }}>
                     <Typography component="div">
@@ -170,7 +170,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
                     </Typography>
                     </CardContent>
                 </Box>
-                <img src="" alt="Profile pic" className='rounded-full w-16 h-16 bg-green-500 mt-3' />
+                <img src="" alt="Profile pic" className='rounded-full w-14 h-14 bg-green-500 mt-3' />
             </Card>
         </Drawer>
         <Main open={open}>
