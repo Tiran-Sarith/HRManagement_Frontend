@@ -27,6 +27,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Vacancies from './Vacancies';
+import AddVacancies from './AddVacancies';
 
 const drawerWidth = 240;
 
@@ -176,7 +177,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
         <Main open={open}>
             <DrawerHeader />
             {/* ------------------------------------------------- */}
-                    <Vacancies/>
+                    <AddVacancies/>
             {/* ------------------------------------------------- */}
         </Main>
         </Box>
