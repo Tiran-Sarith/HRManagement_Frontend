@@ -22,6 +22,7 @@ function App() {
         </div>
       </Router> */}
       <MainHR/>
+      
     </div>
   );
 }
