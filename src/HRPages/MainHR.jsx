@@ -193,7 +193,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
                     
                     <Route path="/" element={<Vacancies/>} />
                     <Route path="/add" element={<AddVacancies/>} />
-                
+                    
                 </Routes>
             </Router>
         </Main>
