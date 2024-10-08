@@ -185,16 +185,19 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
                 <img src="" alt="Profile pic" className='rounded-full w-14 h-14 bg-green-500 mt-3' />
             </Card>
         </Drawer>
+
         <Main open={open}>
             <DrawerHeader />
             <Router>
                 <Routes>
-                <Route path="/" element={<Vacancies/>} />
-                <Route path="/add" element={<AddVacancies/>} />
+                    
+                    <Route path="/" element={<Vacancies/>} />
+                    <Route path="/add" element={<AddVacancies/>} />
                 
                 </Routes>
             </Router>
         </Main>
+
         </Box>
     );
     }
