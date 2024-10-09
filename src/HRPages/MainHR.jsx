@@ -190,10 +190,8 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
             <DrawerHeader />
             <Router>
                 <Routes>
-                    
                     <Route path="/" element={<Vacancies/>} />
                     <Route path="/add" element={<AddVacancies/>} />
-                    
                 </Routes>
             </Router>
         </Main>

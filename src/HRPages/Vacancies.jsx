@@ -219,7 +219,6 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 
 const columns = [
@@ -273,8 +272,9 @@ const initialRows = [
 
 export default function Vacancies() {
   const theme = useTheme();
-  const navigate = useNavigate();
   const [rows, setRows] = useState(initialRows);
+
+  const navigate = useNavigate();
 
   const handleAddVacancy = () => {
     navigate("/add");

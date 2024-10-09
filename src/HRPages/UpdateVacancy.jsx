@@ -72,17 +72,17 @@ const customTheme = (outerTheme) =>
         }
 
         try {
-            await axios.post("http://localhost:8070/Vacancies/Vadd", vacancySchema);
+            await axios.post("http://localhost:8070/Vacancies/Vadd",addVacancy, vacancySchema);
             alert('vacancy Added');
         } catch (err) {
             alert(err);
         }
 
-        navigate('/grounds')
+    }
 
         return (
             <div className='w-[847px]'>
-                <form action="">
+                <form onSubmit="submitVacancy">
                     <div className='w-[560px] '>
                         <div className='mb-4 flex justify-start ml-12'>
                             <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
@@ -171,7 +171,7 @@ const customTheme = (outerTheme) =>
             </div>
         );
         
-    }
+    
 
     
     }

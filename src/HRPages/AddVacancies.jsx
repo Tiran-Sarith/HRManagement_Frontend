@@ -81,7 +81,7 @@ const customTheme = (outerTheme) =>
 
         return (
             <div className='w-[847px]'>
-                <form action="submitVacancy">
+                <form action="submitVacancy" onSubmit={submitVacancy}>
                     <div className='w-[560px] '>
                         <div className='mb-4 flex justify-start ml-12'>
                             <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
