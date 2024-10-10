@@ -32,6 +32,8 @@ import { Routes } from 'react-router-dom';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
 import { Link } from 'react-router-dom';
+import UpdateVacancies from './UpdateVacancy';
+import HRHome from './HRHome';
 
 <ListItemButton component={Link} to="/Vacancy">
     <ListItemIcon><WorkIcon /></ListItemIcon>
@@ -82,7 +84,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
     }));
@@ -117,7 +118,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
                 <MenuIcon className="bg-[#1A7A08]"/>
             </IconButton>
             <Typography variant="h6" noWrap component="div" className='text-[#1A7A08]'>
-                Vacancies
+                Admin Panel
             </Typography>
             </Toolbar>
         </AppBar>
@@ -190,10 +191,14 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
             <DrawerHeader />
             <Router>
                 <Routes>
-                    <Route path="/" element={<Vacancies/>} />
-                    <Route path="/add" element={<AddVacancies/>} />
+                    <Route path="/" element={<HRHome/>} />
+                    <Route path="/vacancies" element={<Vacancies/>} />
+                    <Route path="/vacanciesAdd" element={<AddVacancies/>} />
+                    <Route path="/vacanciesUpdate" element={<UpdateVacancies/>}/>
                 </Routes>
             </Router>
+
+            {/* <UpdateVacancies/> */}
         </Main>
 
         </Box>
