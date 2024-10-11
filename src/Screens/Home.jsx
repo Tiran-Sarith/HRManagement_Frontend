@@ -12,7 +12,7 @@ import slide2image from "./Assests/Section 2.png";
 function Home() {
   return (
     <div id="app">
-      <section className="relative mx-10 my-10  h-[700px] bg-fixed">
+      <section className="relative mx-10 my-10 h-[700px] bg-fixed">
         {/* Slide image */}
         <img
           className="object-cover w-full h-full"
@@ -40,16 +40,50 @@ function Home() {
         </div>
       </section>
 
-      <section className="relative mx-10 my-10 bg-zinc-100 bg-fixed">
-        <div className="flex mb-4">
-          <div className="w-3/5 bg-gray-400 "></div>
-          <div className="w-2/5">
-            <div className="bg-zinc-800 rounded-xl"></div>
-            <div>
-              <img className="" src={slide2image} alt="Section 2 Image"></img>
+      <section className="relative w-full my-10 bg-zinc-100 ">
+        <div className="flex flex-col-2 relative">
+          <div className="w-1/2 mt-40 ml-10 mb-20 bg-gray-400">
+            <div className="p-6 ml-20 text-left bg-transparent">
+              <h2 className="mb-4 text-5xl font-extrabold leading-snug tracking-wide">
+                Together, we build{" "}
+                <span className="text-green-700">impactful</span> tech!
+              </h2>
+              <p className="mb-4 text-lg">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Suspendisse varius enim in eros elementum tristique. Duis
+                cursus, mi quis viverra ornare, eros dolor interdum nulla, ut
+                commodo diam libero vitae erat.
+              </p>
+              <ul className="justify-items-center">
+                <li className="justify-items-center">a</li>
+                <li>b</li>
+              </ul>
+            </div>
+          </div>
+          <div className="w-1/2 relative">
+            <div className=" object-left">
+              <img
+                className="transform scale-120"
+                src={slide2image}
+                alt="Section 2 Image"
+              ></img>
             </div>
           </div>
         </div>
+      </section>
+
+      <section>
+      <div class="grid grid-cols-4 gap-4">
+  <div>01</div>
+  <div>09</div>
+  <div>09</div>
+  <div>09</div>
+  <div>09</div>
+  <div>09</div>
+  <div>09</div>
+  <div>09</div>
+  <div>09</div>
+</div>
       </section>
     </div>
   );
