@@ -8,22 +8,18 @@ import Home from './Screens/Home';
 import Footer from "./Components/Footer";
 import MainHR from "./HRPages/MainHR";
 import HeroSlider from "./Components/Hero";
+import ServicesPage from "./HRPages/ServicesPage";
 
 
 function App() {
   return (
     <div>
-      <Router>
-        <div className="App">
-          <Navbar/>
-          {/* <HeroSlider/> */}
-          <Routes>
-            <Route path="/" element={<Home/>} />
-          </Routes>
-          <Footer/>
-        </div>
-      </Router>
+    <Navbar/>
+
+<ServicesPage/>
+      
       {/* <MainHR/> */}
+          <Footer/>
     </div>
   );
 }
