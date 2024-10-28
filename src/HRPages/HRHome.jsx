@@ -21,7 +21,7 @@ return (
             color="success"
             className="h-9 bg-green-500"
           >
-            Vacancies
+             Vacancies
           </Button>
     </div>
   )
