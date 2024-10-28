@@ -46,28 +46,28 @@ const customTheme = (outerTheme) =>
 export default function AddVacancies() {
     const outerTheme = useTheme();
 
-    const [jobName, setJobName] = useState('');
-    const [category, setCategory] = useState('');
+    const [jobTitle, setJobTitle] = useState('');
+    const [jobCategory, setJobCategory] = useState('');
     const [hireType, setHireType] = useState('');
     const [jobID, setJobID] = useState('');
     const [deadline, setDeadline] = useState('');
     const [designation, setDesignation] = useState('');
     const [department, setDepartment] = useState('');
-    const [jobPosted, setJobPosted] = useState('');
+    const [postedDate, setPostedDate] = useState('');
     const [jobDescription, setJobDescription] = useState('');
 
     const submitVacancy = async (e) => {
         e.preventDefault();
 
         const newVacancy = {
-            jobName,
-            category,
+            jobTitle,
+            jobCategory,
             hireType,
             jobID,
             deadline,
             designation,
             department,
-            jobPosted,
+            postedDate,
             jobDescription,
         };
 
@@ -86,7 +86,7 @@ export default function AddVacancies() {
                     <div className='mb-4 flex justify-start ml-12'>
                         <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[560px]' label="Job Name" variant="filled" onChange={(e) => setJobName(e.target.value)} />
+                                <TextField className='w-[560px]' label="Job Name" variant="filled" onChange={(e) => setJobTitle(e.target.value)} />
                             </ThemeProvider>
                         </Box>
                     </div>
@@ -94,7 +94,7 @@ export default function AddVacancies() {
                     <div className='mb-4 flex justify-start ml-12'>
                         <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Category" variant="filled" onChange={(e) => setCategory(e.target.value)} />
+                                <TextField className='w-[272px]' label="Category" variant="filled" onChange={(e) => setJobCategory(e.target.value)} />
                             </ThemeProvider>
                             <ThemeProvider theme={customTheme(outerTheme)}>
                                 <TextField className='w-[272px]' label="Hire Type" variant="filled" onChange={(e) => setHireType(e.target.value)} />
@@ -127,7 +127,7 @@ export default function AddVacancies() {
                                 <TextField className='w-[272px]' label="Department" variant="filled" onChange={(e) => setDepartment(e.target.value)} />
                             </ThemeProvider>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Job Posted" variant="filled" onChange={(e) => setJobPosted(e.target.value)} />
+                                <TextField className='w-[272px]' label="Job Posted" variant="filled" onChange={(e) => setPostedDate(e.target.value)} />
                             </ThemeProvider>
                         </Box>
                     </div>
