@@ -27,8 +27,20 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Vacancies from './Vacancies';
+import AddVacancies from './AddVacancies';
+import { Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
+
+import { Link } from 'react-router-dom';
+
+<ListItemButton component={Link} to="/Vacancy">
+    <ListItemIcon><WorkIcon /></ListItemIcon>
+    <ListItemText primary="Vacancies" />
+</ListItemButton>
 
 const drawerWidth = 240;
+
+
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
@@ -133,7 +145,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
             {['Home', 'Employee', 'Projects', 'Departments','Vacancies','Applications'].map((text, index) => (
                 <ListItem key={text} disablePadding>
                 <ListItemButton>
-                    <ListItemIcon>
+                    <ListItemIcon component={Link} to={text === 'Vacancies' ? "/vacancy" : "#"}>
                     {   index % 6 === 0 ? <HomeIcon /> : 
                         index % 6 === 1 ? <PeopleAltIcon /> : 
                         index % 6 === 2 ? <AccountTreeIcon /> : 
@@ -173,12 +185,17 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
                 <img src="" alt="Profile pic" className='rounded-full w-14 h-14 bg-green-500 mt-3' />
             </Card>
         </Drawer>
+
         <Main open={open}>
             <DrawerHeader />
-            {/* ------------------------------------------------- */}
-                    <Vacancies/>
-            {/* ------------------------------------------------- */}
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Vacancies/>} />
+                    <Route path="/add" element={<AddVacancies/>} />
+                </Routes>
+            </Router>
         </Main>
+
         </Box>
     );
     }
