@@ -96,7 +96,7 @@ export default function MainHR() {
 
     return (
         <Router>
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', backgroundColor: 'rgb(240 253 244)' }}>
                 <CssBaseline />
                 <AppBar position="fixed" open={open} sx={{ backgroundColor: 'white' }}>
                     <Toolbar>

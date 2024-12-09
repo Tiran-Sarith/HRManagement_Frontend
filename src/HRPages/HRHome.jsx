@@ -1,6 +1,7 @@
 import React from 'react'
 import Button from "@mui/material/Button";
 import { useNavigate } from 'react-router-dom';
+import EmployeePopup from '../Components/EmployeePopup';
 
 
 function HRHome() {
@@ -17,22 +18,8 @@ function HRHome() {
 return (
     <div>
 
-        <Button
-            onClick={handleAddVacancy}
-            variant="contained"
-            color="success"
-            className="h-9 bg-green-500"
-          >
-             Vacancies
-          </Button>
-        <Button
-            onClick={handleEmployee}
-            variant="contained"
-            color="success"
-            className="h-9 bg-green-500"
-          >
-             Employee
-          </Button>
+      <EmployeePopup/>
+
     </div>
   )
 }

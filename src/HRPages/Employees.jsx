@@ -14,29 +14,29 @@ import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import EmployeePopup from "../Components/EmployeePopup";
 
 function Employees() {
 
-    const [vacancies, setVacancies] = useState([]);
   
     useEffect(() => {
-      function getVacancies() {
-        axios.get(`http://localhost:8070/vacancies/Vview`).then((res) => {
-          const formattedVacancies = res.data.map((vacancy, index) => ({
-            id: index + 1,
-            JobName: vacancy.jobTitle,
-            JobType: vacancy.hireType,
-            Department: vacancy.department,
-            Created: vacancy.postedDate,
-            Deadline: vacancy.deadline,
-          }));
-          setRows(formattedVacancies); // Replace initialRows with API data
-        }).catch((err) => {
-          alert(err.message);
-        });
-      }
-      getVacancies();
-    }, []);
+        axios
+          .get(`http://localhost:8070/vacancies/Vview`)
+          .then((res) => {
+            const formattedVacancies = res.data.map((vacancy, index) => ({
+              id: index + 1,
+              JobName: vacancy.jobTitle,
+              JobType: vacancy.hireType,
+              Department: vacancy.department,
+              Created: vacancy.postedDate,
+              Deadline: vacancy.deadline,
+            }));
+            setRows(formattedVacancies);
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
+      }, []);
     
     const columns = [
       { field: "id", headerName: "id", width: 70 },
@@ -45,34 +45,8 @@ function Employees() {
       { field: "Department", headerName: "Department", width: 130 },
       { field: "Created", headerName: "Employee ID", type: "number", width: 90 },
       { field: "Deadline", headerName: "Project ID", width: 160 },
-      {
-        field: "delete",
-        headerName: " ",
-        width: 130,
-        renderCell: (params) => (
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => handleDelete(params.id)}
-          >
-            Delete
-          </Button>
-        ),
-      },
-      {
-        field: "update",
-        headerName: " ",
-        width: 130,
-        renderCell: (params) => (
-          <Button
-            variant="outlined" 
-            color="success"
-            onClick={() => handleUpdate(params.id)}
-          >
-            Update
-          </Button>
-        ),
-      },
+      { field: "Deadline", headerName: "Designation", width: 160 },
+      
     ];
     
     const initialRows = [
@@ -89,6 +63,8 @@ function Employees() {
     
     const theme = useTheme();
     const [rows, setRows] = useState(initialRows);
+    const [showMyModel, setShowMyModel] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null)
   
     const navigate = useNavigate();
   
@@ -104,6 +80,15 @@ function Employees() {
       setRows((prevRows) => prevRows.filter((row) => row.id !== id));
       navigate("/vacanciesUpdate")
     };
+
+ 
+
+    const handleOnClose = () => setShowMyModel(false);
+
+    const handleRowClick = (params) => {
+        setSelectedRow(params.row);
+        setShowMyModel(true);
+      };
 
     return (
         <div>
@@ -154,19 +139,18 @@ function Employees() {
               )}
             />
           </Stack>
-          <div style={{ height: 450, width: "90%" }}>
+          <div style={{ height: 450, width: 850 }}>
             <DataGrid
-              rows={rows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                },
-              }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
+            rows={rows}
+            columns={columns}
+            initialState={{
+                pagination: { paginationModel: { page: 0, pageSize: 5 } },
+            }}
+            pageSizeOptions={[5, 10]}
+            onRowClick={handleRowClick}
             />
-          </div>
+            <EmployeePopup onClose={handleOnClose} visible={showMyModel} data={selectedRow} />
+        </div>
         </div>
       );
 }
