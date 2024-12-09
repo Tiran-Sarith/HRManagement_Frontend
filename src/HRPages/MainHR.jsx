@@ -134,7 +134,7 @@ export default function MainHR() {
                         </IconButton>
                     </DrawerHeader>
                     <Divider />
-                    <List>
+                    <List> 
                         {['Home', 'Employee', 'Projects', 'Departments', 'Vacancies', 'Applications'].map(
                             (text, index) => (
                                 <ListItem key={text} disablePadding>
