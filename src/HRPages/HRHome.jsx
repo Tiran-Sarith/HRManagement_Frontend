@@ -10,10 +10,12 @@ function HRHome() {
     const handleAddVacancy = () => {
         navigate("/vacancies");
     };
+    const handleEmployee = () => {
+        navigate("/employee");
+    };
 
 return (
     <div>
-        HRHome
 
         <Button
             onClick={handleAddVacancy}
@@ -22,6 +24,14 @@ return (
             className="h-9 bg-green-500"
           >
              Vacancies
+          </Button>
+        <Button
+            onClick={handleEmployee}
+            variant="contained"
+            color="success"
+            className="h-9 bg-green-500"
+          >
+             Employee
           </Button>
     </div>
   )
