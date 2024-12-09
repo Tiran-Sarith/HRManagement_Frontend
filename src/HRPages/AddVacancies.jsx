@@ -155,7 +155,7 @@ export default function AddVacancies() {
 
                         <div className=''>
                             <Stack spacing={2} direction="row">
-                                <Button type="submit" variant="contained" color="success">Add</Button>
+                                <Button type="submit" variant="contained" color="success">Add </Button>
                                 <Button variant="outlined" color="success">Cancel</Button>
                             </Stack>
                         </div>
