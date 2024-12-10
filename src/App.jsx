@@ -16,6 +16,9 @@ import ServicesPage from "./Screens/ServicesPage";
 
 import MainHR from "./HRPages/MainHR";
 import HeroSlider from "./Components/Hero";
+
+import AboutUs from "./AboutUsPage/AboutUs";
+
 import ServicesPage from "./HRPages/ServicesPage";
 
 
@@ -30,6 +33,9 @@ function App() {
         <div className="App">
           <Navbar/>
           <Routes>
+            <Route path="/home" element={<Home/>} />
+            <Route path="/aboutus" element={<AboutUs/>} />
+            
             <Route path="/" element={<Home/>} />
             <Route path="/career" element={<Career/>} />
             <Route path="/contact" element={<ContactPage/>} />
