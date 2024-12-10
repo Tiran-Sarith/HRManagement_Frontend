@@ -8,6 +8,7 @@ import Home from './Screens/Home';
 import Footer from "./Components/Footer";
 import MainHR from "./HRPages/MainHR";
 import HeroSlider from "./Components/Hero";
+import AboutUs from "./AboutUsPage/AboutUs";
 
 
 function App() {
@@ -18,7 +19,10 @@ function App() {
           <Navbar/>
           {/* <HeroSlider/> */}
           <Routes>
-            <Route path="/" element={<Home/>} />
+            <Route path="/home" element={<Home/>} />
+            <Route path="/aboutus" element={<AboutUs/>} />
+            
+            
           </Routes>
           <Footer/>
         </div>
