@@ -1,7 +1,7 @@
 import React from 'react';
 import './ServicesPage.css';
 
-const ServicesPage = () => {
+const ServicesPageHR = () => {
   const services = [
     { id: 1, title: "Service 1", description: "Description for service 1" },
     { id: 2, title: "Service 2", description: "Description for service 2" },
@@ -86,4 +86,4 @@ const ServicesPage = () => {
   );
 };
 
-export default ServicesPage;
+export default ServicesPageHR;

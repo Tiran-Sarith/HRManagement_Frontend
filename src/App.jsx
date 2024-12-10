@@ -17,9 +17,9 @@ import ServicesPage from "./Screens/ServicesPage";
 import MainHR from "./HRPages/MainHR";
 import HeroSlider from "./Components/Hero";
 
-import AboutUs from "./AboutUsPage/AboutUs";
+import About from "./AboutUsPage/About";
 
-import ServicesPage from "./HRPages/ServicesPage";
+import ServicesPageHR from "./HRPages/ServicesPage";
 
 
 // import JobPosting from "./Screens/JobPost"
@@ -34,27 +34,28 @@ function App() {
           <Navbar/>
           <Routes>
             <Route path="/home" element={<Home/>} />
-            <Route path="/aboutus" element={<AboutUs/>} />
+            <Route path="/aboutus" element={<About/>} />
             
             <Route path="/" element={<Home/>} />
             <Route path="/career" element={<Career/>} />
             <Route path="/contact" element={<ContactPage/>} />
             <Route path="/services" element={<ServicesPage/>} />
             <Route path="/career/:id" element={<JobDetails/>} />
+
            
             
           </Routes>
 
-    <Navbar/>
+    {/* <Navbar/> */}
 
-<ServicesPage/>
+{/* <ServicesPage/> */}
       
       {/* <MainHR/> */}
 
           <Footer/>
         </div>
-      </Router> */}
-      <MainHR/>
+      </Router> 
+      {/*<MainHR/>*/}
       
 
     </div>

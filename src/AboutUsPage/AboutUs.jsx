@@ -18,7 +18,7 @@ export default function AboutUs() {
         {/* Text Overlay */}
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <h1 className="text-white text-6xl font-bold" >
-            <span style={{marginBottom:'30px'}} className="text-6xl md:text-6xl lg:text-6xl block">We are machine learning </span>
+            <span style={{marginBottom:'30px'}} className="text-6xl md:text-6xl lg:text-6xl block"> are machine learning </span>
             <span className="text-6xl md:text-6xl lg:text-6xl block">engineering specialists</span>
         </h1>
         </div>
@@ -27,7 +27,7 @@ export default function AboutUs() {
 
     <div style={{backgroundColor:'#F1F1F1'}}>
         <div style={{display:'flex', marginLeft:'50px'}}>
-            <div style={{backgroundColor:'#FFFFFF', marginBottom:'90px',marginTop:'90px', width:'4000px'}}> 
+            <div style={{backgroundColor:'#FFFFFF', marginBottom:'900px',marginTop:'90px', width:'4000px'}}> 
                 <div style={{ marginLeft:'60px' ,marginTop:'40px', textAlign:'left'}}>
             <h1 className="text-green text-5xl font-bold" > About [company name] (include story as a summary) </h1>
                 </div>

@@ -20,16 +20,18 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@mui/x-data-grid": "^7.12.1",
     "axios": "^1.7.7",
-    //there was a error here
     "lucide-react": "^0.453.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.12",
     "swiper": "^11.1.9"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
+    "@fortawesome/fontawesome-free": "^6.7.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
@@ -41,6 +43,10 @@
     "globals": "^15.9.0",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10",
-    "vite": "^5.4.0"
-  }
+    "vite": "^5.4.11"
+  },
+  "description": "hr tool",
+  "main": "eslint.config.js",
+  "author": "",
+  "license": "ISC"
 }
