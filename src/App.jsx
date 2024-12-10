@@ -14,17 +14,15 @@ import JobDetails from "./Screens/JobDetails"
 import ContactPage from "./Screens/ContactPage";
 import ServicesPage from "./Screens/ServicesPage";
 
+import AboutUs from "./AboutUsPage/AboutUs";
 
 // import MainHR from "./HRPages/MainHR";
 // import HeroSlider from "./Components/Hero";
 // import ServicesPage from "./HRPages/ServicesPage";
 
-import MainHR from "./HRPages/MainHR";
-import HeroSlider from "./Components/Hero";
 
-import AboutUs from "./AboutUsPage/AboutUs";
 
-import ServicesPage from "./HRPages/ServicesPage";
+
 
 
 
