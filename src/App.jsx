@@ -20,6 +20,11 @@ function App() {
       
       {/* <MainHR/> */}
           <Footer/>
+        </div>
+      </Router> */}
+      <MainHR/>
+      
+
     </div>
   );
 }
