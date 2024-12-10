@@ -8,7 +8,7 @@ const Item = ({ Links, title }) => {
       {Links.map((link) => (
         <li key={link.name}>
           <a
-            className="text-gray-400 hover:text-green-400 duration-300 text-sm cursor-pointer leading-6"
+            className="text-sm leading-6 text-gray-400 duration-300 cursor-pointer hover:text-green-400"
             href={link.link}
           >
             {link.name}
@@ -22,8 +22,8 @@ const Item = ({ Links, title }) => {
 // Define the ItemsContainer component to display multiple Item components
 const ItemsContainer = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-5 sm:px-8 px-5 py-16 text-left ml-20">
-      <h1 className="ml-0 py-8 text-green-600 font-extrabold text-3xl">LOGO</h1>
+    <div className="grid grid-cols-1 gap-5 px-5 py-16 ml-20 text-left sm:grid-cols-3 lg:grid-cols-5 sm:px-8">
+      <h1 className="py-8 ml-0 text-3xl font-extrabold text-green-600">LOGO</h1>
       <Item Links={PRODUCTS} title="PRODUCTS" />
       <Item Links={RESOURCES} title="RESOURCES" />
       <Item Links={COMPANY} title="COMPANY" />
@@ -81,9 +81,9 @@ export const Icons = [
 // Define the Footer component
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white mt-60">
+    <footer className="text-white bg-gray-900 mt-60">
       <div className="md:flex md:justify-between md:items-center sm:px-12 px-4 bg-[#ffffff19] py-7">
-        <h1 className="lg:text-4xl text-3xl md:mb-0 mb-6 lg:leading-normal font-semibold md:w-2/5">
+        <h1 className="mb-6 text-3xl font-semibold lg:text-4xl md:mb-0 lg:leading-normal md:w-2/5">
           <span className="text-green-500">Join</span> Our News Letter..
         </h1>
         <div className="px-40">
@@ -101,7 +101,7 @@ const Footer = () => {
       </div>
       <ItemsContainer />
       <div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-center pt-2 text-gray-400 text-sm pb-8"
+        className="grid grid-cols-1 gap-3 pt-2 pb-8 text-sm text-center text-gray-400 sm:grid-cols-2 lg:grid-cols-3"
       >
         <span>© 2024 Appy. All rights reserved.</span>
         <span>Terms · Privacy Policy</span>
