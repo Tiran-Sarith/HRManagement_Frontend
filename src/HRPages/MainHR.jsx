@@ -35,6 +35,9 @@ import UpdateVacancy from './UpdateVacancy';
 import HRHome from './HRHome';
 import Employees from './Employees';
 import AddEmployee from './AddEmployee';
+import Applications from './Applications';
+import CVs from './CVs';
+import CVCard from '../Components/CVCard';
 
 const drawerWidth = 240;
 
@@ -95,7 +98,7 @@ export default function MainHR() {
     };
 
     return (
-        <Router>
+        <div>
             <Box sx={{ display: 'flex', backgroundColor: 'rgb(240 253 244)' }}>
                 <CssBaseline />
                 <AppBar position="fixed" open={open} sx={{ backgroundColor: 'white' }}>
@@ -145,6 +148,8 @@ export default function MainHR() {
                                                 ? '/vacancies'
                                                 : text === 'Employee'
                                                 ? '/employee'
+                                                : text === 'Applications'
+                                                ? '/applications'
                                                 : '/'
                                         }
                                     >
@@ -195,7 +200,7 @@ export default function MainHR() {
                     </Card>
                 </Drawer>
 
-                <Main open={open}>
+                <Main open={open} className='bg-green-50'>
                     <DrawerHeader />
                     <Routes>
                         <Route path="/" element={<HRHome />} />
@@ -204,9 +209,11 @@ export default function MainHR() {
                         <Route path="/vacanciesUpdate" element={<UpdateVacancy />} />
                         <Route path="/employee" element={<Employees />} />
                         <Route path="/AddEmployee" element={<AddEmployee />} />
+                        <Route path="/applications" element={<Applications />} />
+                        <Route path="/cvs" element={<CVs />} />
                     </Routes>
                 </Main>
             </Box>
-        </Router>
+        </div>
     );
 }
