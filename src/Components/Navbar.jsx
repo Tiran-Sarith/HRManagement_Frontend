@@ -18,7 +18,7 @@ function Navbar() {
               </a>
             </li>
             <li className="font-semibold my-7 md:my-0 md:ml-8">
-                
+
               <a href="/services" className="text-gray-500 hover:text-green-800">
                 Services
               </a>
