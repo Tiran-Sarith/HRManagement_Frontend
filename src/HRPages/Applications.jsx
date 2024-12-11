@@ -22,7 +22,7 @@ function Applications() {
                 <label htmlFor="Search" className='text-green-700'>Search</label>
             </div>
 
-            <div className='hover'>
+            <div className=''>
                 <ApplicationCard/>
             </div>
         
