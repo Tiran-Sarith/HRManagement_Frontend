@@ -209,8 +209,12 @@ export default function MainHR() {
                         <Route path="/vacanciesUpdate" element={<UpdateVacancy />} />
                         <Route path="/employee" element={<Employees />} />
                         <Route path="/AddEmployee" element={<AddEmployee />} />
+
+                        <Route path="/Applications" element={<AddEmployee />} />
+
                         <Route path="/applications" element={<Applications />} />
                         <Route path="/cvs" element={<CVs />} />
+
                     </Routes>
                 </Main>
             </Box>

@@ -52,12 +52,14 @@ function App() {
           </Routes>
 
           <Footer/> */}
+
         <MainHR/>
         </div>
           <Footer/>
+ main
         </div>
-        {/* <MainHR/> */}
       </Router> 
+      <MainHR/>
       
       
 
