@@ -16,7 +16,7 @@ import ServicesPage from "./Screens/ServicesPage";
 
 import AboutUs from "./AboutUsPage/AboutUs";
 
-// import MainHR from "./HRPages/MainHR";
+import MainHR from "./HRPages/MainHR";
 // import HeroSlider from "./Components/Hero";
 // import ServicesPage from "./HRPages/ServicesPage";
 
@@ -35,7 +35,7 @@ function App() {
 
       <Router>
         <div className="App">
-          <Navbar/>
+          {/* <Navbar/>
           <Routes>
             <Route path="/home" element={<Home/>} />
             <Route path="/aboutus" element={<AboutUs/>} />
@@ -47,10 +47,10 @@ function App() {
             <Route path="/career/:id" element={<JobDetails/>} />
           </Routes>
 
-          <Footer/>
+          <Footer/> */}
         </div>
-        {/* <MainHR/> */}
       </Router> 
+      <MainHR/>
       
       
 
