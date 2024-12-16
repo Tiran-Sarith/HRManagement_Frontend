@@ -25,6 +25,10 @@ import MainHR from "./HRPages/MainHR";
 
 
 
+// import MainHR from "./HRPages/MainHR";
+// import HeroSlider from "./Components/Hero";
+// import ServicesPage from "./HRPages/ServicesPage";
+
 
 // import JobPosting from "./Screens/JobPost"
 // import MainHR from "./HRPages/MainHR";
@@ -48,6 +52,11 @@ function App() {
           </Routes>
 
           <Footer/> */}
+
+        <MainHR/>
+        </div>
+          <Footer/>
+ main
         </div>
       </Router> 
       <MainHR/>
