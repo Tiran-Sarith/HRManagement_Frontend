@@ -37,7 +37,10 @@ import Employees from './Employees';
 import AddEmployee from './AddEmployee';
 import Applications from './Applications';
 import CVs from './CVs';
-import CVCard from '../Components/CVCard';
+import Projects from './Projects';
+import Departments from './Departments';
+import ProjectsPending from '../Components/ProjectsPending';
+import AddProject from './AddProject';
 
 const drawerWidth = 240;
 
@@ -113,7 +116,7 @@ export default function MainHR() {
                             <MenuIcon className="bg-[#1A7A08]" />
                         </IconButton>
                         <Typography variant="h6" noWrap component="div" className="text-[#1A7A08]">
-                            Admin Panel
+                            ADMIN PANEL
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -150,6 +153,10 @@ export default function MainHR() {
                                                 ? '/employee'
                                                 : text === 'Applications'
                                                 ? '/applications'
+                                                : text === 'Projects'
+                                                ? '/projects'
+                                                : text === 'Departments'
+                                                ? '/departments'
                                                 : '/'
                                         }
                                     >
@@ -209,11 +216,12 @@ export default function MainHR() {
                         <Route path="/vacanciesUpdate" element={<UpdateVacancy />} />
                         <Route path="/employee" element={<Employees />} />
                         <Route path="/AddEmployee" element={<AddEmployee />} />
-
-                        <Route path="/Applications" element={<AddEmployee />} />
-
                         <Route path="/applications" element={<Applications />} />
                         <Route path="/cvs" element={<CVs />} />
+                        <Route path="/projects" element={<Projects/>} />
+                        <Route path="/departments" element={<Departments/>} />
+                        <Route path="/projectsPending" element={<ProjectsPending/>} />
+                        <Route path="/addProject" element={<AddProject/>} />
 
                     </Routes>
                 </Main>
