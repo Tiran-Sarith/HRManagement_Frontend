@@ -63,8 +63,8 @@ export default function InprogressProjects() {
             <StyledTableCell align="right">Project ID</StyledTableCell>
             <StyledTableCell align="right">Client</StyledTableCell>
             <StyledTableCell align="right">Deadline</StyledTableCell>
-            <StyledTableCell align="right">Estimated Budget($)</StyledTableCell>
-            <StyledTableCell align="right">Estimated Duration(Weeks)</StyledTableCell>
+            <StyledTableCell align="right">Budget($)</StyledTableCell>
+            <StyledTableCell align="right">Duration(Weeks)</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>

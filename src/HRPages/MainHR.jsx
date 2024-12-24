@@ -116,7 +116,7 @@ export default function MainHR() {
                             <MenuIcon className="bg-[#1A7A08]" />
                         </IconButton>
                         <Typography variant="h6" noWrap component="div" className="text-[#1A7A08]">
-                            ADMIN PANEL
+                            <span className='font-bold'>ADMIN PANEL</span> 
                         </Typography>
                     </Toolbar>
                 </AppBar>

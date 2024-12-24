@@ -6,6 +6,11 @@ import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { grey } from '@mui/material/colors';
 
 
 const customTheme = (outerTheme) =>
@@ -180,11 +185,18 @@ function AddEmployee() {
                     </div>
 
                     <div className='mb-4 flex justify-start ml-12'>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 0 }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
                                 <TextField className='w-[272px]' label="Company ID:" variant="filled" onChange={(e) => setJobID(e.target.value)} />
                             </ThemeProvider>
                         </Box>
+                    </div>
+                    <div className='mb-4 flex justify-start ml-12'>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['DatePicker']}>
+                                <DatePicker label="Hired Date" />
+                            </DemoContainer>
+                        </LocalizationProvider>
                     </div>
 
 
