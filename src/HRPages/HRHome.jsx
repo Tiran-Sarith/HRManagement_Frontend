@@ -230,7 +230,7 @@ const card3 = (
         
         <div>
           <p className='text-[90px] font-bold  font-sans mx-2 mt-4 text-[#00a36d]'>8</p>
-          <p className='text-lg font-semibold font-sans text-[#1c8552]'>Processing Projects</p>
+          <p className='text-lg font-semibold font-sans text-[#1c8552]'>Inprogress Projects</p>
         </div>
         
         <div>
