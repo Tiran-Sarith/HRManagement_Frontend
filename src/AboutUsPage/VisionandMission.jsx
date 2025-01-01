@@ -55,6 +55,8 @@ const MissionCard = () => {
           />
         </div>
       </div>
+
+      
     </div>
   );
 };
