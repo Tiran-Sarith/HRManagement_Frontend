@@ -11,24 +11,25 @@ import ContactPage from "./Screens/ContactPage";
 import ServicesPage from "./Screens/ServicesPage";
 import AboutUs from "./AboutUsPage/AboutUs";
 import MainHR from "./HRPages/MainHR";
+import About from "./AboutUsPage/About";
 
 function App() {
   return (
     <Router>
       <div className="App">
-        {/* <Navbar />
+         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/aboutus" element={<About />} />
           <Route path="/career" element={<Career />} />
           <Route path="/career/:id" element={<JobDetails />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/services" element={<ServicesPage />} />
         </Routes>
-        <Footer /> */}
+        <Footer /> 
       </div>
-      <MainHR />
+      {/* <MainHR /> */}
     </Router>
   );
 }
