@@ -81,7 +81,7 @@ export const Icons = [
 // Define the Footer component
 const Footer = () => {
   return (
-    <footer className="text-white bg-gray-900 mt-60">
+    <footer className="mt-20 text-white bg-gray-900">
       <div className="md:flex md:justify-between md:items-center sm:px-12 px-4 bg-[#ffffff19] py-7">
         <h1 className="mb-6 text-3xl font-semibold lg:text-4xl md:mb-0 lg:leading-normal md:w-2/5">
           <span className="text-green-500">Join</span> Our News Letter..
