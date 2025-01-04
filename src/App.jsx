@@ -1,11 +1,11 @@
 
-
 //App.jsx
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 
 //Website
+
 import Navbar from './Components/Navbar';
 import Home from './Screens/Home';
 import Footer from "./Components/Footer";
@@ -14,6 +14,12 @@ import JobDetails from "./Screens/JobDetails"
 import ContactPage from "./Screens/ContactPage";
 import ServicesPage from "./Screens/ServicesPage";
 import About from "./AboutUsPage/About";
+
+
+//HR
+import MainHR from "./HRPages/MainHR";
+
+
 
 
 //HR
@@ -28,10 +34,13 @@ function App() {
         <div className="App">
 
 {/* website pages */}
+
           <Navbar/>
+         
+         
           <Routes>
             <Route path="/home" element={<Home/>} />
-            <Route path="/aboutus" element={<About />} />
+            <Route path="/aboutus" element={<AboutUs/>} />
             <Route path="/" element={<Home/>} />
             <Route path="/career" element={<Career/>} />
             <Route path="/contact" element={<ContactPage/>} />
@@ -39,10 +48,13 @@ function App() {
             <Route path="/career/:id" element={<JobDetails/>} />
           </Routes>
 
+
           <Footer/>
 
 {/* HR Pages */}
           {/* <MainHR /> */}
+
+
 
         </div>
       </Router> 
