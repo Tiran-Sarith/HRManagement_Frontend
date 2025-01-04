@@ -4,21 +4,20 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 
+//Website
+// import Navbar from './Components/Navbar';
+// import Home from './Screens/Home';
+// import Footer from "./Components/Footer";
+// import Career from "./Screens/Career";
+// import JobDetails from "./Screens/JobDetails"
+// import ContactPage from "./Screens/ContactPage";
+// import ServicesPage from "./Screens/ServicesPage";
+// import AboutUs from "./AboutUsPage/AboutUs";
 
-import Navbar from './Components/Navbar';
-import Home from './Screens/Home';
-import Footer from "./Components/Footer";
 
-import Career from "./Screens/Career";
-import JobDetails from "./Screens/JobDetails"
-import ContactPage from "./Screens/ContactPage";
-import ServicesPage from "./Screens/ServicesPage";
-
-import AboutUs from "./AboutUsPage/AboutUs";
-
+//HR
 import MainHR from "./HRPages/MainHR";
-// import HeroSlider from "./Components/Hero";
-// import ServicesPage from "./HRPages/ServicesPage";
+
 
 
 
@@ -39,6 +38,8 @@ function App() {
 
       <Router>
         <div className="App">
+
+{/* website pages */}
           {/* <Navbar/>
           <Routes>
             <Route path="/home" element={<Home/>} />
@@ -53,16 +54,11 @@ function App() {
 
           <Footer/> */}
 
-        <MainHR/>
-        </div>
-          <Footer/>
- main
+{/* HR Pages */}
+          <MainHR />
+
         </div>
       </Router> 
-      <MainHR/>
-      
-      
-
     </div>
   );
 }
