@@ -5,40 +5,19 @@ import "./App.css";
 
 
 //Website
-// import Navbar from './Components/Navbar';
-// import Home from './Screens/Home';
-// import Footer from "./Components/Footer";
-// import Career from "./Screens/Career";
-// import JobDetails from "./Screens/JobDetails"
-// import ContactPage from "./Screens/ContactPage";
-// import ServicesPage from "./Screens/ServicesPage";
-// import AboutUs from "./AboutUsPage/AboutUs";
+ import Navbar from './Components/Navbar';
+import Home from './Screens/Home';
+import Footer from "./Components/Footer";
+import Career from "./Screens/Career";
+import JobDetails from "./Screens/JobDetails"
+import ContactPage from "./Screens/ContactPage";
+import ServicesPage from "./Screens/ServicesPage";
+import AboutUs from "./AboutUsPage/AboutUs";
 
 
 //HR
 import MainHR from "./HRPages/MainHR";
-import About from "./AboutUsPage/About";
-import JobApplication from "./JobApplication/jobApplication";
-
-function App() {
-  return (
-    <Router>
-      <div className="App">
-         <Navbar />
-        <Routes>
-          <Route path="/apply" element={<JobApplication/>}/>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/aboutus" element={<About/>} />
-          <Route path="/career" element={<Career />} />
-          <Route path="/career/:id" element={<JobDetails />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/services" element={<ServicesPage />} />
-        </Routes>
-        <Footer /> 
-      </div>
-      {/* <MainHR /> */}
-    </Router>
+import JobApplication from "./JobApplication/JobApplication";
 
 
 function App() {
@@ -49,7 +28,7 @@ function App() {
         <div className="App">
 
 {/* website pages */}
-          {/* <Navbar/>
+           <Navbar/>
           <Routes>
             <Route path="/home" element={<Home/>} />
             <Route path="/aboutus" element={<AboutUs/>} />
@@ -59,9 +38,12 @@ function App() {
             <Route path="/contact" element={<ContactPage/>} />
             <Route path="/services" element={<ServicesPage/>} />
             <Route path="/career/:id" element={<JobDetails/>} />
+            <Route path="/apply" element={<JobApplication/>} />
+
+
           </Routes>
 
-          <Footer/> */}
+          <Footer/>
 
 {/* HR Pages */}
           <MainHR />
