@@ -5,7 +5,16 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        roboto: ['Roboto', 'sans-serif'],
+        custom: ['Cambria', 'Cochin', 'Georgia', 'Times', 'Times New Roman', 'serif'],
+        marck: ['"Marck Script"', 'serif'],
+        rubikDirt: ['"Rubik Dirt"', 'serif'],
+        monoton: ['"Monoton"', 'serif'], 
+      },
+
+    },
   },
   plugins: [],
 }
