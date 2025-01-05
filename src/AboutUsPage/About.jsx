@@ -20,7 +20,7 @@ export default function About() {
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <h1 className="text-white text-3xl md:text-4xl lg:text-6xl font-bold text-center">
               <span className="block mb-4">We are machine learning</span>
-              <span className="block">Engineering specialists</span>
+              <span className="block">Engineers</span>
             </h1>
           </div>
         </div>
