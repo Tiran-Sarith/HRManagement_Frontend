@@ -17,6 +17,28 @@ import "./App.css";
 
 //HR
 import MainHR from "./HRPages/MainHR";
+import About from "./AboutUsPage/About";
+import JobApplication from "./JobApplication/jobApplication";
+
+function App() {
+  return (
+    <Router>
+      <div className="App">
+         <Navbar />
+        <Routes>
+          <Route path="/apply" element={<JobApplication/>}/>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/aboutus" element={<About/>} />
+          <Route path="/career" element={<Career />} />
+          <Route path="/career/:id" element={<JobDetails />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+        </Routes>
+        <Footer /> 
+      </div>
+      {/* <MainHR /> */}
+    </Router>
 
 
 function App() {
