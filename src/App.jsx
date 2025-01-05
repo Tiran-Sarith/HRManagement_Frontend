@@ -14,17 +14,13 @@ import JobDetails from "./Screens/JobDetails"
 import ContactPage from "./Screens/ContactPage";
 import ServicesPage from "./Screens/ServicesPage";
 import About from "./AboutUsPage/About";
-import AboutUs from "./AboutUsPage/AboutUs";
+
 
 //HR
 import MainHR from "./HRPages/MainHR";
-import About from "./AboutUsPage/About";
 import JobApplication from "./JobApplication/jobApplication";
 
 
-
-//HR
-// import MainHR from "./HRPages/MainHR";
 
 
 function App() {
@@ -40,7 +36,6 @@ function App() {
           <Navbar/>
           <Routes>
             <Route path="/home" element={<Home/>} />
-            <Route path="/aboutus" element={<AboutUs/>} />
             <Route path="/" element={<Home/>} />
             <Route path="/career" element={<Career/>} />
             <Route path="/contact" element={<ContactPage/>} />
