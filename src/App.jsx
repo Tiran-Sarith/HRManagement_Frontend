@@ -12,6 +12,7 @@ import ServicesPage from "./Screens/ServicesPage";
 import AboutUs from "./AboutUsPage/AboutUs";
 import MainHR from "./HRPages/MainHR";
 import About from "./AboutUsPage/About";
+import JobApplication from "./JobApplication/jobApplication";
 
 function App() {
   return (
@@ -19,9 +20,10 @@ function App() {
       <div className="App">
          <Navbar />
         <Routes>
+          <Route path="/apply" element={<JobApplication/>}/>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/aboutus" element={<About />} />
+          <Route path="/aboutus" element={<About/>} />
           <Route path="/career" element={<Career />} />
           <Route path="/career/:id" element={<JobDetails />} />
           <Route path="/contact" element={<ContactPage />} />
