@@ -13,8 +13,6 @@ import JobDetails from "./Screens/JobDetails"
 import ContactPage from "./Screens/ContactPage";
 import ServicesPage from "./Screens/ServicesPage";
 import AboutUs from "./AboutUsPage/AboutUs";
-
-
 //HR
 import MainHR from "./HRPages/MainHR";
 import About from "./AboutUsPage/About";
@@ -39,7 +37,6 @@ function App() {
       </div>
       {/* <MainHR /> */}
     </Router>
-    
   );
 }
 
