@@ -129,9 +129,11 @@ const JobDetails = () => {
               <div>Deadline: 2024-11-20</div>
             </div>
 
-            <button className="px-6 py-2 mt-4 text-sm text-white bg-green-700 rounded">
-              Apply Now
-            </button>
+            <a href="/apply" target="_blank" rel="noopener noreferrer">
+              <button className="px-6 py-2 mt-4 text-sm text-white bg-green-700 rounded">
+                App/y Now
+              </button>
+            </a>
           </div>
 
           {/* Benefits Section */}

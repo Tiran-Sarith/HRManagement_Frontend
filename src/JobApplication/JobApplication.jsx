@@ -47,9 +47,6 @@ export default function JobApplication() {
         display: "flex",
         width:"80%",
         marginLeft:'20px',
-        
-
-        
         }}>
     <div
       style={{

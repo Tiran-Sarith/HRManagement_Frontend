@@ -5,59 +5,66 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 
 export default function Form() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [portfolio, setPortfolio] = useState("");
-  const [telephone, setTelephone] = useState("");
-  const [message, setMessage] = useState("");
-  const [file, setFile] = useState("");
-
+  const [phoneNo, setPhoneNo] = useState("");
+  const [introduction, setIntroduction] = useState("");
+  const [file, setFile] = useState(null);
 
   const maxCharacters = 263;
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevents default form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    // Validate required fields
+    if (!name || !email || !phoneNo || !introduction || !file) {
+      alert("Please fill out all required fields and upload a file!");
+      return;
+    }
+
+    // Create form data
     const formData = new FormData();
-    
-    formData.append("name",name );
-    formData.append("email",email );
-    formData.append("portfolio",portfolio );
-    formData.append("telephone",telephone );
-    formData.append("message",message );
-    formData.append("file",file );
-console.log(message, name, email, portfolio,telephone,file)
-    // Perform validation
-    // if (!name || !email || !telephone || !message || !file) {
-    //   alert("Please fill out all required fields!");
-    //   return;
-    // }
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("portfolio", portfolio);
+    formData.append("phoneNo", phoneNo);
+    formData.append("introduction", introduction);
+    formData.append("file", file);
 
-    // // Create a data object for submission
-    // const formData = {
-    //   name,
-    //   email,
-    //   portfolio,
-    //   telephone,
-    //   message,
-    //   file, // You might need to handle file uploads differently (see note below)
-    // };
-    // console.log("Form submitted:", formData);
+    console.log("Submitting form data:", formData);
 
-  };
-
-  const handleMessageChange = (e) => {
-    setMessage(e.target.value);
+    try {
+      const result = await axios.post(
+        "http://localhost:8070/applications/Aadd",
+        formData
+      );
+      console.log("Server response:", result.data);
+      alert("Form submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting form:", error.response || error.message);
+      alert("An error occurred while submitting the form. Please try again.");
+    }
   };
 
   return (
-    <div style={{ backgroundColor: "white", padding: "20px", borderRadius: "10px", maxWidth: "600px", margin: "auto" }}>
+    <div
+      style={{
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "10px",
+        maxWidth: "600px",
+        margin: "auto",
+      }}
+    >
       <Typography
         variant="h6"
         style={{
           fontWeight: "bold",
-          color: "#008000", // Green text
+          color: "#008000",
           marginBottom: "20px",
         }}
       >
@@ -66,7 +73,7 @@ console.log(message, name, email, portfolio,telephone,file)
 
       <Box
         component="form"
-        onSubmit={handleSubmit} // Add the submit handler here
+        onSubmit={handleSubmit}
         sx={{
           "& > :not(style)": { marginBottom: "20px", width: "100%" },
         }}
@@ -81,7 +88,7 @@ console.log(message, name, email, portfolio,telephone,file)
           onChange={(e) => setName(e.target.value)}
           sx={{
             "& .MuiOutlinedInput-root": {
-              borderRadius: "10px", // Adjust the border radius
+              borderRadius: "10px",
             },
           }}
         />
@@ -93,10 +100,9 @@ console.log(message, name, email, portfolio,telephone,file)
           variant="outlined"
           required
           onChange={(e) => setEmail(e.target.value)}
-
           sx={{
             "& .MuiOutlinedInput-root": {
-              borderRadius: "10px", // Adjust the border radius
+              borderRadius: "10px",
             },
           }}
         />
@@ -106,41 +112,40 @@ console.log(message, name, email, portfolio,telephone,file)
           label="Portfolio / Github / LinkedIn"
           variant="outlined"
           onChange={(e) => setPortfolio(e.target.value)}
-
           sx={{
             "& .MuiOutlinedInput-root": {
-              borderRadius: "10px", // Adjust the border radius
+              borderRadius: "10px",
             },
           }}
         />
 
         <TextField
-          id="telephone"
+          id="phoneNo"
           label="Telephone No*"
           type="tel"
           variant="outlined"
           required
-          onChange={(e) => setTelephone(e.target.value)}
+          onChange={(e) => setPhoneNo(e.target.value)}
           sx={{
             "& .MuiOutlinedInput-root": {
-              borderRadius: "10px", // Adjust the border radius
+              borderRadius: "10px",
             },
           }}
         />
 
         <TextField
-          id="message"
+          id="introduction"
           label="Say something about you*"
           multiline
           rows={4}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          helperText={`${maxCharacters - message.length} characters left`}
+          value={introduction}
+          onChange={(e) => setIntroduction(e.target.value)}
+          helperText={`${maxCharacters - introduction.length} characters left`}
           variant="outlined"
           required
           sx={{
             "& .MuiOutlinedInput-root": {
-              borderRadius: "10px", // Adjust the border radius
+              borderRadius: "10px",
             },
           }}
         />
@@ -150,13 +155,15 @@ console.log(message, name, email, portfolio,telephone,file)
           component="label"
           style={{
             borderRadius: "10px",
-
           }}
         >
           Upload CV*
-          <input type="file" accept="application/pdf" hidden required 
-                    onChange={(e) => setFile(e.target.files[0])}
-
+          <input
+            type="file"
+            accept="application/pdf"
+            hidden
+            required
+            onChange={(e) => setFile(e.target.files[0])}
           />
         </Button>
 
@@ -182,11 +189,11 @@ console.log(message, name, email, portfolio,telephone,file)
             Cancel
           </Button>
           <Button
-          type="submit"
+            type="submit"
             variant="contained"
             style={{
               borderRadius: "10px",
-              backgroundColor: "#008000", // Green button
+              backgroundColor: "#008000",
               color: "white",
             }}
           >
