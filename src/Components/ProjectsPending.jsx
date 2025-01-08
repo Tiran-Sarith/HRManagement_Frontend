@@ -1,5 +1,3 @@
-
-
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -10,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
+import Button from '@mui/material/Button';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -25,30 +24,29 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
 }));
 
 function createData(name, id, client, deadline, estimatedBudget, estimatedDuration) {
-  return { name,id, client, deadline, estimatedBudget, estimatedDuration };
+  return { name, id, client, deadline, estimatedBudget, estimatedDuration };
 }
 
-const rows = [
-  createData('Frozen yoghurt',1000, 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich',1001, 237, 9.0, 37, 4.3),
-  createData('Eclair',1002, 262, 16.0, 24, 6.0),
-  createData('Cupcake',1003, 305, 3.7, 67, 4.3),
-  createData('Gingerbread',1004, 356, 16.0, 49, 3.9),
-  createData('Donut',1005, 452, 25.0, 51, 4.9),
-  createData('Brownie',1006, 320, 22.0, 45, 3.5),
-  createData('Brownie',1007, 320, 22.0, 45, 3.5),
+const initialRows = [
+  createData('Frozen yoghurt', 1000, 159, '2025-01-15', 24, 4.0),
+  createData('Ice cream sandwich', 1001, 237, '2025-01-20', 37, 4.3),
+  createData('Eclair', 1002, 262, '2025-01-22', 24, 6.0),
+  createData('Cupcake', 1003, 305, '2025-01-25', 67, 4.3),
+  createData('Gingerbread', 1004, 356, '2025-02-01', 49, 3.9),
+  createData('Donut', 1005, 452, '2025-02-10', 51, 4.9),
+  createData('Brownie', 1006, 320, '2025-02-15', 45, 3.5),
 ];
 
 export default function ProjectsPending() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [rows, setRows] = React.useState(initialRows);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -57,6 +55,20 @@ export default function ProjectsPending() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  // Handle delete row
+  const handleStart = (id) => {
+
+    
+
+    if (window.confirm('Are you sure you want to start this project?')) {
+      setRows(rows.filter((row) => row.id !== id));
+      // For backend integration, replace the above line with an API call:
+      // axios.delete(`http://localhost:8070/projects/delete/${id}`).then(() => {
+      //   setRows(rows.filter((row) => row.id !== id));
+      // }).catch((error) => console.error(error));
+    }
   };
 
   return (
@@ -69,12 +81,13 @@ export default function ProjectsPending() {
             <StyledTableCell align="right">Client</StyledTableCell>
             <StyledTableCell align="right">Deadline</StyledTableCell>
             <StyledTableCell align="right">Budget($)</StyledTableCell>
-            <StyledTableCell align="right">Duration(Weeks)</StyledTableCell>  
+            <StyledTableCell align="right">Duration(Weeks)</StyledTableCell>
+            <StyledTableCell align="center"></StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-            <StyledTableRow key={row.name}>
+            <StyledTableRow key={row.id}>
               <StyledTableCell component="th" scope="row">
                 {row.name}
               </StyledTableCell>
@@ -83,6 +96,11 @@ export default function ProjectsPending() {
               <StyledTableCell align="right">{row.deadline}</StyledTableCell>
               <StyledTableCell align="right">{row.estimatedBudget}</StyledTableCell>
               <StyledTableCell align="right">{row.estimatedDuration}</StyledTableCell>
+              <StyledTableCell align="center">
+                <Button variant="contained" sx={{backgroundColor: 'black'}} onClick={() => handleStart(row.id)}>
+                  Start
+                </Button>
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
