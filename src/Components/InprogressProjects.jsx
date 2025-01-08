@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
+import Button from '@mui/material/Button';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -54,6 +55,17 @@ export default function InprogressProjects() {
     setPage(0);
   };
 
+  const handleFinish = (id) => {
+    if (window.confirm('Are you sure you want to finish this project?')) {
+      setRows(rows.filter((row) => row.id !== id));
+      // For backend integration, replace the above line with an API call:
+      // axios.delete(`http://localhost:8070/projects/delete/${id}`).then(() => {
+      //   setRows(rows.filter((row) => row.id !== id));
+      // }).catch((error) => console.error(error));
+    }
+  };
+
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -65,6 +77,7 @@ export default function InprogressProjects() {
             <StyledTableCell align="right">Deadline</StyledTableCell>
             <StyledTableCell align="right">Budget($)</StyledTableCell>
             <StyledTableCell align="right">Duration(Weeks)</StyledTableCell>
+            <StyledTableCell align="right"></StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -78,6 +91,11 @@ export default function InprogressProjects() {
               <StyledTableCell align="right">{row.deadline}</StyledTableCell>
               <StyledTableCell align="right">{row.estimatedBudget}</StyledTableCell>
               <StyledTableCell align="right">{row.estimatedDuration}</StyledTableCell>
+              <StyledTableCell align="center">
+                <Button variant="contained" sx={{backgroundColor: 'black'}} onClick={() => handleFinish(row.id)}>
+                  Finish
+                </Button>
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
