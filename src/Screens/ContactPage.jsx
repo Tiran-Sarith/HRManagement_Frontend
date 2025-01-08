@@ -1,17 +1,17 @@
- import React, { useState } from 'react';
-import './ContactPage.css'; // Include this for any additional styles
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faInstagram, faLinkedin, faYoutube } from '@fortawesome/free-brands-svg-icons';
-
+import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
+import "./ContactPage.css"; // Include this for any additional styles
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebook, faInstagram, faLinkedin, faYoutube } from "@fortawesome/free-brands-svg-icons";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    topic: '',
-    message: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    topic: "",
+    message: "",
     termsAccepted: false,
   });
 
@@ -19,14 +19,45 @@ const ContactPage = () => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission (e.g., send data to server)
-    console.log(formData);
+
+    emailjs
+      .send(
+        "service_0qsjkm8", // Replace with your service ID
+        "template_yhd51rq", // Replace with your template ID
+        {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone || "N/A",
+          topic: formData.topic,
+          message: formData.message,
+          termsAccepted: formData.termsAccepted ? "Yes" : "No",
+        },
+        "5FAVnNohYmKg4nXIi" // Replace with your public key
+      )
+      .then((response) => {
+        console.log("SUCCESS!", response.status, response.text);
+        alert("Your message has been sent successfully!");
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          topic: "",
+          message: "",
+          termsAccepted: false,
+        });
+      })
+      .catch((error) => {
+        console.error("FAILED...", error);
+        alert("There was an error sending your message. Please try again later.");
+      });
   };
 
   return (
@@ -34,8 +65,8 @@ const ContactPage = () => {
       {/* Contact Form and Info */}
       <div className="contact-content">
         <div className="contact-info">
-          <h2 style={{ fontSize: '2em' }}>Contact Us</h2>
-          <p  style={{ marginTop: '20px', marginBottom: '20px' }}>Our friendly team would love to hear from you</p>
+          <h2 style={{ fontSize: "2em" }}>Contact Us</h2>
+          <p style={{ marginTop: "20px", marginBottom: "20px" }}>Our friendly team would love to hear from you</p>
           <ul>
             <li>Email: hello@relume.io</li>
             <li>Phone: +1 (555) 000-0000</li>
@@ -43,20 +74,19 @@ const ContactPage = () => {
           </ul>
           <h3>Follow Us</h3>
           <div className="social-media">
-  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-    <FontAwesomeIcon icon={faFacebook} size="2x" /> Facebook
-  </a>
-  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-    <FontAwesomeIcon icon={faInstagram} size="2x" /> Instagram
-  </a>
-  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-    <FontAwesomeIcon icon={faLinkedin} size="2x" /> LinkedIn
-  </a>
-  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
-    <FontAwesomeIcon icon={faYoutube} size="2x" /> YouTube
-  </a>
-</div>
-
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+              <FontAwesomeIcon icon={faFacebook} size="2x" /> Facebook
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+              <FontAwesomeIcon icon={faInstagram} size="2x" /> Instagram
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+              <FontAwesomeIcon icon={faLinkedin} size="2x" /> LinkedIn
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+              <FontAwesomeIcon icon={faYoutube} size="2x" /> YouTube
+            </a>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="contact-form">
@@ -98,12 +128,7 @@ const ContactPage = () => {
           </div>
 
           <div className="form-group">
-            <select
-              name="topic"
-              value={formData.topic}
-              onChange={handleChange}
-              required
-            >
+            <select name="topic" value={formData.topic} onChange={handleChange} required>
               <option value="">Choose a topic</option>
               <option value="Support">Support</option>
               <option value="Sales">Sales</option>
@@ -133,7 +158,9 @@ const ContactPage = () => {
             </label>
           </div>
 
-          <button type="submit" className="submit-btn">Submit</button>
+          <button type="submit" className="submit-btn">
+            Submit
+          </button>
         </form>
       </div>
     </div>
