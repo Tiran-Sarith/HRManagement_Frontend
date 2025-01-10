@@ -26,13 +26,13 @@ import WorkIcon from '@mui/icons-material/Work';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 
 // Import your components
 import Vacancies from './Vacancies';
 import AddVacancies from './AddVacancies';
 import UpdateVacancy from './UpdateVacancy';
-import HRHome from './HRHome';
+// import HRHome from './HRHome';
 import Employees from './Employees';
 import AddEmployee from './AddEmployee';
 import Applications from './Applications';
@@ -41,6 +41,8 @@ import Projects from './Projects';
 import Departments from './Departments';
 import ProjectsPending from '../Components/ProjectsPending';
 import AddProject from './AddProject';
+import Dashboard from './Dashboard';
+
 
 const drawerWidth = 240;
 
@@ -203,14 +205,15 @@ export default function MainHR() {
                                 </Typography>
                             </CardContent>
                         </Box>
-                        <img src="" alt="Profile pic" className="rounded-full w-14 h-14 bg-green-500 mt-3" />
+                        <img src="" alt="Profile pic" className="mt-3 bg-green-500 rounded-full w-14 h-14" />
                     </Card>
                 </Drawer>
 
                 <Main open={open} className='bg-green-50'>
                     <DrawerHeader />
                     <Routes>
-                        <Route path="/" element={<HRHome />} />
+                        {/* <Route path="/" element={<HRHome />} /> */}
+                        <Route path="/" element={<Dashboard/>} />
                         <Route path="/vacancies" element={<Vacancies />} />
                         <Route path="/vacanciesAdd" element={<AddVacancies />} />
                         <Route path="/vacanciesUpdate" element={<UpdateVacancy />} />
