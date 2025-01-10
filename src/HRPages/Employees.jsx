@@ -4,8 +4,6 @@ import Typography from "@mui/material/Typography";
 import { DataGrid } from "@mui/x-data-grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -118,30 +116,13 @@ function Employees() {
           </Button>
         </Stack>
       </div>
-      <Stack spacing={3} sx={{ width: 550 }} className="mb-5 rounded-xl pl-2 pb-1">
-        <Autocomplete
-          multiple
-          id="tags-standard"
-          options={rows}
-          getOptionLabel={(option) => option.name || ''}
-          defaultValue={[]}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              variant="standard"
-              label="Filter by employee name"
-              placeholder="Favorites"
-              className="text-green-500 bg-[#F4F3FF]"
-            />
-          )}
-        />
-      </Stack>
+
       <div style={{ height: 450, width: 850 }}>
         <DataGrid
           rows={rows}
           columns={columns}
           initialState={{
-            pagination: { paginationModel: { page: 0, pageSize: 5 } },
+            pagination: { paginationModel: { page: 0, pageSize: 8 } },
           }}
           pageSizeOptions={[5, 10]}
           onRowClick={handleRowClick}

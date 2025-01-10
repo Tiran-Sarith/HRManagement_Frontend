@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import Button from '@mui/material/Button';
+import axios from 'axios';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,17 +35,11 @@ function createData(name,id, client, deadline, estimatedBudget, estimatedDuratio
   return { name,id, client, deadline, estimatedBudget, estimatedDuration };
 }
 
-const rows = [
-  createData('Frozen yoghurt',1000, 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich',1001, 237, 9.0, 37, 4.3),
-  createData('Eclair',1002, 262, 16.0, 24, 6.0),
-  createData('Brownie',1006, 320, 22.0, 45, 3.5),
-  createData('Brownie',1007, 320, 22.0, 45, 3.5),
-];
 
 export default function InprogressProjects() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [rows, setRows] = React.useState([]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -55,13 +50,38 @@ export default function InprogressProjects() {
     setPage(0);
   };
 
-  const handleFinish = (id) => {
+  React.useEffect(() => {
+    fetchInProgressProjects();
+  }, []);
+
+  const fetchInProgressProjects = async () => {
+    try {
+      const response = await axios.get('http://localhost:8070/projects/Pview');
+      const inProgressProjects = response.data.filter(project => project.projectStatus === 'Inprogress');
+      setRows(inProgressProjects.map(project => createData(
+        project.projectName,
+        project._id,
+        project.projectManager,
+        project.projectDeadline,
+        project.projectBudget,
+        project.projectDuration
+      )));
+    } catch (error) {
+      console.error('Error fetching in-progress projects:', error);
+    }
+  };
+
+  const handleFinish = async (id) => {
     if (window.confirm('Are you sure you want to finish this project?')) {
-      setRows(rows.filter((row) => row.id !== id));
-      // For backend integration, replace the above line with an API call:
-      // axios.delete(`http://localhost:8070/projects/delete/${id}`).then(() => {
-      //   setRows(rows.filter((row) => row.id !== id));
-      // }).catch((error) => console.error(error));
+      try {
+        await axios.put(`http://localhost:8070/projects/Pupdate/${id}`, {
+          projectStatus: 'Finished'
+        });
+        // Remove from in-progress list
+        setRows(rows.filter(row => row.id !== id));
+      } catch (error) {
+        console.error('Error updating project status:', error);
+      }
     }
   };
 

@@ -104,7 +104,7 @@ export default function MainHR() {
 
     return (
         <div>
-            <Box sx={{ display: 'flex', backgroundColor: 'rgb(240 253 244)' }}>
+            <Box sx={{ display: 'flex', backgroundColor: 'rgb(240 253 244)', height: '100vh' }}>
                 <CssBaseline />
                 <AppBar position="fixed" open={open} sx={{ backgroundColor: 'white' }}>
                     <Toolbar>
@@ -220,11 +220,11 @@ export default function MainHR() {
                         <Route path="/employee" element={<Employees />} />
                         <Route path="/AddEmployee" element={<AddEmployee />} />
                         <Route path="/applications" element={<Applications />} />
-                        <Route path="/cvs" element={<CVs />} />
                         <Route path="/projects" element={<Projects/>} />
                         <Route path="/departments" element={<Departments/>} />
                         <Route path="/projectsPending" element={<ProjectsPending/>} />
                         <Route path="/addProject" element={<AddProject/>} />
+                        <Route path="/cvs/:applicationId" element={<CVs />} />
 
                     </Routes>
                 </Main>

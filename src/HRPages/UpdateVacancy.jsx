@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const customTheme = (outerTheme) =>
     createTheme({
@@ -45,48 +45,80 @@ const customTheme = (outerTheme) =>
 
 export default function UpdateVacancies() {
     const outerTheme = useTheme();
+    const navigate = useNavigate();
 
-    const [jobName, setJobName] = useState('');
-    const [category, setCategory] = useState('');
-    const [hireType, setHireType] = useState('');
-    const [jobID, setJobID] = useState('');
-    const [deadline, setDeadline] = useState('');
-    const [designation, setDesignation] = useState('');
-    const [department, setDepartment] = useState('');
-    const [jobPosted, setJobPosted] = useState('');
-    const [jobDescription, setJobDescription] = useState('');
+    const [formData, setFormData] = useState({
+        jobTitle: '',
+        jobCategory: '',
+        hireType: '',
+        jobID: '',
+        deadline: '',
+        designation: '',
+        department: '',
+        postedDate: '',
+        jobDescription: ''
+    });
 
-    const submitUpdatedVacancy = async (e) => {
-        e.preventDefault();
-
-        const newUpdatedVacancy = {
-            jobName,
-            category,
-            hireType,
-            jobID,
-            deadline,
-            designation,
-            department,
-            jobPosted,
-            jobDescription,
-        };
-
-        try {
-            await axios.post("http://localhost:8070/Vacancies/Vadd", newUpdatedVacancy);
-            alert('Vacancy Added');
-        } catch (err) {
-            alert(err);
+    useEffect(() => {
+        // Get vacancy data from localStorage
+        const vacancyData = JSON.parse(localStorage.getItem('vacancyToUpdate'));
+        if (vacancyData) {
+            setFormData({
+                jobTitle: vacancyData.jobTitle || '',
+                jobCategory: vacancyData.jobCategory || '',
+                hireType: vacancyData.hireType || '',
+                jobID: vacancyData.jobID || '',
+                deadline: vacancyData.deadline || '',
+                designation: vacancyData.designation || '',
+                department: vacancyData.department || '',
+                postedDate: vacancyData.postedDate || '',
+                jobDescription: vacancyData.jobDescription || ''
+            });
         }
+    }, []);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        try {
+            const vacancyId = JSON.parse(localStorage.getItem('vacancyToUpdate'))._id;
+            await axios.put(`http://localhost:8070/vacancies/Vupdate/${vacancyId}`, formData);
+            alert('Vacancy Updated Successfully');
+            localStorage.removeItem('vacancyToUpdate'); // Clean up
+            navigate('/vacancies'); // Navigate back to vacancies list
+        } catch (err) {
+            alert('Error updating vacancy: ' + err.message);
+        }
+    };
+
+    const handleCancel = () => {
+        localStorage.removeItem('vacancyToUpdate');
+        navigate('/vacancies');
     };
 
     return (
         <div className='w-[847px]'>
-            <form onSubmit={submitUpdatedVacancy}>
-                <div className='w-[560px] '>
+            <form onSubmit={handleSubmit}>
+                <div className='w-[560px]'>
                     <div className='mb-4 flex justify-start ml-12'>
                         <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[560px]' label="Job Name" variant="filled" onChange={(e) => setJobName(e.target.value)} defaultValue="Job name"/>
+                                <TextField 
+                                    className='w-[560px]' 
+                                    label="Job Title" 
+                                    variant="filled" 
+                                    name="jobTitle"
+                                    value={formData.jobTitle}
+                                    onChange={handleInputChange}
+                                />
                             </ThemeProvider>
                         </Box>
                     </div>
@@ -94,29 +126,24 @@ export default function UpdateVacancies() {
                     <div className='mb-4 flex justify-start ml-12'>
                         <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Category" variant="filled" onChange={(e) => setCategory(e.target.value)} defaultValue="category"/>
+                                <TextField 
+                                    className='w-[272px]' 
+                                    label="Category" 
+                                    variant="filled" 
+                                    name="jobCategory"
+                                    value={formData.jobCategory}
+                                    onChange={handleInputChange}
+                                />
                             </ThemeProvider>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Hire Type" variant="filled" onChange={(e) => setHireType(e.target.value)} defaultValue="Hire type"/>
-                            </ThemeProvider>
-                        </Box>
-                    </div>
-
-                    <div className='mb-4 flex justify-start ml-12'>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Job ID:" variant="filled" onChange={(e) => setJobID(e.target.value)} defaultValue="Job ID"/>
-                            </ThemeProvider>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Deadline" variant="filled" onChange={(e) => setDeadline(e.target.value)} defaultValue="Deadline"/>
-                            </ThemeProvider>
-                        </Box>
-                    </div>
-
-                    <div className='mb-4 flex justify-start ml-12'>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[560px]' label="Designation" variant="filled" onChange={(e) => setDesignation(e.target.value)} defaultValue="Designation"/>
+                                <TextField 
+                                    className='w-[272px]' 
+                                    label="Hire Type" 
+                                    variant="filled" 
+                                    name="hireType"
+                                    value={formData.hireType}
+                                    onChange={handleInputChange}
+                                />
                             </ThemeProvider>
                         </Box>
                     </div>
@@ -124,10 +151,64 @@ export default function UpdateVacancies() {
                     <div className='mb-4 flex justify-start ml-12'>
                         <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Department" variant="filled" onChange={(e) => setDepartment(e.target.value)} defaultValue="Department"/>
+                                <TextField 
+                                    className='w-[272px]' 
+                                    label="Job ID" 
+                                    variant="filled" 
+                                    name="jobID"
+                                    value={formData.jobID}
+                                    onChange={handleInputChange}
+                                />
                             </ThemeProvider>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Job Posted" variant="filled" onChange={(e) => setJobPosted(e.target.value)} defaultValue="Job Posted"/>
+                                <TextField 
+                                    className='w-[272px]' 
+                                    label="Deadline" 
+                                    variant="filled" 
+                                    name="deadline"
+                                    value={formData.deadline}
+                                    onChange={handleInputChange}
+                                />
+                            </ThemeProvider>
+                        </Box>
+                    </div>
+
+                    <div className='mb-4 flex justify-start ml-12'>
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
+                            <ThemeProvider theme={customTheme(outerTheme)}>
+                                <TextField 
+                                    className='w-[560px]' 
+                                    label="Designation" 
+                                    variant="filled" 
+                                    name="designation"
+                                    value={formData.designation}
+                                    onChange={handleInputChange}
+                                />
+                            </ThemeProvider>
+                        </Box>
+                    </div>
+
+                    <div className='mb-4 flex justify-start ml-12'>
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
+                            <ThemeProvider theme={customTheme(outerTheme)}>
+                                <TextField 
+                                    className='w-[272px]' 
+                                    label="Department" 
+                                    variant="filled" 
+                                    name="department"
+                                    value={formData.department}
+                                    onChange={handleInputChange}
+                                />
+                            </ThemeProvider>
+                            <ThemeProvider theme={customTheme(outerTheme)}>
+                                <TextField 
+                                    className='w-[272px]' 
+                                    label="Posted Date" 
+                                    variant="filled" 
+                                    name="postedDate"
+                                    value={formData.postedDate}
+                                    onChange={handleInputChange}
+                                />
                             </ThemeProvider>
                         </Box>
                     </div>
@@ -138,8 +219,9 @@ export default function UpdateVacancies() {
                                 <TextField
                                     id="filled-multiline-static"
                                     label="Job Description"
-                                    onChange={(e) => setJobDescription(e.target.value)}
-                                    defaultValue="Job Description"
+                                    name="jobDescription"
+                                    value={formData.jobDescription}
+                                    onChange={handleInputChange}
                                     multiline
                                     rows={4}
                                     variant="filled"
@@ -157,7 +239,7 @@ export default function UpdateVacancies() {
                         <div className=''>
                             <Stack spacing={2} direction="row">
                                 <Button type="submit" variant="contained" color="success">Update</Button>
-                                <Button variant="outlined" color="success">Cancel</Button>
+                                <Button variant="outlined" color="success" onClick={handleCancel}>Cancel</Button>
                             </Stack>
                         </div>
                     </div>
