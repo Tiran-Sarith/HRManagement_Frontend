@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
+import axios from 'axios';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -33,24 +34,11 @@ function createData(name,id, client, deadline, estimatedBudget, estimatedDuratio
   return { name,id, client, deadline, estimatedBudget, estimatedDuration };
 }
 
-const rows = [
-  createData('Frozen yoghurt',1000, 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich',1001, 237, 9.0, 37, 4.3),
-  createData('Eclair',1002, 262, 16.0, 24, 6.0),
-  createData('Cupcake',1003, 305, 3.7, 67, 4.3),
-  createData('Gingerbread',1004, 356, 16.0, 49, 3.9),
-  createData('Donut',1005, 452, 25.0, 51, 4.9),
-  createData('Brownie',1006, 320, 22.0, 45, 3.5),
-  createData('Brownie',1007, 320, 22.0, 45, 3.5),
-  createData('Frozen yoghurt',1000, 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich',1001, 237, 9.0, 37, 4.3),
-  createData('Eclair',1002, 262, 16.0, 24, 6.0),
-  createData('Cupcake',1003, 305, 3.7, 67, 4.3),
-];
 
 export default function FinishedProjects() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [rows, setRows] = React.useState([]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -59,6 +47,27 @@ export default function FinishedProjects() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  React.useEffect(() => {
+    fetchFinishedProjects();
+  }, []);
+
+  const fetchFinishedProjects = async () => {
+    try {
+      const response = await axios.get('http://localhost:8070/projects/Pview');
+      const finishedProjects = response.data.filter(project => project.projectStatus === 'Finished');
+      setRows(finishedProjects.map(project => createData(
+        project.projectName,
+        project._id,
+        project.projectManager,
+        project.projectDeadline,
+        project.projectBudget,
+        project.projectDuration
+      )));
+    } catch (error) {
+      console.error('Error fetching finished projects:', error);
+    }
   };
 
   return (

@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import Button from '@mui/material/Button';
+import axios from 'axios';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -33,20 +34,11 @@ function createData(name, id, client, deadline, estimatedBudget, estimatedDurati
   return { name, id, client, deadline, estimatedBudget, estimatedDuration };
 }
 
-const initialRows = [
-  createData('Frozen yoghurt', 1000, 159, '2025-01-15', 24, 4.0),
-  createData('Ice cream sandwich', 1001, 237, '2025-01-20', 37, 4.3),
-  createData('Eclair', 1002, 262, '2025-01-22', 24, 6.0),
-  createData('Cupcake', 1003, 305, '2025-01-25', 67, 4.3),
-  createData('Gingerbread', 1004, 356, '2025-02-01', 49, 3.9),
-  createData('Donut', 1005, 452, '2025-02-10', 51, 4.9),
-  createData('Brownie', 1006, 320, '2025-02-15', 45, 3.5),
-];
 
 export default function ProjectsPending() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
-  const [rows, setRows] = React.useState(initialRows);
+  const [rows, setRows] = React.useState([]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -57,19 +49,42 @@ export default function ProjectsPending() {
     setPage(0);
   };
 
-  // Handle delete row
-  const handleStart = (id) => {
+  React.useEffect(() => {
+    fetchPendingProjects();
+  }, []);
 
-    
-
-    if (window.confirm('Are you sure you want to start this project?')) {
-      setRows(rows.filter((row) => row.id !== id));
-      // For backend integration, replace the above line with an API call:
-      // axios.delete(`http://localhost:8070/projects/delete/${id}`).then(() => {
-      //   setRows(rows.filter((row) => row.id !== id));
-      // }).catch((error) => console.error(error));
+  const fetchPendingProjects = async () => {
+    try {
+      const response = await axios.get('http://localhost:8070/projects/Pview');
+      const pendingProjects = response.data.filter(project => project.projectStatus === 'Pending');
+      setRows(pendingProjects.map(project => createData(
+        project.projectName,
+        project._id,
+        project.projectManager,
+        project.projectDeadline,
+        project.projectBudget,
+        project.projectDuration
+      )));
+    } catch (error) {
+      console.error('Error fetching pending projects:', error);
     }
   };
+
+  // Handle delete row
+    const handleStart = async (id) => {
+      if (window.confirm('Are you sure you want to start this project?')) {
+        try {
+          await axios.put(`http://localhost:8070/projects/Pupdate/${id}`, {
+            projectStatus: 'Inprogress'
+          });
+          // Remove from pending list
+          setRows(rows.filter(row => row.id !== id));
+        } catch (error) {
+          console.error('Error updating project status:', error);
+        }
+      }
+    };
+
 
   return (
     <TableContainer component={Paper}>
