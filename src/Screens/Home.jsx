@@ -86,13 +86,13 @@ function Home() {
   return (
     <div id="app" className="overflow-hidden">
       {/* Section 1 */}
-      <section className="relative mx-auto my-4 md:my-10 h-[400px] md:h-[700px] bg-fixed">
+      <section className="relative mx-auto my-4 md:my-0 h-[400px] md:h-[700px] bg-fixed">
         <img
           className="object-cover w-full h-full"
           src={slide1image}
           alt="Section 1 Image"
         />
-        <div className="absolute inset-0 flex items-center px-4 md:mx-20">
+        <div className="absolute inset-0 flex items-center px-4 md:mx-20 ">
           <div className="p-4 text-left bg-transparent max-w-[100%] md:max-w-[600px]">
             <h2 className="mb-4 text-3xl font-extrabold leading-tight tracking-wide text-left md:text-6xl md:leading-snug">
               Together, we build{" "}
@@ -104,10 +104,9 @@ function Home() {
               turn your complex challenges into intelligent, scalable solutions.
             </p>
             <button
-              className="px-6 py-2 mt-4 text-base text-white transition-colors duration-300 bg-green-700 md:px-10 md:text-lg hover:bg-green-600
-            relative  border-none space-x-2 font-sans 
-                  rounded-sm overflow-hidden cursor-pointer 
-                  before:content-[''] before:absolute before:top-0 before:w-10 before:h-10
+              className="relative  border-none space-x-2 font-sans font-semibold text-base text-white bg-green-900 py-2 px-8
+                  rounded-md overflow-hidden cursor-pointer transition-all duration-300 hover:bg-green-800
+                  before:content-[''] before:absolute before:top-0 before:w-10 before:h-10 
                   before:bg-white/70 before:transform before:-translate-x-[90px] before:skew-x-[40deg] before:transition-transform 
                   before:duration-[800ms] before:ease-[cubic-bezier(0.97,0.02,0.44,0.99)] hover:before:translate-x-[100px]"
             >
@@ -118,13 +117,13 @@ function Home() {
       </section>
 
       {/* Section 2 */}
-      <section className="relative w-full bg-zinc-100">
+      <section className="relative mt-10 w-full bg-zinc-100">
         <img
           className="object-cover w-full h-[400px] md:h-full"
           src={slide2image}
           alt="Section 2 Image"
         />
-        <div className="absolute inset-0 flex items-center px-4 mx-10 md:px-20">
+        <div className="absolute inset-0 flex items-center px-4  md:px-20">
           <div className="w-full p-4 text-left bg-transparent md:w-1/2">
             <h2 className="mb-4 text-3xl font-extrabold leading-tight tracking-wide text-left md:text-6xl md:leading-snug">
               Engaging <span className="text-green-700">Creative</span> minds
@@ -135,7 +134,7 @@ function Home() {
               global standards to deliver exceptional tech solutions.
             </p>
             <div className="ml-10 space-y-2 text-base text-left text-black md:text-s">
-              <ol className="list-disc">
+              <ol className="list-disc list-inside">
                 <li>
                   Expert team in Machine Learning and MERN stack development
                 </li>

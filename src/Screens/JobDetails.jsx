@@ -89,21 +89,20 @@ const JobDetails = () => {
 
   return (
     <div>
-      <section >
+      <section className="relative h-[400px]">
       <img
           className="object-cover w-full h-full px-12"
           src={slide1image}
           alt="Section 1 Image"
         />
         <div className="absolute inset-0 flex items-center justify-center mx-20">
-          <div className="p-4 text-center bg-transparent   max-w-[1000px]">
+          <div className="p-4 text-center bg-transparent max-w-4xl ">
             <h2 className="mb-4 text-5xl font-extrabold leading-snug tracking-normal text-white">
             Do the Most Meaningful Work of Your Career
     
             </h2>
-            <p className="mb-4 text-lg font-medium text-white">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. 
-            </p>
+            <h3 className="mb-4 text-center text-lg font-medium text-white">
+            At Intellisense, your ideas always matter, and you will be empowered to make things happen. Join us to jump-start your career!            </h3>
             
           </div>
         </div>
@@ -118,20 +117,54 @@ const JobDetails = () => {
       <div className="grid grid-cols-1 gap-20 md:grid-cols-2 ">
         <div className="space-y-6">
           {/* Job Details Section */}
-          <div className="w-4/5 px-8 py-8 my-4 mb-8 shadow-xl">
+          <div className="w-4/5 px-8 py-8  rounded-xl my-4 mb-8 shadow-xl">
             <h1 className="mb-4 text-4xl font-bold text-gray-800">{vacancy.jobTitle}</h1>
             
-            <div className="space-y-2 text-sm text-gray-600">
+            {/* <div className="space-y-2 text-sm text-gray-600">
               <div>Category:{vacancy.jobCategory}</div>
               <div>Job ID: Job ID</div>
               <div>Hire Type: {vacancy.hireType}</div>
               <div>Job posted: {new Date(vacancy.postedDate).toLocaleDateString()}</div>
-              <div>Deadline: 2024-11-20</div>
-            </div>
+              <div>Deadline: 2025-03-20</div>
+            </div> */}
+
+
+            <div className="space-y-4 text-gray-600 mt-8">
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span>Category: {vacancy.jobCategory}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span>Type: {vacancy.hireType}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <span>Posted: {new Date(vacancy.postedDate).toLocaleDateString()}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span>Deadline: {vacancy.deadline}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span>Designation: {vacancy.designation}</span>
+                </div>
+              </div>
 
             <a href="/apply" target="_blank" rel="noopener noreferrer">
-              <button className="px-6 py-2 mt-4 text-sm text-white bg-green-700 rounded">
-                App/y Now
+              <button className="w-full mt-5 px-6 py-2 text-lg font-semibold text-white transition-colors bg-green-700 rounded-lg hover:bg-green-800">
+                Apply Now
               </button>
             </a>
           </div>
@@ -143,15 +176,75 @@ const JobDetails = () => {
               <span className="ml-2 text-4xl text-green-500">♦</span>
             </h2>
             <ul className="space-y-2 text-sm leading-relaxed text-gray-600">
-              <li>• US dollar-linked compensation</li>
-              <li>• Performance-based annual bonus</li>
-              <li>• Performance matrix-based recognition</li>
-              <li>• Agile Benefits - special allowances for Health, Wellness & Academic growth</li>
-              <li>• Paid birthday leave</li>
-              <li>• Team engagement allowance</li>
-              <li>• Comprehensive Health & Life Insurance Cover - extendable to parents and in-laws</li>
-              <li>• Overseas travel opportunities and exposure to client environments</li>
-              <li>• Hybrid work arrangement</li>
+            <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">US dollar-linked compensation</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">Performance-based annual bonus</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">Comprehensive Health & Life Insurance</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">Hybrid work arrangement</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">Performance matrix-based recognition</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">Special allowances for Health, Wellness & Academic</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">Paid birthday leave</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">Team engagement allowance</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">Comprehensive Health & Life Insurance Cover</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">Overseas travel opportunities.</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="text-gray-600">Exposure to client environments.</span>
+                </li>
+
+
+              
             </ul>
           </div>
 
@@ -161,7 +254,7 @@ const JobDetails = () => {
               WHAT WE OFFER
               <span className="ml-2 text-4xl text-green-500">♦</span>
             </h2>
-            <p className="text-sm leading-loose text-gray-600">
+            <p className="text-sm leading-loose text-gray-600 text-left">
               Our careers offer a flexible working environment, attractive remuneration, and 
               a place to grow and flourish. You will be amongst peers at the top of their game, 
               allowing you to sharpen your skills in an inclusive culture. We offer a variety of 
@@ -177,47 +270,46 @@ const JobDetails = () => {
           <div>
             <h2 className="mb-4 text-lg font-bold">ABOUT THIS POSITION</h2>
             <p className="text-sm leading-loose text-gray-600">
-              We are currently on the lookout for a competent, self-motivated Engineer – 
+              {vacancy.about}
+              {/* We are currently on the lookout for a competent, self-motivated Engineer – 
               Cloud Services for our Cloud Services team with a solid understanding of 
               Linux, GCP/AWS Cloud and Azure to collaborate, lead change, automate 
-              and inspire teams towards delivery excellence at Intelligence.
+              and inspire teams towards delivery excellence at Intelligence. */}
             </p>
           </div>
 
           {/* Responsibilities Section */}
           <div>
-            <h2 className="mb-4 text-lg font-bold">RESPONSIBILITIES</h2>
-            <ul className="space-y-2 text-sm leading-loose text-gray-600">
-              <li>• Driving the creation of infrastructure, environment provisioning, 
-                automation and monitoring tools that will support, enhance and grow 
-                an advanced infrastructure support model for Sysco's multi-cloud 
-                environments</li>
-              <li>• Designing and developing re-usable components and operational 
-                strategies in the cloud and datacenters to support scalability, high-
-                availability, performance, monitoring, backup, restoring, etc.</li>
-              <li>• Acting as SME for Linux based workloads, providing solutions to 
-                problems, handling migrations, and troubleshooting any issues in a 
-                timely manner</li>
-              <li>• Working with tools such as Jenkins, Docker, Terraform, AWS Systems 
-                Manager, Cloud Formation, and Kubernetes for cloud operation work on 
-                AWS, GCP and Azure</li>
-              <li>• Patch Management and coordinating patch schedules with other teams</li>
-              <li>• Improving our knowledge base and engineering standards through 
-                documentation</li>
-              <li>• Ensuring the security of all infrastructure, data, 
-                applications, and configurations</li>
-              <li>• Automation and scripting via Ansible, Python, Bash, Cloud Formation or 
-                Terraform</li>
-              <li>• Monitoring and proactively managing systems and application issues</li>
-              <li>• Working on a roster covering 24/7 support to our end users</li>
-            </ul>
+            <h2 className="mb-4 mt-16 text-lg font-bold">RESPONSIBILITIES</h2>
+            
+            <ul className="space-y-4 leading-loose">
+                  {vacancy.responsibilities.map((responsibility, index) => (
+                    <li key={index} className="flex items-start space-x-3">
+                      <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="text-gray-600">{responsibility}</span>
+                    </li>
+                  ))}
+                </ul>
           </div>
 
           {/* Requirements Section */}
           <div>
-            <h2 className="mb-4 text-lg font-bold">REQUIREMENTS</h2>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>• A Bachelor's Degree in Computer Science or equivalent</li>
+            <h2 className="mb-4 mt-16 text-lg font-bold">REQUIREMENTS</h2>
+            
+
+              <ul className="space-y-4 leading-loose">
+                  {vacancy.requirements.map((requirement, index) => (
+                    <li key={index} className="flex items-start space-x-3">
+                      <svg className="w-5 h-5 mt-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="text-gray-600">{requirement}</span>
+                    </li>
+                  ))}
+                
+              {/* <li>• A Bachelor's Degree in Computer Science or equivalent</li>
               <li>• Certifications on Google Cloud/Amazon Web Services (AWS) and a solid 
                 understanding of their services</li>
               <li>• Certifications on Linux based Systems and 1 to 3 years of proven 
@@ -234,8 +326,17 @@ const JobDetails = () => {
                 levels of the business, from executives to operations and development 
                 teams</li>
               <li>• Certifications in the areas of Azure, GCP, AWS, Linux, or Networking will 
-                be an added advantage</li>
+                be an added advantage</li> */}
             </ul>
+          </div>
+
+          {/* Apply Button */}
+          <div className="flex justify-center mt-8">
+          <a href="/apply" target="_blank" rel="noopener noreferrer">
+              <button className="w-full mt-5 px-12 py-2 text-lg font-semibold text-white transition-colors bg-green-700 rounded-lg hover:bg-green-800">
+                Apply Now
+              </button>
+            </a>
           </div>
         </div>
       </div>
