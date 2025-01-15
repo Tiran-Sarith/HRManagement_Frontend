@@ -24,6 +24,7 @@
     "@mui/x-data-grid": "^7.12.1",
     "@mui/x-date-pickers": "^7.23.3",
     "@radix-ui/react-select": "^2.1.4",
+    "@shadcn/ui": "^0.0.4",
     "@toolpad/core": "^0.10.0",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",

@@ -355,86 +355,172 @@ const EmployeeGrowthChart = () => {
     );
   };  
 
+// const generateNudeColors = (length) => {
+//     const nudeColors = [
+//       '#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600', '#D5C5B0', '#F4D1B9', '#D8B29E'
+//     ];
+//     return Array.from({ length }, (_, i) => nudeColors[i % nudeColors.length]);
+//   };
+  
+//   const ProjectDistributionChart = () => {
+//     const [chartData, setChartData] = useState([]);
+  
+//     useEffect(() => {
+//       const fetchProjectData = async () => {
+//         try {
+//           const response = await axios.get('http://localhost:8070/projects/Pview');
+//           const projects = response.data;
+  
+//           // Group projects by department
+//           const departmentProjects = projects.reduce((acc, project) => {
+//             const deptName = project.departmentID.departmentName;
+//             if (!acc[deptName]) {
+//               acc[deptName] = 0;
+//             }
+//             acc[deptName]++;
+//             return acc;
+//           }, {});
+  
+//           // Transform data for pie chart
+//           const pieData = Object.entries(departmentProjects).map(([dept, count]) => ({
+//             name: dept,
+//             value: count
+//           }));
+  
+//           setChartData(pieData);
+//         } catch (err) {
+//           console.error('Failed to fetch project distribution:', err);
+//         }
+//       };
+  
+//       fetchProjectData();
+//     }, []);
+  
+//     if (!chartData.length) return <div>Loading chart...</div>;
+  
+//     return (
+//       <div className="flex justify-center ">
+//         <ResponsiveContainer width="100%" height={300}>
+//           <PieChart>
+//             <Pie
+//               data={chartData}
+//               dataKey="value"
+//               nameKey="name"
+//               outerRadius={100}
+//               label={({ name, value }) => `${name}: ${value}`}
+//               animationDuration={500}
+//               stroke="#fff" // Adding a white stroke for cleaner separation between slices
+//               strokeWidth={1.5} // Slightly thicker stroke for a more refined look
+//             >
+//               {chartData.map((entry, index) => (
+//                 <Cell key={`cell-${index}`} fill={generateNudeColors(chartData.length)[index]} />
+//               ))}
+//             </Pie>
+//             <Tooltip
+//               contentStyle={{
+//                 backgroundColor: '#f4f4f4', // Light background for tooltip
+//                 borderRadius: '20px', // Rounded corners
+//                 padding: '20px', // Padding for better spacing
+//               }}
+//               labelStyle={{
+//                 color: '#333', // Darker text for the label
+//                 fontWeight: 'bold',
+//               }}
+//               itemStyle={{
+//                 color: '#444', // Dark color for the tooltip content
+//               }}
+//             />
+//           </PieChart>
+//         </ResponsiveContainer>
+//       </div>
+//     );
+//   };
+// Function to generate a set of colors for the chart
 const generateNudeColors = (length) => {
-    const nudeColors = [
-      '#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600', '#D5C5B0', '#F4D1B9', '#D8B29E'
-    ];
-    return Array.from({ length }, (_, i) => nudeColors[i % nudeColors.length]);
-  };
-  
-  const ProjectDistributionChart = () => {
-    const [chartData, setChartData] = useState([]);
-  
-    useEffect(() => {
-      const fetchProjectData = async () => {
-        try {
-          const response = await axios.get('http://localhost:8070/projects/Pview');
-          const projects = response.data;
-  
-          // Group projects by department
-          const departmentProjects = projects.reduce((acc, project) => {
-            const deptName = project.departmentID.departmentName;
-            if (!acc[deptName]) {
-              acc[deptName] = 0;
-            }
-            acc[deptName]++;
-            return acc;
-          }, {});
-  
-          // Transform data for pie chart
-          const pieData = Object.entries(departmentProjects).map(([dept, count]) => ({
-            name: dept,
-            value: count
-          }));
-  
-          setChartData(pieData);
-        } catch (err) {
-          console.error('Failed to fetch project distribution:', err);
+  const nudeColors = [
+    "#003f5c", "#58508d", "#bc5090", "#ff6361", "#ffa600", "#D5C5B0", "#F4D1B9", "#D8B29E"
+  ];
+  return Array.from({ length }, (_, i) => nudeColors[i % nudeColors.length]);
+};
+
+const ProjectDistributionChart = () => {
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProjectData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8070/projects/Pview");
+        console.log("Fetched Projects:", response.data); // ✅ Debug API Response
+
+        const projects = response.data;
+        if (!Array.isArray(projects) || projects.length === 0) {
+          throw new Error("No project data available.");
         }
-      };
-  
-      fetchProjectData();
-    }, []);
-  
-    if (!chartData.length) return <div>Loading chart...</div>;
-  
-    return (
-      <div className="flex justify-center ">
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={chartData}
-              dataKey="value"
-              nameKey="name"
-              outerRadius={100}
-              label={({ name, value }) => `${name}: ${value}`}
-              animationDuration={500}
-              stroke="#fff" // Adding a white stroke for cleaner separation between slices
-              strokeWidth={1.5} // Slightly thicker stroke for a more refined look
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={generateNudeColors(chartData.length)[index]} />
-              ))}
-            </Pie>
-            <Tooltip
-              contentStyle={{
-                backgroundColor: '#f4f4f4', // Light background for tooltip
-                borderRadius: '20px', // Rounded corners
-                padding: '20px', // Padding for better spacing
-              }}
-              labelStyle={{
-                color: '#333', // Darker text for the label
-                fontWeight: 'bold',
-              }}
-              itemStyle={{
-                color: '#444', // Dark color for the tooltip content
-              }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-    );
-  };
+
+        // ✅ Ensure departmentID exists before accessing departmentName
+        const departmentProjects = projects.reduce((acc, project) => {
+          const deptName = project.departmentID?.departmentName || "Unknown";
+          acc[deptName] = (acc[deptName] || 0) + 1;
+          return acc;
+        }, {});
+
+        // ✅ Transform data for PieChart
+        const pieData = Object.entries(departmentProjects).map(([dept, count]) => ({
+          name: dept,
+          value: count,
+        }));
+
+        setChartData(pieData);
+      } catch (err) {
+        console.error("Failed to fetch project distribution:", err);
+        setError(err.message || "Error fetching data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjectData();
+  }, []);
+
+  if (loading) return <div className="text-blue-500">Loading chart...</div>;
+  if (error) return <div className="text-red-500">{error}</div>;
+  if (!chartData.length) return <div className="text-gray-500">No data available.</div>;
+
+  return (
+    <div className="flex justify-center">
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
+          <Pie
+            data={chartData}
+            dataKey="value"
+            nameKey="name"
+            outerRadius={100}
+            label={({ name, value }) => `${name}: ${value}`}
+            animationDuration={500}
+            stroke="#fff"
+            strokeWidth={1.5}
+          >
+            {chartData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={generateNudeColors(chartData.length)[index]} />
+            ))}
+          </Pie>
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#f4f4f4",
+              borderRadius: "10px",
+              padding: "10px",
+            }}
+            labelStyle={{ color: "#333", fontWeight: "bold" }}
+            itemStyle={{ color: "#444" }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
 
 
 // Main HRHome Component
