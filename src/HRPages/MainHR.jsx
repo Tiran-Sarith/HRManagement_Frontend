@@ -209,7 +209,7 @@ export default function MainHR() {
                     </Card>
                 </Drawer>
 
-                <Main open={open} className='bg-green-50'>
+                <Main open={open} className='bg-green-50 h-full'>
                     <DrawerHeader />
                     <Routes>
                         {/* <Route path="/" element={<HRHome />} /> */}
