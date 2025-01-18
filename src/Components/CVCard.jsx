@@ -28,44 +28,43 @@ function CVs() {
         }
     };
 
-    // CVs.jsx
-const handleDownload = async () => {
-  try {
-      if (!application.filename) {
-          alert('No file available for download');
-          return;
-      }
+    const handleDownload = async () => {
+        try {
+            if (!application?.filename) {
+                alert('No file available for download');
+                return;
+            }
 
-      const response = await axios.get(
-          `http://localhost:8070/applications/download/${application.filename}`, 
-          {
-              responseType: 'blob',
-              headers: {
-                  'Accept': 'application/octet-stream'
-              }
-          }
-      );
-      
-      // Check if response is valid
-      if (response.status !== 200) {
-          throw new Error('Download failed');
-      }
+            const response = await axios.get(
+                `http://localhost:8070/applications/download/${application.filename}`, 
+                {
+                    responseType: 'blob',
+                    headers: {
+                        'Accept': 'application/octet-stream'
+                    }
+                }
+            );
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', application.filename);
-      document.body.appendChild(link);
-      link.click();
-      
-      // Cleanup
-      window.URL.revokeObjectURL(url);
-      link.remove();
-  } catch (err) {
-      console.error('Error downloading file:', err);
-      alert('Error downloading file: ' + (err.response?.data?.message || err.message));
-  }
-};
+            // Check if response is valid
+            if (response.status !== 200) {
+                throw new Error('Download failed');
+            }
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', application.filename);
+            document.body.appendChild(link);
+            link.click();
+            
+            // Cleanup
+            window.URL.revokeObjectURL(url);
+            link.remove();
+        } catch (err) {
+            console.error('Error downloading file:', err);
+            alert('Error downloading file: ' + (err.response?.data?.message || err.message));
+        }
+    };
 
     if (loading) return <div>Loading application data...</div>;
     if (error) return <div className="text-red-500">{error}</div>;
@@ -84,7 +83,7 @@ const handleDownload = async () => {
                 </div>
                 <div className='flex justify-start'>
                     <p className='text-start pl-2 text-black font-sans font-semibold'>Score: </p>
-                    <p className='pl-2'>{}</p>
+                    <p className='pl-2'>{application.score || 'N/A'}</p>
                 </div>
             </div>
             <div className='my-4 mx-2'>

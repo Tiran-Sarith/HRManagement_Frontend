@@ -26,10 +26,17 @@ function Applications() {
         }
     };
 
-    // Only filter if applications exist and searchTerm is not empty
-    const filteredApplications = applications?.filter(app => 
-        app?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || [];
+    const filteredApplications = applications.filter(app => {
+        if (!searchTerm) return true;
+        
+        const searchLower = searchTerm.toLowerCase();
+        return (
+            (app?.name?.toLowerCase()?.includes(searchLower)) ||
+            (app?.email?.toLowerCase()?.includes(searchLower)) ||
+            (app?.portfolio?.toLowerCase()?.includes(searchLower)) ||
+            (app?.phoneNo?.toString()?.includes(searchTerm))
+        );
+    });
 
     return (
         <div>
@@ -48,10 +55,10 @@ function Applications() {
             {error && <div className="text-red-500">{error}</div>}
             
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'>
-                {!loading && applications.length === 0 && (
+                {!loading && filteredApplications.length === 0 && (
                     <div>No applications found</div>
                 )}
-                {applications.map((application) => (
+                {filteredApplications.map((application) => (
                     <ApplicationCard 
                         key={application._id || Math.random()}
                         application={application}

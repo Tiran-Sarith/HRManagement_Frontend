@@ -6,6 +6,12 @@ import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import MenuItem from '@mui/material/MenuItem';
+import dayjs from 'dayjs';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const customTheme = (outerTheme) =>
     createTheme({
@@ -43,17 +49,100 @@ const customTheme = (outerTheme) =>
         },
     });
 
+
+    const HireType = [
+        {
+          value: 'Permanent',
+          label: 'Permanent',
+        },
+        {
+          value: 'Internship',
+          label: 'Internship',
+        },
+        {
+          value: 'Part-time',
+          label: 'Part-time',
+        },
+      ];
+
+    const Designation = [
+        {
+          value: 'Head of Department',
+          label: 'HOD',
+        },
+        {
+          value: 'Senior Manager',
+          label: 'Senior Manager',
+        },
+        {
+          value: 'Senior Engineer',
+          label: 'Senior Engineer',
+        },
+        {
+          value: 'Engineer',
+          label: 'Engineer',
+        },
+        {
+          value: 'Assistant Engineer',
+          label: 'Assistant Engineer',
+        },
+        {
+          value: 'Trainee Engineer',
+          label: 'Trainee Engineer',
+        },
+      ];
+
+    const Department = [
+        {
+          value: 'Networking',
+          label: 'Networking',
+        },
+        {
+          value: 'Software Development',
+          label: 'Software Development',
+        },
+        {
+          value: 'Cyber Security',
+          label: 'Cyber Security',
+        },
+        {
+          value: 'DevOps',
+          label: 'DevOps',
+        },
+        {
+          value: 'Quality Assurance',
+          label: 'QA',
+        },
+        {
+          value: 'UI/UX Design',
+          label: 'UI/UX',
+        },
+        {
+          value: 'Data Science',
+          label: 'Data Science',
+        },
+        {
+          value: 'Machine Learning/AI',
+          label: 'Machine Learning/AI',
+        },
+        {
+          value: 'Human Resources',
+          label: 'Human Resources',
+        },
+      ];
+
 export default function AddVacancies() {
     const outerTheme = useTheme();
 
     const [jobTitle, setJobTitle] = useState('');
-    const [jobCategory, setJobCategory] = useState('');
     const [hireType, setHireType] = useState('');
     const [jobID, setJobID] = useState('');
-    const [deadline, setDeadline] = useState('');
+    const [deadline, setDeadline] = useState();
     const [designation, setDesignation] = useState('');
     const [department, setDepartment] = useState('');
     const [postedDate, setPostedDate] = useState('');
+    const [requirements, setRequirements] = useState([]);
+    const [responsibilities, setResponsibilities] = useState([]);
     const [jobDescription, setJobDescription] = useState('');
 
     const submitVacancy = async (e) => {
@@ -68,6 +157,8 @@ export default function AddVacancies() {
             designation,
             department,
             postedDate,
+            requirements,
+            responsibilities,
             jobDescription,
         };
 
@@ -94,21 +185,23 @@ export default function AddVacancies() {
                     <div className='mb-4 flex justify-start ml-12'>
                         <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Category" variant="filled" onChange={(e) => setJobCategory(e.target.value)} />
-                            </ThemeProvider>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Hire Type" variant="filled" onChange={(e) => setHireType(e.target.value)} />
-                            </ThemeProvider>
-                        </Box>
-                    </div>
-
-                    <div className='mb-4 flex justify-start ml-12'>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
                                 <TextField className='w-[272px]' label="Job ID:" variant="filled" onChange={(e) => setJobID(e.target.value)} />
                             </ThemeProvider>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Deadline" variant="filled" onChange={(e) => setDeadline(e.target.value)} />
+                            <TextField
+                            sx={{ width: 273 }}
+                            id="filled-select-currency"
+                            select
+                            label="Hire Type"
+                            variant="filled"
+                            onChange={(e) => setHireType(e.target.value)}
+                            >
+                            {HireType.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                             </ThemeProvider>
                         </Box>
                     </div>
@@ -116,7 +209,27 @@ export default function AddVacancies() {
                     <div className='mb-4 flex justify-start ml-12'>
                         <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[560px]' label="Designation" variant="filled" onChange={(e) => setDesignation(e.target.value)} />
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoContainer components={['DatePicker', 'DatePicker']} sx={{width: 273 }}>
+                                            <DatePicker
+                                            sx={{width: 273 }}
+                                            label="Posted Date"
+                                            onChange={(newValue) => setPostedDate(newValue)}
+                                            />
+                                        </DemoContainer>
+                                    </LocalizationProvider>
+                            </ThemeProvider>
+                            <ThemeProvider theme={customTheme(outerTheme)}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoContainer components={['DatePicker', 'DatePicker']} sx={{width: 273 }}>
+                                        <DatePicker
+                                        sx={{width: 273 }}
+                                        label="Deadline"
+                                        value={deadline}
+                                        onChange={(newValue) => setDeadline(newValue)}
+                                        />
+                                    </DemoContainer>
+                                </LocalizationProvider>
                             </ThemeProvider>
                         </Box>
                     </div>
@@ -124,16 +237,63 @@ export default function AddVacancies() {
                     <div className='mb-4 flex justify-start ml-12'>
                         <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Department" variant="filled" onChange={(e) => setDepartment(e.target.value)} />
+                                <TextField
+                                    sx={{ width: 273, marginTop:1 }}
+                                    id="filled-select-currency"
+                                    select
+                                    label="Department"
+                                    variant="filled"
+                                    onChange={(e) => setDepartment(e.target.value)}
+                                    >
+                                    {Department.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                                <TextField
+                                sx={{ width: 273,  marginTop:1 }}
+                                id="filled-select-currency"
+                                select
+                                label="Designation"
+                                variant="filled"
+                                onChange={(e) => setDesignation(e.target.value)}
+                                >
+                                {Designation.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                             </ThemeProvider>
+                        </Box>
+                    </div>
+
+                    <div className='mb-1 flex justify-start ml-12'>
+                        <Box component="form" sx={{'& .MuiTextField-root': { marginBottom:2, width: '560px' }  }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Job Posted" variant="filled" onChange={(e) => setPostedDate(e.target.value)} />
+                                <TextField
+                                        id="filled-multiline-static"
+                                        label="Requirements"
+                                        onChange={(e) => setRequirements(e.target.value.split(',').map(item => item.trim()))}
+                                        multiline
+                                        rows={2}
+                                        variant="filled"
+                                    />
+                                <TextField
+                                    id="filled-multiline-static"
+                                    label="Responsibilities (comma-separated)"
+                                    onChange={(e) => setResponsibilities(e.target.value.split(',').map(item => item.trim()))}
+                                    multiline
+                                    rows={2}
+                                    variant="filled"
+                                />
                             </ThemeProvider>
                         </Box>
                     </div>
 
                     <div className='mb-4 flex justify-start ml-10'>
-                        <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '847px' } }} noValidate autoComplete="off">
+                        <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '560px' } }} noValidate autoComplete="off">
                             <div>
                                 <TextField
                                     id="filled-multiline-static"
@@ -142,7 +302,6 @@ export default function AddVacancies() {
                                     multiline
                                     rows={4}
                                     variant="filled"
-                                    className='w-[854px]'
                                 />
                             </div>
                         </Box>
