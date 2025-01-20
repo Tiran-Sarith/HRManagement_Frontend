@@ -38,6 +38,7 @@
           </Link>
         </div>
       );
+
       
       // Enhanced Jobvacancies Component
       const Jobvacancies = ({ searchQuery }) => {

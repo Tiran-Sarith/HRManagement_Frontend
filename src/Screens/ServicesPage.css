@@ -72,3 +72,17 @@
   .client-item {
     margin: 10px;
   }
+
+  .hexagon {
+  width: 220px;
+  height: 250px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+  

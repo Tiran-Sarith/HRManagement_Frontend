@@ -36,7 +36,7 @@ function App() {
 
           {/* <Navbar/>
           <Routes>
-            <Route path="/apply" element={<JobApplication/>}/>
+            {/* <Route path="/apply" element={<JobApplication/>}/> */}
             <Route path="/home" element={<Home/>} />
             <Route path="/" element={<Home/>} />
             <Route path="/career" element={<Career/>} />
@@ -44,12 +44,14 @@ function App() {
             <Route path="/services" element={<ServicesPage/>} />
             <Route path="/aboutus" element={<About/>} />
             <Route path="/career/:id" element={<JobDetails/>} />
+            <Route path="/career/:id/apply" element={<JobApplication/>} />
+
+
           </Routes>
           <Footer/> */}
 
 {/* HR Pages */}
           <MainHR />
-          {/* <AdminLogin/> */}
 
 
 
