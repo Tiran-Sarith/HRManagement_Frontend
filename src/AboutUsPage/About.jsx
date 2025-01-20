@@ -29,6 +29,7 @@ export default function About() {
 {/* About Section */}
 <div className="bg-gray-100 relative max-w-full overflow-hidden py-32">
   {/* Right Image */}
+  
   <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 w-3/4 md:w-2/3">
     <img
       src={women1}

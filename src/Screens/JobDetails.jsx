@@ -60,6 +60,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import slide1image from "./Assests/banner-5250179_1280.jpg";
+import { Link } from 'react-router-dom';
+
 
 const JobDetails = () => {
   const { id } = useParams(); // Get the ID from the URL
@@ -161,13 +163,16 @@ const JobDetails = () => {
                   <span>Designation: {vacancy.designation}</span>
                 </div>
               </div>
+<div style={{marginTop:'20px'}}>
+              <Link 
+  to={`/career/${id}/apply`}  
+  className="w-full mt-5 px-6 py-2 text-lg font-semibold text-white transition-colors bg-green-700 rounded-lg hover:bg-green-800"
+>
+  Apply Now
+</Link> 
+</div>         
 
-            <a href="/apply" target="_blank" rel="noopener noreferrer">
-              <button className="w-full mt-5 px-6 py-2 text-lg font-semibold text-white transition-colors bg-green-700 rounded-lg hover:bg-green-800">
-                Apply Now
-              </button>
-            </a>
-          </div>
+</div>
 
           {/* Benefits Section */}
           <div className="w-4/5 p-6 mb-20 rounded-lg shadow-xl bg-lime-100">

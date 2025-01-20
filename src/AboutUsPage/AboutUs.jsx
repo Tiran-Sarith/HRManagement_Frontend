@@ -4,10 +4,11 @@ import "./aboutus.css";
 import women1 from "../Screens/Assests/young-woman-suit-confident-smiling-camera-generated-by-artificial-intelligence.png"
 
 
+
 export default function AboutUs() {
     return (
         <div id="app">
-       <section className="relative mx-10 my-10 h-[700px] bg-fixed">
+       <section className="relative mx-10 my-10 h-[700px] bg-fixed ">
       <div className="relative h-full">
         {/* Image */}
         <img
@@ -43,7 +44,7 @@ export default function AboutUs() {
             <img
           src={women1}
           alt="Section 1 Image"
-          style={{width:'4000px', height:'450px'}}
+          style={{width:'40px', height:'450px'}}
         />
             </div>
 
