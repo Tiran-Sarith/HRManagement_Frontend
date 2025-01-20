@@ -14,6 +14,7 @@ export default function Form() {
   const [phoneNo, setPhoneNo] = useState("");
   const [introduction, setIntroduction] = useState("");
   const [file, setFile] = useState(null);
+  const [jobTitle, setJobTitle] = useState("");
 
   const maxCharacters = 263;
 
@@ -21,7 +22,7 @@ export default function Form() {
     e.preventDefault(); // Prevent default form submission
 
     // Validate required fields
-    if (!name || !email || !phoneNo || !introduction || !file) {
+    if (!name || !email || !phoneNo || !introduction || !file ||!jobTitle) {
       alert("Please fill out all required fields and upload a file!");
       return;
     }
@@ -34,6 +35,7 @@ export default function Form() {
     formData.append("phoneNo", phoneNo);
     formData.append("introduction", introduction);
     formData.append("file", file);
+    formData.append("jobTitle", jobTitle);
 
     console.log("Submitting form data:", formData);
 
@@ -126,6 +128,20 @@ export default function Form() {
           variant="outlined"
           required
           onChange={(e) => setPhoneNo(e.target.value)}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "10px",
+            },
+          }}
+        />
+
+<TextField
+          id="jobTitle"
+          label="Job Title"
+          type="tel"
+          variant="outlined"
+          required
+          onChange={(e) => setJobTitle(e.target.value)}
           sx={{
             "& .MuiOutlinedInput-root": {
               borderRadius: "10px",

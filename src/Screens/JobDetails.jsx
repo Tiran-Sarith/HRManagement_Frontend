@@ -163,13 +163,16 @@ const JobDetails = () => {
                   <span>Designation: {vacancy.designation}</span>
                 </div>
               </div>
-
+<div style={{marginTop:'20px'}}>
               <Link 
   to={`/career/${id}/apply`}  
   className="w-full mt-5 px-6 py-2 text-lg font-semibold text-white transition-colors bg-green-700 rounded-lg hover:bg-green-800"
 >
   Apply Now
-</Link>          </div>
+</Link> 
+</div>         
+
+</div>
 
           {/* Benefits Section */}
           <div className="w-4/5 p-6 mb-20 rounded-lg shadow-xl bg-lime-100">

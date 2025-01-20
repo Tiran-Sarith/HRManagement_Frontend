@@ -104,7 +104,7 @@ export default function JobApplication() {
           }}
         >
           
-          If you think you are the right person for this. Aplly now.
+          If you think you are the right person. Apply now.
         </p>
         <p
           style={{
