@@ -2,6 +2,7 @@ import React from "react";
 import Rectangle_3842 from "./Assets/Rectangle_3842.png"; // Ensure the correct path to your uploaded image
 import Group7 from "./Assets/Group7.png"; // Replace with the actual path to your icon
 import Form from "./form";
+import JobDetails from "./JobDetails_apply";
 
 export default function JobApplication() {
   return (
@@ -45,8 +46,10 @@ export default function JobApplication() {
     </div>
     <div style={{
         display: "flex",
-        width:"80%",
-        marginLeft:'20px',
+        justifyContent: "space-between",
+        marginRight:'130px',
+        marginLeft:'130px',
+        // Adds space between child elements
         }}>
     <div
       style={{
@@ -54,7 +57,7 @@ export default function JobApplication() {
         flexDirection: "column",
         alignContent:"left",
         height: "100vh",
-        marginLeft:"50px",
+        
         padding: "20px",
         backgroundColor: "#ffffff", // Adjust background color if needed
       }}
@@ -100,7 +103,8 @@ export default function JobApplication() {
             textAlign: 'left',
           }}
         >
-          Say something about instruction about submitting CV and other details
+          
+          If you think you are the right person for this. Aplly now.
         </p>
         <p
           style={{
@@ -110,8 +114,7 @@ export default function JobApplication() {
             textAlign: 'left',
           }}
         >
-          Pursue your passion. Make your mark in the Era of Pervasive
-          Intelligence.
+          <JobDetails/>
         </p>
       </div>
     </div>

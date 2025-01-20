@@ -1,5 +1,7 @@
 import React, { useRef } from "react";
 import "./Slider.css";
+import header1image from "../Screens/Assests/02.jpeg";
+
 
 const TeamSlider = () => {
   const sliderRef = useRef(null);
@@ -69,7 +71,7 @@ const TeamSlider = () => {
             <div key={index} className="team-card">
               <div className="card-content">
                 <img
-                  src={member.img}
+                  src={header1image}
                   alt={member.name}
                   className="rounded-lg w-full h-72 object-cover"
                 />
