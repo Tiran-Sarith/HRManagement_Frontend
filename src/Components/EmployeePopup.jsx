@@ -1,9 +1,20 @@
 import React from 'react'
 import Button from "@mui/material/Button";
+import { useNavigate } from 'react-router-dom';
 
-function EmployeePopup({visible, onClose, data, onDelete, onUpdate}) {
+function EmployeePopup({visible, onClose, data, onDelete}) {
+
+    const navigate = useNavigate();
+
     const handleOnClose = (e)=> {
         if(e.target.id === "container") onClose()
+    };
+
+    const handleUpdate = () => {
+        if (data && data.id) {  // Make sure data.id exists
+            console.log("Navigating to update with ID:", data.id); // Add this for debugging
+            navigate(`/employeeUpdate/${data.id}`);
+        }
     };
 
     if (!visible || !data) return null;
@@ -99,7 +110,7 @@ function EmployeePopup({visible, onClose, data, onDelete, onUpdate}) {
                             Delete
                         </Button>
                         <Button
-                            onClick={() => onUpdate(data.id)}
+                            onClick={handleUpdate}
                             variant="outlined"
                             color="success"
                             className="h-9"

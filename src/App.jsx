@@ -19,6 +19,7 @@ import About from "./AboutUsPage/About";
 //HR
 import MainHR from "./HRPages/MainHR";
 import JobApplication from "./JobApplication/jobApplication";
+import AdminLogin from "./HRPages/AdminLogin";
 
 
 

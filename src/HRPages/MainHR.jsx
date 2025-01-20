@@ -42,6 +42,8 @@ import Departments from './Departments';
 import ProjectsPending from '../Components/ProjectsPending';
 import AddProject from './AddProject';
 import Dashboard from './Dashboard';
+import AdminLogin from './AdminLogin';
+import EmployeeUpdate from './EmployeeUpdate';
 
 
 const drawerWidth = 240;
@@ -136,7 +138,7 @@ export default function MainHR() {
                     open={open}
                 >
                     <DrawerHeader>
-                        <p className="text-[#1A7A08] font-bold text-xl text-right mr-28">LOGO</p>
+                        <p className="text-[#1A7A08] font-bold text-xl text-right mr-6 ">INTELLISENZE</p>
                         <IconButton onClick={handleDrawerClose}>
                             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                         </IconButton>
@@ -209,7 +211,7 @@ export default function MainHR() {
                     </Card>
                 </Drawer>
 
-                <Main open={open} className='bg-green-50 h-full'>
+                <Main sx={{height:1800}} open={open} className='bg-green-50'>
                     <DrawerHeader />
                     <Routes>
                         {/* <Route path="/" element={<HRHome />} /> */}
@@ -225,6 +227,8 @@ export default function MainHR() {
                         <Route path="/projectsPending" element={<ProjectsPending/>} />
                         <Route path="/addProject" element={<AddProject/>} />
                         <Route path="/cvs/:applicationId" element={<CVs />} />
+                        <Route path="/updateEmployee/:id" element={<EmployeeUpdate />} />
+
 
                     </Routes>
                 </Main>

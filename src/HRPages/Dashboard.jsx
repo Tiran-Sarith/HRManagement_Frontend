@@ -42,7 +42,9 @@ const MonthlyHiresCard = () => {
   };
 
   return (
-    <CardContent className='w-80 h-screen'>
+
+    <CardContent className='w-72 h-screen'>
+
       <h1 className='font-sans text-3xl font-semibold text-green-700 text-start'>
         Hire per month
       </h1>
@@ -89,6 +91,7 @@ const DepartmentCard = () => {
         }
 
         const employees = response.data;
+
         
         // Count employees by department
         const departmentCounts = employees.reduce((acc, employee) => {
@@ -111,6 +114,30 @@ const DepartmentCard = () => {
 
         setDepartmentStats(sortedDepartments);
         
+
+        
+        // Count employees by department
+//         const departmentCounts = employees.reduce((acc, employee) => {
+//           const department = employee.employee_department || 'Unassigned';
+//           if (!acc[department]) {
+//             acc[department] = 1;
+//           } else {
+//             acc[department]++;
+//           }
+//           return acc;
+//         }, {});
+
+//         // Sort departments by count in descending order
+//         const sortedDepartments = Object.entries(departmentCounts)
+//           .sort(([, a], [, b]) => b - a)
+//           .reduce((acc, [dept, count]) => {
+//             acc[dept] = count;
+//             return acc;
+//           }, {});
+
+//         setDepartmentStats(sortedDepartments);
+        
+
         // Calculate total employees
         const totalEmployees = employees.length;
         
@@ -138,7 +165,11 @@ const DepartmentCard = () => {
   if (Object.keys(departmentStats).length === 0) return <div className="p-4">No employee data available</div>;
 
   return (
+
+    <CardContent className='w-72 h-screen'>
+
     <CardContent className='w-80 h-screen'>
+
       <h1 className='font-sans text-3xl font-semibold text-green-700 text-start'>
         Employees
       </h1>
@@ -155,7 +186,9 @@ const DepartmentCard = () => {
                 {department}
               </p>
               <p className='text-start ml-4 text-[#018554]'>
-                {count} {count === 1 ? 'employee' : 'employees'}
+
+                {count}
+
               </p>
             </div>
             <hr className="mt-2" />
@@ -193,7 +226,7 @@ const DepartmentCard = () => {
         <hr className="mt-2" />
       </div>
     </CardContent>
-  );
+  );
 };
 
 
@@ -256,7 +289,9 @@ const ProjectSummaryCard = () => {
   const avgDuration = projectData.reduce((sum, project) => sum + project.projectDuration, 0) / totalProjects || 0;
 
   return (
-    <CardContent className='h-full h-screen'>
+
+    <CardContent className='h-screen'>
+
       <h1 className='font-sans text-3xl font-semibold text-green-700 text-start'>
         Project Summary
       </h1>
@@ -521,55 +556,70 @@ const ProjectDistributionChart = () => {
 function HRHome() {
 
   return (
-    <div className="min-w-full overflow-x-auto bg-emerald-50">
-      <div className="min-w-[1400px] p-4">
-        <Box className='mt-10 mb-20'>
-          <section className='flex justify-between h-fu'>
-          <div className='grid grid-cols-2 gap-6 '>
-            <div className='grid  grid-cols-2 gap-4'>
-              <div className='w-full  '>
-                <Card variant="outlined" className='shadow-lg w-80'>
+
+    <div className="w-full px-4 overflow-x-hidden"> {/* Changed from min-w-full */}
+      <div className="w-full max-w-[1400px] mx-auto"> {/* Changed from min-w-[1400px] */}
+        <Box>
+          <div className='grid grid-cols-2 gap-4'> {/* Adjusted gap */}
+            <div className='grid h-[700px] grid-cols-2 gap-4'>
+              <div className='w-full'>
+                <Card variant="outlined" className='shadow-lg w-full'> {/* Changed from w-80 */}
                   <MonthlyHiresCard />
                 </Card>
               </div>
-              <div className='w-full h-full'>
-                <Card variant="outlined" className='ml-3 shadow-lg w-80'>
+              <div className='w-full'>
+                <Card variant="outlined" className='shadow-lg w-full'> {/* Changed from w-80 */}
+
+//     <div className="min-w-full overflow-x-auto bg-emerald-50">
+//       <div className="min-w-[1400px] p-4">
+//         <Box className='mt-10 mb-20'>
+//           <section className='flex justify-between h-fu'>
+//           <div className='grid grid-cols-2 gap-6 '>
+//             <div className='grid  grid-cols-2 gap-4'>
+//               <div className='w-full  '>
+//                 <Card variant="outlined" className='shadow-lg w-80'>
+//                   <MonthlyHiresCard />
+//                 </Card>
+//               </div>
+//               <div className='w-full h-full'>
+//                 <Card variant="outlined" className='ml-3 shadow-lg w-80'>
+
                   <DepartmentCard />
                 </Card>
               </div>
-              
-              
             </div>
             
-            <div className='flex-none ml-3 mr-20 h-full'>
-              <Card variant="outlined" className='w-full shadow-lg'>
+
+            <div className='w-full'>
+              <Card variant="outlined" className='shadow-lg w-full'>
+
                 <ProjectSummaryCard />
               </Card>
-
-              
             </div>
           </div>
           </section>
 
-          <div className='grid grid-cols-2 gap-10 mt-16 mr-20'>
-            <div className='w-full '>
-            <DashboardCharts />
-            
+
+          <div className='grid grid-cols-2 gap-6 mt-16'> {/* Adjusted gap */}
+            <div className='w-full'>
+              <DashboardCharts />
+
             </div>
             <div className='w-full'>
-            <Card>
-                    <CardContent>   
-                    <div className="mt-1 text-2xl font-semibold text-gray-700">Projects by Department</div>
-                    <ProjectDistributionChart />
-                        
-                    </CardContent>
-                </Card>
-            
+              <Card className='w-full'>
+                <CardContent>   
+                  <div className="mt-1 text-2xl font-semibold text-gray-700">
+                    Projects by Department
+                  </div>
+                  <ProjectDistributionChart />
+                </CardContent>
+              </Card>
             </div>
           </div>
 
-          {/* New Graph Cards */}
-          <div className='grid grid-cols-2 gap-10 mt-16 mr-20'>
+
+          <div className='grid grid-cols-2 gap-6 mt-16'> {/* Adjusted gap */}
+
             <div className='w-full'>
               <MonthlyHiresChart />
             </div>
