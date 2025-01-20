@@ -33,7 +33,7 @@ function App() {
 
 {/* website pages */}
 
-          <Navbar/>
+          {/* <Navbar/>
           <Routes>
             {/* <Route path="/apply" element={<JobApplication/>}/> */}
             <Route path="/home" element={<Home/>} />
@@ -47,10 +47,10 @@ function App() {
 
 
           </Routes>
-          <Footer/>
+          <Footer/> */}
 
 {/* HR Pages */}
-          {/* <MainHR /> */}
+          <MainHR />
 
 
 

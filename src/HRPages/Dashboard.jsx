@@ -42,7 +42,7 @@ const MonthlyHiresCard = () => {
   };
 
   return (
-    <CardContent className='mb-24 w-80'>
+    <CardContent className='w-80 h-screen'>
       <h1 className='font-sans text-3xl font-semibold text-green-700 text-start'>
         Hire per month
       </h1>
@@ -65,9 +65,10 @@ const MonthlyHiresCard = () => {
   );
 };
 
+
 // Department Card Component
 const DepartmentCard = () => {
-  const [departments, setDepartments] = useState([]);
+  const [departmentStats, setDepartmentStats] = useState({});
   const [applicantStats, setApplicantStats] = useState({
     applications: 0,
     technicalInterviews: 0,
@@ -80,23 +81,51 @@ const DepartmentCard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8070/departments/Dview');
-        setDepartments(response.data);
+        const response = await axios.get('http://localhost:8070/employee/Eview');
+        console.log('Employee Data:', response.data);
+
+        if (!response.data || !Array.isArray(response.data)) {
+          throw new Error('Invalid data format received');
+        }
+
+        const employees = response.data;
         
-        // Calculate total hired from departments
-        const totalHired = response.data.reduce((sum, dept) => sum + dept.Numberofemployees, 0);
+        // Count employees by department
+        const departmentCounts = employees.reduce((acc, employee) => {
+          const department = employee.employee_department || 'Unassigned';
+          if (!acc[department]) {
+            acc[department] = 1;
+          } else {
+            acc[department]++;
+          }
+          return acc;
+        }, {});
+
+        // Sort departments by count in descending order
+        const sortedDepartments = Object.entries(departmentCounts)
+          .sort(([, a], [, b]) => b - a)
+          .reduce((acc, [dept, count]) => {
+            acc[dept] = count;
+            return acc;
+          }, {});
+
+        setDepartmentStats(sortedDepartments);
         
-        // Setting mock data for other stats - replace with real API calls when available
+        // Calculate total employees
+        const totalEmployees = employees.length;
+        
+        // Set applicant stats based on total employees
         setApplicantStats({
-          applications: totalHired * 4, // Assuming 5 applications per hire
-          technicalInterviews: totalHired * 3, // Assuming 3 technical interviews per hire
-          hrInterviews: totalHired * 2, // Assuming 2 HR interviews per hire
-          totalHired: totalHired
+          applications: totalEmployees * 4, // Assuming 4 applications per hire
+          technicalInterviews: totalEmployees * 3, // Assuming 3 technical interviews per hire
+          hrInterviews: totalEmployees * 2, // Assuming 2 HR interviews per hire
+          totalHired: totalEmployees
         });
         
         setLoading(false);
-      } catch {
-        setError('Failed to fetch department data');
+      } catch (err) {
+        console.error('Error fetching employee data:', err);
+        setError(err.message || 'Failed to fetch employee data');
         setLoading(false);
       }
     };
@@ -104,27 +133,32 @@ const DepartmentCard = () => {
     fetchData();
   }, []);
 
-  if (loading) return <div className="p-4">Loading department data...</div>;
+  if (loading) return <div className="p-4">Loading employee data...</div>;
   if (error) return <div className="p-4 text-red-600">{error}</div>;
+  if (Object.keys(departmentStats).length === 0) return <div className="p-4">No employee data available</div>;
 
   return (
-    <CardContent>
+    <CardContent className='w-80 h-screen'>
       <h1 className='font-sans text-3xl font-semibold text-green-700 text-start'>
         Employees
       </h1>
       
       <div>
         <h2 className='mt-6 mb-5 ml-4 font-sans text-xl font-semibold text-green-700 text-start'>
-          For Departments
+          Department Distribution
         </h2>
 
-        {departments.map((dept) => (
-          <div key={dept._id}>
+        {Object.entries(departmentStats).map(([department, count]) => (
+          <div key={department}>
             <div className='flex justify-between mt-3'>
-              <p className='text-start ml-4 text-[#018554]'>{dept.departmentName}</p>
-              <p className='text-start ml-4 text-[#018554]'>{dept.Numberofemployees}</p>
+              <p className='text-start ml-4 text-[#018554]'>
+                {department}
+              </p>
+              <p className='text-start ml-4 text-[#018554]'>
+                {count} {count === 1 ? 'employee' : 'employees'}
+              </p>
             </div>
-            <hr />
+            <hr className="mt-2" />
           </div>
         ))}
       </div>
@@ -135,29 +169,33 @@ const DepartmentCard = () => {
         </h2>
 
         <div className='flex justify-between mt-3'>
-          <p className='text-start ml-4 text-[#018554]'>Applications</p>
+          <p className='text-start ml-4 text-[#018554]'>Total Applications</p>
           <p className='text-start ml-4 text-[#018554]'>{applicantStats.applications}</p>
         </div>
-        <hr />
+        <hr className="mt-2" />
+        
         <div className='flex justify-between mt-3'>
-          <p className='text-start ml-4 text-[#018554]'>Technical Interview</p>
+          <p className='text-start ml-4 text-[#018554]'>Technical Interviews</p>
           <p className='text-start ml-4 text-[#018554]'>{applicantStats.technicalInterviews}</p>
         </div>
-        <hr />
+        <hr className="mt-2" />
+        
         <div className='flex justify-between mt-3'>
-          <p className='text-start ml-4 text-[#018554]'>HR Interview</p>
+          <p className='text-start ml-4 text-[#018554]'>HR Interviews</p>
           <p className='text-start ml-4 text-[#018554]'>{applicantStats.hrInterviews}</p>
         </div>
-        <hr />
+        <hr className="mt-2" />
+        
         <div className='flex justify-between mt-3'>
           <p className='text-start ml-4 text-[#018554]'>Total Hired</p>
           <p className='text-start ml-4 text-[#018554]'>{applicantStats.totalHired}</p>
         </div>
-        <hr />
+        <hr className="mt-2" />
       </div>
     </CardContent>
   );
 };
+
 
 
 const ProjectSummaryCard = () => {
@@ -218,7 +256,7 @@ const ProjectSummaryCard = () => {
   const avgDuration = projectData.reduce((sum, project) => sum + project.projectDuration, 0) / totalProjects || 0;
 
   return (
-    <CardContent>
+    <CardContent className='h-full h-screen'>
       <h1 className='font-sans text-3xl font-semibold text-green-700 text-start'>
         Project Summary
       </h1>
@@ -315,126 +353,82 @@ const MonthlyHiresChart = () => {
     );
   };
 
+
 // Employee Growth Line Chart
 const EmployeeGrowthChart = () => {
-    const [employeeData, setEmployeeData] = useState([]);
-  
-    useEffect(() => {
-      const fetchEmployeeData = async () => {
-        try {
-          const response = await axios.get('http://localhost:8070/departments/Dview');
-          const data = response.data.map(dept => ({
-            name: dept.departmentName,
-            employees: dept.Numberofemployees,
-          }));
-          setEmployeeData(data);
-        } catch (error) {
-          console.error('Failed to fetch employee data:', error);
-        }
-      };
-  
-      fetchEmployeeData();
-    }, []);
-  
-    return (
-      <Card>
-        <CardContent>
-          <h2 className='mb-10 text-2xl font-semibold text-gray-700'>Employee Growth Line Chart</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={employeeData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <RechartsTooltip />
-              <Legend />
-              <Line type="monotone" dataKey="employees" stroke="purple" />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-    );
-  };  
+  const [employeeData, setEmployeeData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-// const generateNudeColors = (length) => {
-//     const nudeColors = [
-//       '#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600', '#D5C5B0', '#F4D1B9', '#D8B29E'
-//     ];
-//     return Array.from({ length }, (_, i) => nudeColors[i % nudeColors.length]);
-//   };
-  
-//   const ProjectDistributionChart = () => {
-//     const [chartData, setChartData] = useState([]);
-  
-//     useEffect(() => {
-//       const fetchProjectData = async () => {
-//         try {
-//           const response = await axios.get('http://localhost:8070/projects/Pview');
-//           const projects = response.data;
-  
-//           // Group projects by department
-//           const departmentProjects = projects.reduce((acc, project) => {
-//             const deptName = project.departmentID.departmentName;
-//             if (!acc[deptName]) {
-//               acc[deptName] = 0;
-//             }
-//             acc[deptName]++;
-//             return acc;
-//           }, {});
-  
-//           // Transform data for pie chart
-//           const pieData = Object.entries(departmentProjects).map(([dept, count]) => ({
-//             name: dept,
-//             value: count
-//           }));
-  
-//           setChartData(pieData);
-//         } catch (err) {
-//           console.error('Failed to fetch project distribution:', err);
-//         }
-//       };
-  
-//       fetchProjectData();
-//     }, []);
-  
-//     if (!chartData.length) return <div>Loading chart...</div>;
-  
-//     return (
-//       <div className="flex justify-center ">
-//         <ResponsiveContainer width="100%" height={300}>
-//           <PieChart>
-//             <Pie
-//               data={chartData}
-//               dataKey="value"
-//               nameKey="name"
-//               outerRadius={100}
-//               label={({ name, value }) => `${name}: ${value}`}
-//               animationDuration={500}
-//               stroke="#fff" // Adding a white stroke for cleaner separation between slices
-//               strokeWidth={1.5} // Slightly thicker stroke for a more refined look
-//             >
-//               {chartData.map((entry, index) => (
-//                 <Cell key={`cell-${index}`} fill={generateNudeColors(chartData.length)[index]} />
-//               ))}
-//             </Pie>
-//             <Tooltip
-//               contentStyle={{
-//                 backgroundColor: '#f4f4f4', // Light background for tooltip
-//                 borderRadius: '20px', // Rounded corners
-//                 padding: '20px', // Padding for better spacing
-//               }}
-//               labelStyle={{
-//                 color: '#333', // Darker text for the label
-//                 fontWeight: 'bold',
-//               }}
-//               itemStyle={{
-//                 color: '#444', // Dark color for the tooltip content
-//               }}
-//             />
-//           </PieChart>
-//         </ResponsiveContainer>
-//       </div>
-//     );
-//   };
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8070/employee/Eview');
+        console.log('Employee Data:', response.data);
+
+        if (!response.data || !Array.isArray(response.data)) {
+          throw new Error('Invalid data format received');
+        }
+
+        const employees = response.data;
+
+        // Group employees by department
+        const departmentCounts = employees.reduce((acc, employee) => {
+          const department = employee.employee_department || 'Unassigned';
+          if (!acc[department]) {
+            acc[department] = 1;
+          } else {
+            acc[department]++;
+          }
+          return acc;
+        }, {});
+
+        // Transform data for the line chart
+        const chartData = Object.entries(departmentCounts).map(([dept, count]) => ({
+          name: dept,
+          employees: count
+        }));
+
+        setEmployeeData(chartData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch employee data:', error);
+        if (error.response) {
+          setError(`Error: ${error.response.status} - ${error.response.statusText}`);
+        } else {
+          setError('Failed to load employee data');
+        }
+        setLoading(false);
+      }
+    };
+
+    fetchEmployeeData();
+  }, []);
+
+  if (loading) return <div className="p-4">Loading employee data...</div>;
+  if (error) return <div className="p-4 text-red-600">{error}</div>;
+
+  return (
+    <Card>
+      <CardContent>
+        <h2 className='mb-10 text-2xl font-semibold text-gray-700'>Employee Growth Line Chart</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={employeeData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <RechartsTooltip />
+            <Legend />
+            <Line type="monotone" dataKey="employees" stroke="purple" />
+          </LineChart>
+        </ResponsiveContainer>
+      </CardContent>
+    </Card>
+  );
+};
+
+
+
 // Function to generate a set of colors for the chart
 const generateNudeColors = (length) => {
   const nudeColors = [
@@ -527,17 +521,18 @@ const ProjectDistributionChart = () => {
 function HRHome() {
 
   return (
-    <div className="min-w-full overflow-x-auto">
+    <div className="min-w-full overflow-x-auto bg-emerald-50">
       <div className="min-w-[1400px] p-4">
-        <Box>
-          <div className='grid grid-cols-2 gap-6'>
-            <div className='grid h-[700px] grid-cols-2 gap-4'>
-              <div className='w-full '>
+        <Box className='mt-10 mb-20'>
+          <section className='flex justify-between h-fu'>
+          <div className='grid grid-cols-2 gap-6 '>
+            <div className='grid  grid-cols-2 gap-4'>
+              <div className='w-full  '>
                 <Card variant="outlined" className='shadow-lg w-80'>
                   <MonthlyHiresCard />
                 </Card>
               </div>
-              <div className='w-full'>
+              <div className='w-full h-full'>
                 <Card variant="outlined" className='ml-3 shadow-lg w-80'>
                   <DepartmentCard />
                 </Card>
@@ -546,7 +541,7 @@ function HRHome() {
               
             </div>
             
-            <div className='flex-none ml-3'>
+            <div className='flex-none ml-3 mr-20 h-full'>
               <Card variant="outlined" className='w-full shadow-lg'>
                 <ProjectSummaryCard />
               </Card>
@@ -554,8 +549,9 @@ function HRHome() {
               
             </div>
           </div>
+          </section>
 
-          <div className='grid grid-cols-2 gap-10 mt-16'>
+          <div className='grid grid-cols-2 gap-10 mt-16 mr-20'>
             <div className='w-full '>
             <DashboardCharts />
             
@@ -573,7 +569,7 @@ function HRHome() {
           </div>
 
           {/* New Graph Cards */}
-          <div className='grid grid-cols-2 gap-10 mt-16'>
+          <div className='grid grid-cols-2 gap-10 mt-16 mr-20'>
             <div className='w-full'>
               <MonthlyHiresChart />
             </div>
