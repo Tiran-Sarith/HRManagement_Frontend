@@ -14,6 +14,7 @@ export default function JobApplication() {
         margin: "auto",
       }}
     >
+
       {/* Image */}
       <img
         src={Rectangle_3842}
@@ -40,7 +41,7 @@ export default function JobApplication() {
           }}
           
       >
-        Engineer – Cloud Services
+        Ready to build the next big thing in tech?
       </h1>
 
     </div>
@@ -89,6 +90,7 @@ export default function JobApplication() {
           }}
         >
           Apply Now
+          
         </h1>
       </div>
 
@@ -104,7 +106,7 @@ export default function JobApplication() {
           }}
         >
           
-          If you think you are the right person. Apply now.
+          Are you the right person?
         </p>
         <p
           style={{
@@ -127,3 +129,4 @@ export default function JobApplication() {
 </div>
   );
 }
+

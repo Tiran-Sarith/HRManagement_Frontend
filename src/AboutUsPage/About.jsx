@@ -40,18 +40,16 @@ export default function About() {
 
   {/* Left Content */}
   <div
-    className="relative z-0 bg-white p-10 md:p-16 rounded-lg shadow-lg w-4/5 md:w-3/5 mx-auto md:ml-20"
+    className="relative -ml-20 z-0 bg-white p-10 md:p-16 rounded-lg shadow-lg w-4/5 md:w-3/5 mx-auto md:ml-20"
     style={{
       borderRadius: "0px 60px 0px 60px",
     }}
   >
-    <h1 className="text-green-500 text-3xl md:text-5xl font-bold">
-      About [Company Name]
+    <h1 className="text-green-500 text-3xl md:text-5xl font-bold text-left">
+      ABOUT INTELLISENSE
     </h1>
-    <p className="text-gray-600 text-base md:text-lg mt-6">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-      varius enim in eros elementum tristique. Duis cursus, mi quis viverra
-      ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.
+    <p className="text-gray-600 text-base md:text-lg mt-6 text-left ">
+    Intellisense is a pioneer and leader in Sri Lanka’s software industry with expertise in the rapidly growing and evolving tech ecosystems of Scandinavia and beyond. We specialise in building and managing dedicated, high-performing software development teams with full stack development competencies.
     </p>
   </div>
 </div>

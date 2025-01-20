@@ -337,11 +337,14 @@ const JobDetails = () => {
 
           {/* Apply Button */}
           <div className="flex justify-center mt-8">
-          <a href="/apply" target="_blank" rel="noopener noreferrer">
-              <button className="w-full mt-5 px-12 py-2 text-lg font-semibold text-white transition-colors bg-green-700 rounded-lg hover:bg-green-800">
-                Apply Now
-              </button>
-            </a>
+          <div style={{marginTop:'20px'}}>
+              <Link 
+  to={`/career/${id}/apply`}  
+  className="w-full mt-5 px-6 py-2 text-lg font-semibold text-white transition-colors bg-green-700 rounded-lg hover:bg-green-800"
+>
+  Apply Now
+</Link> 
+</div> 
           </div>
         </div>
       </div>

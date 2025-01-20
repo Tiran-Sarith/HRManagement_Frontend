@@ -31,7 +31,7 @@ const Navbar = () => {
     <div className="sticky top-0 z-50 w-full bg-white shadow-md">
       <div className="relative flex items-center justify-between py-4 navbar md:px-40 px-7">
         <div className="ml-0 text-3xl text-green-800 font-rubikDirt">
-          <a href="/home">ITELLISENSE</a>
+          <a href="/home">INTELLISENSE</a>
         </div>
 
         {/* Mobile menu button with animation */}
