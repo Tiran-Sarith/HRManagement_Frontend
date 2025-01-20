@@ -36,10 +36,26 @@ const TeamSlider = () => {
     { name: "Clara", title: "CFO", img: "https://via.placeholder.com/300x400" },
     { name: "Dan", title: "CMO", img: "https://via.placeholder.com/300x400" },
     { name: "Eva", title: "COO", img: "https://via.placeholder.com/300x400" },
-    { name: "Fred", title: "Engineer", img: "https://via.placeholder.com/300x400" },
-    { name: "Grace", title: "Designer", img: "https://via.placeholder.com/300x400" },
-    { name: "Hank", title: "Manager", img: "https://via.placeholder.com/300x400" },
-    { name: "Ivy", title: "Developer", img: "https://via.placeholder.com/300x400" },
+    {
+      name: "Fred",
+      title: "Engineer",
+      img: "https://via.placeholder.com/300x400",
+    },
+    {
+      name: "Grace",
+      title: "Designer",
+      img: "https://via.placeholder.com/300x400",
+    },
+    {
+      name: "Hank",
+      title: "Manager",
+      img: "https://via.placeholder.com/300x400",
+    },
+    {
+      name: "Ivy",
+      title: "Developer",
+      img: "https://via.placeholder.com/300x400",
+    },
   ];
 
   return (
@@ -47,15 +63,14 @@ const TeamSlider = () => {
       <h2 className="text-3xl font-bold text-center mb-6">
         Meet <span className="text-green-500">our</span> team
       </h2>
-      
-      <div className="flex justify-center">
-  <p className="text-center mb-10" >
-    Our power of choice is untrammelled and when nothing prevents being able
-    to do what we like best every pleasure.
-  </p>
-</div>
 
-      
+      <div className="flex justify-center">
+        <p className="text-center mb-10">
+          Our power of choice is untrammelled and when nothing prevents being
+          able to do what we like best every pleasure.
+        </p>
+      </div>
+
       <div className="slider-wrapper">
         <button className="scroll-btn left" onClick={scrollLeft}>
           &#8249;
@@ -92,12 +107,11 @@ const TeamSlider = () => {
             </div>
           ))}
         </div>
-        <button className="scroll-btn right" onClick={scrollRight}>
-          
-        </button>
+        <button className="scroll-btn right" onClick={scrollRight}></button>
       </div>
     </div>
-  );s
+  );
+  s;
 };
 
 export default TeamSlider;

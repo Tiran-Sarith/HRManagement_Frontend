@@ -19,6 +19,7 @@ import About from "./AboutUsPage/About";
 //HR
 import MainHR from "./HRPages/MainHR";
 import JobApplication from "./JobApplication/jobApplication";
+import AdminLogin from "./HRPages/AdminLogin";
 
 
 
@@ -33,7 +34,7 @@ function App() {
 
 {/* website pages */}
 
-          <Navbar/>
+          {/* <Navbar/>
           <Routes>
             <Route path="/apply" element={<JobApplication/>}/>
             <Route path="/home" element={<Home/>} />
@@ -44,10 +45,11 @@ function App() {
             <Route path="/aboutus" element={<About/>} />
             <Route path="/career/:id" element={<JobDetails/>} />
           </Routes>
-          <Footer/>
+          <Footer/> */}
 
 {/* HR Pages */}
-          {/* <MainHR /> */}
+          <MainHR />
+          {/* <AdminLogin/> */}
 
 
 

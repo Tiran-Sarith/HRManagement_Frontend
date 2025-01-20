@@ -28,7 +28,7 @@ function Employees() {
     try {
       const response = await axios.get('http://localhost:8070/employee/Eview');
       const formattedEmployees = response.data.map((employee, index) => ({
-        id: employee._id,
+        id: employee._id,  // Make sure this is set correctly
         name: employee.employee_name_with_initials,
         email: employee.employee_email,
         department: employee.employee_department,
@@ -117,14 +117,14 @@ function Employees() {
         </Stack>
       </div>
 
-      <div style={{ height: 450, width: 850 }}>
+      <div style={{ height: 450, width: 950 }}>
         <DataGrid
           rows={rows}
           columns={columns}
           initialState={{
-            pagination: { paginationModel: { page: 0, pageSize: 8 } },
+            pagination: { paginationModel: { page: 0, pageSize: 6 } },
           }}
-          pageSizeOptions={[5, 10]}
+          pageSizeOptions={[5, 6]}
           onRowClick={handleRowClick}
         />
         <EmployeePopup 

@@ -42,7 +42,7 @@ const MonthlyHiresCard = () => {
   };
 
   return (
-    <CardContent className='mb-24 w-80'>
+    <CardContent className='w-72 h-screen'>
       <h1 className='font-sans text-3xl font-semibold text-green-700 text-start'>
         Hire per month
       </h1>
@@ -67,7 +67,7 @@ const MonthlyHiresCard = () => {
 
 // Department Card Component
 const DepartmentCard = () => {
-  const [departments, setDepartments] = useState([]);
+  const [departmentStats, setDepartmentStats] = useState({});
   const [applicantStats, setApplicantStats] = useState({
     applications: 0,
     technicalInterviews: 0,
@@ -80,23 +80,51 @@ const DepartmentCard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8070/departments/Dview');
-        setDepartments(response.data);
+        const response = await axios.get('http://localhost:8070/employee/Eview');
+        console.log('Employee Data:', response.data);
+
+        if (!response.data || !Array.isArray(response.data)) {
+          throw new Error('Invalid data format received');
+        }
+
+        const employees = response.data;
         
-        // Calculate total hired from departments
-        const totalHired = response.data.reduce((sum, dept) => sum + dept.Numberofemployees, 0);
+        // Count employees by department
+        const departmentCounts = employees.reduce((acc, employee) => {
+          const department = employee.employee_department || 'Unassigned';
+          if (!acc[department]) {
+            acc[department] = 1;
+          } else {
+            acc[department]++;
+          }
+          return acc;
+        }, {});
+
+        // Sort departments by count in descending order
+        const sortedDepartments = Object.entries(departmentCounts)
+          .sort(([, a], [, b]) => b - a)
+          .reduce((acc, [dept, count]) => {
+            acc[dept] = count;
+            return acc;
+          }, {});
+
+        setDepartmentStats(sortedDepartments);
         
-        // Setting mock data for other stats - replace with real API calls when available
+        // Calculate total employees
+        const totalEmployees = employees.length;
+        
+        // Set applicant stats based on total employees
         setApplicantStats({
-          applications: totalHired * 4, // Assuming 5 applications per hire
-          technicalInterviews: totalHired * 3, // Assuming 3 technical interviews per hire
-          hrInterviews: totalHired * 2, // Assuming 2 HR interviews per hire
-          totalHired: totalHired
+          applications: totalEmployees * 4, // Assuming 4 applications per hire
+          technicalInterviews: totalEmployees * 3, // Assuming 3 technical interviews per hire
+          hrInterviews: totalEmployees * 2, // Assuming 2 HR interviews per hire
+          totalHired: totalEmployees
         });
         
         setLoading(false);
-      } catch {
-        setError('Failed to fetch department data');
+      } catch (err) {
+        console.error('Error fetching employee data:', err);
+        setError(err.message || 'Failed to fetch employee data');
         setLoading(false);
       }
     };
@@ -104,27 +132,32 @@ const DepartmentCard = () => {
     fetchData();
   }, []);
 
-  if (loading) return <div className="p-4">Loading department data...</div>;
+  if (loading) return <div className="p-4">Loading employee data...</div>;
   if (error) return <div className="p-4 text-red-600">{error}</div>;
+  if (Object.keys(departmentStats).length === 0) return <div className="p-4">No employee data available</div>;
 
   return (
-    <CardContent>
+    <CardContent className='w-72 h-screen'>
       <h1 className='font-sans text-3xl font-semibold text-green-700 text-start'>
         Employees
       </h1>
       
       <div>
         <h2 className='mt-6 mb-5 ml-4 font-sans text-xl font-semibold text-green-700 text-start'>
-          For Departments
+          Department Distribution
         </h2>
 
-        {departments.map((dept) => (
-          <div key={dept._id}>
+        {Object.entries(departmentStats).map(([department, count]) => (
+          <div key={department}>
             <div className='flex justify-between mt-3'>
-              <p className='text-start ml-4 text-[#018554]'>{dept.departmentName}</p>
-              <p className='text-start ml-4 text-[#018554]'>{dept.Numberofemployees}</p>
+              <p className='text-start ml-4 text-[#018554]'>
+                {department}
+              </p>
+              <p className='text-start ml-4 text-[#018554]'>
+                {count}
+              </p>
             </div>
-            <hr />
+            <hr className="mt-2" />
           </div>
         ))}
       </div>
@@ -135,28 +168,31 @@ const DepartmentCard = () => {
         </h2>
 
         <div className='flex justify-between mt-3'>
-          <p className='text-start ml-4 text-[#018554]'>Applications</p>
+          <p className='text-start ml-4 text-[#018554]'>Total Applications</p>
           <p className='text-start ml-4 text-[#018554]'>{applicantStats.applications}</p>
         </div>
-        <hr />
+        <hr className="mt-2" />
+        
         <div className='flex justify-between mt-3'>
-          <p className='text-start ml-4 text-[#018554]'>Technical Interview</p>
+          <p className='text-start ml-4 text-[#018554]'>Technical Interviews</p>
           <p className='text-start ml-4 text-[#018554]'>{applicantStats.technicalInterviews}</p>
         </div>
-        <hr />
+        <hr className="mt-2" />
+        
         <div className='flex justify-between mt-3'>
-          <p className='text-start ml-4 text-[#018554]'>HR Interview</p>
+          <p className='text-start ml-4 text-[#018554]'>HR Interviews</p>
           <p className='text-start ml-4 text-[#018554]'>{applicantStats.hrInterviews}</p>
         </div>
-        <hr />
+        <hr className="mt-2" />
+        
         <div className='flex justify-between mt-3'>
           <p className='text-start ml-4 text-[#018554]'>Total Hired</p>
           <p className='text-start ml-4 text-[#018554]'>{applicantStats.totalHired}</p>
         </div>
-        <hr />
+        <hr className="mt-2" />
       </div>
     </CardContent>
-  );
+  );
 };
 
 
@@ -218,7 +254,7 @@ const ProjectSummaryCard = () => {
   const avgDuration = projectData.reduce((sum, project) => sum + project.projectDuration, 0) / totalProjects || 0;
 
   return (
-    <CardContent>
+    <CardContent className='h-screen'>
       <h1 className='font-sans text-3xl font-semibold text-green-700 text-start'>
         Project Summary
       </h1>
@@ -527,53 +563,47 @@ const ProjectDistributionChart = () => {
 function HRHome() {
 
   return (
-    <div className="min-w-full overflow-x-auto">
-      <div className="min-w-[1400px] p-4">
+    <div className="w-full px-4 overflow-x-hidden"> {/* Changed from min-w-full */}
+      <div className="w-full max-w-[1400px] mx-auto"> {/* Changed from min-w-[1400px] */}
         <Box>
-          <div className='grid grid-cols-2 gap-6'>
+          <div className='grid grid-cols-2 gap-4'> {/* Adjusted gap */}
             <div className='grid h-[700px] grid-cols-2 gap-4'>
-              <div className='w-full '>
-                <Card variant="outlined" className='shadow-lg w-80'>
+              <div className='w-full'>
+                <Card variant="outlined" className='shadow-lg w-full'> {/* Changed from w-80 */}
                   <MonthlyHiresCard />
                 </Card>
               </div>
               <div className='w-full'>
-                <Card variant="outlined" className='ml-3 shadow-lg w-80'>
+                <Card variant="outlined" className='shadow-lg w-full'> {/* Changed from w-80 */}
                   <DepartmentCard />
                 </Card>
               </div>
-              
-              
             </div>
             
-            <div className='flex-none ml-3'>
-              <Card variant="outlined" className='w-full shadow-lg'>
+            <div className='w-full'>
+              <Card variant="outlined" className='shadow-lg w-full'>
                 <ProjectSummaryCard />
               </Card>
-
-              
             </div>
           </div>
 
-          <div className='grid grid-cols-2 gap-10 mt-16'>
-            <div className='w-full '>
-            <DashboardCharts />
-            
+          <div className='grid grid-cols-2 gap-6 mt-16'> {/* Adjusted gap */}
+            <div className='w-full'>
+              <DashboardCharts />
             </div>
             <div className='w-full'>
-            <Card>
-                    <CardContent>   
-                    <div className="mt-1 text-2xl font-semibold text-gray-700">Projects by Department</div>
-                    <ProjectDistributionChart />
-                        
-                    </CardContent>
-                </Card>
-            
+              <Card className='w-full'>
+                <CardContent>   
+                  <div className="mt-1 text-2xl font-semibold text-gray-700">
+                    Projects by Department
+                  </div>
+                  <ProjectDistributionChart />
+                </CardContent>
+              </Card>
             </div>
           </div>
 
-          {/* New Graph Cards */}
-          <div className='grid grid-cols-2 gap-10 mt-16'>
+          <div className='grid grid-cols-2 gap-6 mt-16'> {/* Adjusted gap */}
             <div className='w-full'>
               <MonthlyHiresChart />
             </div>
