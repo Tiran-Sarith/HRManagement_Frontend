@@ -1,7 +1,7 @@
 import React from "react";
 import Rectangle_3842 from "./Assets/Rectangle_3842.png"; // Ensure the correct path to your uploaded image
 import Group7 from "./Assets/Group7.png"; // Replace with the actual path to your icon
-import Form from "./form";
+import Form from "./Form";
 import JobDetails from "./JobDetails_apply";
 
 export default function JobApplication() {

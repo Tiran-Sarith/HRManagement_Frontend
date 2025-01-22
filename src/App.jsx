@@ -15,10 +15,9 @@ import ContactPage from "./Screens/ContactPage";
 import ServicesPage from "./Screens/ServicesPage";
 import About from "./AboutUsPage/About";
 
-
 //HR
 import MainHR from "./HRPages/MainHR";
-import JobApplication from "./JobApplication/jobApplication";
+import JobApplication from "./JobApplication/JobApplication";
 
 
 
@@ -33,7 +32,7 @@ function App() {
 
 {/* website pages */}
 
-          {/* <Navbar/>
+           <Navbar/>
           <Routes>
             {/* <Route path="/apply" element={<JobApplication/>}/> */}
             <Route path="/home" element={<Home/>} />
@@ -47,10 +46,10 @@ function App() {
 
 
           </Routes>
-          <Footer/> */}
+          <Footer/>
 
 {/* HR Pages */}
-          <MainHR />
+          
 
 
 
