@@ -27,7 +27,7 @@ export default function Form() {
   const [jobTitle, setJobTitle] = useState("");
 
   const [jobRequirements, setJobRequirements] = useState("");
-
+  const [vacancyId, setVacancyId] = useState("");
 
   const maxCharacters = 263;
 
@@ -39,6 +39,8 @@ export default function Form() {
         setVacancy(response.data);
         setJobTitle(response.data?.jobTitle || ""); // Auto-fill jobTitle
         setJobRequirements(response.data?.requirements || ""); // Auto-fill requirements
+        setVacancyId(response.data?._id || ""); // Auto-fill vacancyId
+
         setLoading(false);
       })
       .catch((error) => {
@@ -70,6 +72,7 @@ export default function Form() {
     formData.append("jobTitle", jobTitle);
 
     formData.append("jobRequirements", jobRequirements);
+    formData.append("vacancyId", vacancyId);
 
     console.log("Submitting form data:", formData);
 
@@ -86,8 +89,6 @@ export default function Form() {
     }
   };
   
-
-
 
   return (
     <div
@@ -244,7 +245,7 @@ export default function Form() {
           >
             Apply
           </Button>
-
+          <span>Designation: {vacancyId}</span>
         </Box>
       </Box>
 
