@@ -1,45 +1,99 @@
+
+
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import image from '../Screens/Assests/Section 02.png';
+import { 
+  Card, 
+  CardHeader, 
+  CardContent, 
+  CardMedia,
+  Typography, 
+  Avatar,
+  Box
+} from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import JobIcon from '@mui/icons-material/Work';
+import LanguageIcon from '@mui/icons-material/Language';
+import image2 from '../Screens/Assests/OIP (2).jfif';
 
-function ApplicationCard({ application }) {
-    const navigate = useNavigate();
+const ApplicationCard = ({ application }) => {
+  const navigate = useNavigate();
 
-    const handleClick = () => {
-        navigate(`/cvs/${application._id}`);
-    };
+  if (!application) return null;
 
-    if (!application) return null;
-
-    return (
-        <Card sx={{ maxWidth: 345 }}>
-            <button onClick={handleClick} className="w-full text-left">
-                <CardHeader
-                    title={application.name || 'No Name'}
-                    subheader={`Email: ${application.email || 'No Email'}`}
-                />
-                <CardMedia
-                    component="img"
-                    height="50"
-                    image={image}
-                    alt="Application image"
-                />
-                <CardContent>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Phone: {application.phoneNo || 'No Phone Number'}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Portfolio: {application.portfolio || 'No Portfolio'}
-                    </Typography>
-                </CardContent>
-            </button>
-        </Card>
-    );
-}
+  return (
+    <Card 
+      onClick={() => navigate(`/cvs/${application._id}`)}
+      sx={{
+        cursor: 'pointer',
+        transition: 'all 0.3s',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: '0 4px 20px rgba(0, 128, 0, 0.15)'
+        },
+        maxWidth: 345,
+        border: '1px solid #e8f5e9'
+      }}
+    >
+      <CardHeader
+        avatar={
+          <Avatar sx={{ bgcolor: '#e8f5e9', color: 'green' }}>
+            <PersonIcon />
+          </Avatar>
+        }
+        title={ 
+          <Typography variant="h6" component="div" sx={{ color: 'green', alignItems: 'center' }}>
+            {application.name || 'No Name'}
+          </Typography>
+        }
+        subheader={
+          <Typography variant="subtitle2" sx={{ color: 'green' }}>
+            ID: {application._id?.slice(-10) || 'N/A'}
+          </Typography>
+        }
+      />
+      <CardMedia
+        component="img"
+        height="140"
+        image={image2}
+        alt="Application image"
+        sx={{
+          mx: 'auto',
+          width: 'auto',
+          maxHeight: '160px',
+          objectFit: 'contain',
+          px: 4
+        }}
+      />
+      <CardContent>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <EmailIcon sx={{ color: 'green' }} fontSize="small" />
+            <Typography variant="body2" sx={{ color: 'green' }}>
+              {application.email || 'No Email'}
+            </Typography>
+          </Box>
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <PhoneIcon sx={{ color: 'green' }} fontSize="small" />
+            <Typography variant="body2" sx={{ color: 'green' }}>
+              {application.phoneNo || 'No Phone Number'}
+            </Typography>
+          </Box>
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <JobIcon sx={{ color: 'green' }} fontSize="small" />
+            <Typography variant="body2" sx={{ color: 'green' }}>
+              {application.jobTitle|| 'No jobTitle'}
+            </Typography>
+          </Box>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default ApplicationCard;
