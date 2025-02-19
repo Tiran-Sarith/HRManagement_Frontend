@@ -18,6 +18,7 @@ import About from "./AboutUsPage/About";
 //HR
 import MainHR from "./HRPages/MainHR";
 import JobApplication from "./JobApplication/JobApplication";
+import HRLogin from "./Screens/HRLogin";
 
 
 
@@ -32,9 +33,9 @@ function App() {
 
 {/* website pages */}
 
-           <Navbar/>
+          <Navbar/>
           <Routes>
-            {/* <Route path="/apply" element={<JobApplication/>}/> */}
+            <Route path="/apply" element={<JobApplication/>}/>
             <Route path="/home" element={<Home/>} />
             <Route path="/" element={<Home/>} />
             <Route path="/career" element={<Career/>} />
@@ -43,13 +44,14 @@ function App() {
             <Route path="/aboutus" element={<About/>} />
             <Route path="/career/:id" element={<JobDetails/>} />
             <Route path="/career/:id/apply" element={<JobApplication/>} />
+            <Route path="/hrlogin" element={<HRLogin/>} />
 
 
           </Routes>
           <Footer/>
 
 {/* HR Pages */}
-          
+          {/* <MainHR/> */}
 
 
 

@@ -62,6 +62,7 @@ export const COMPANY = [
   { name: "About us", link: "#" },
   { name: "Careers", link: "#" },
   { name: "Customer Stories", link: "#" },
+  { name: "HR Login", link: "/hrlogin" },
 ];
 export const SUPPORT = [
   { name: "Documentation", link: "#" },

@@ -42,6 +42,7 @@ import Departments from './Departments';
 import ProjectsPending from '../Components/ProjectsPending';
 import AddProject from './AddProject';
 import Dashboard from './Dashboard';
+import MembersAccounts from './MembersAccounts';
 
 
 const drawerWidth = 240;
@@ -143,7 +144,7 @@ export default function MainHR() {
                     </DrawerHeader>
                     <Divider />
                     <List> 
-                        {['Home', 'Employee', 'Projects', 'Departments', 'Vacancies', 'Applications'].map(
+                        {['Home', 'Employee', 'Projects', 'Departments', 'Vacancies', 'Applications','Members Accounts'].map(
                             (text, index) => (
                                 <ListItem key={text} disablePadding>
                                     <ListItemButton
@@ -159,6 +160,8 @@ export default function MainHR() {
                                                 ? '/projects'
                                                 : text === 'Departments'
                                                 ? '/departments'
+                                                : text === 'Members Accounts'
+                                                ? '/membersaccounts'
                                                 : '/'
                                         }
                                     >
@@ -184,19 +187,8 @@ export default function MainHR() {
                         )}
                     </List>
                     <Divider />
-                    <List>
-                        {['Support', 'Settings'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <HelpCenterIcon /> : <SettingsIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Card sx={{ display: 'flex' }} className="mt-40">
+
+                    <Card sx={{ display: 'flex' }} className="mt-56">
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <CardContent sx={{ flex: '1 0 auto' }}>
                                 <Typography component="div">Username</Typography>
@@ -213,6 +205,7 @@ export default function MainHR() {
                     <DrawerHeader />
                     <Routes>
                         {/* <Route path="/" element={<HRHome />} /> */}
+                        <Route path="/membersaccounts" element={<MembersAccounts/>} />
                         <Route path="/" element={<Dashboard/>} />
                         <Route path="/vacancies" element={<Vacancies />} />
                         <Route path="/vacanciesAdd" element={<AddVacancies />} />
