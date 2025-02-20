@@ -126,9 +126,9 @@ const ApplicationsList = () => {
       </Typography>
 
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" sx={{ mb: 3, fontWeight: 'bold', color: 'green' }}>
+        {/* <Typography variant="h4" component="h1" sx={{ mb: 3, fontWeight: 'bold', color: 'green' }}>
           Applications
-        </Typography>
+        </Typography> */}
         <TextField
           fullWidth
           variant="outlined"
