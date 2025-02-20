@@ -148,7 +148,7 @@ export default function MainHR() {
                     </DrawerHeader>
                     <Divider />
                     <List> 
-                        {['Home', 'Employee', 'Projects', 'Departments', 'Vacancies', 'Applications','Members Accounts'].map(
+                        {['Home', 'Employee', 'Projects', 'Departments', 'Vacancies','Members Accounts'].map(
                             (text, index) => (
                                 <ListItem key={text} disablePadding>
                                     <ListItemButton
@@ -158,8 +158,8 @@ export default function MainHR() {
                                                 ? '/vacancies'
                                                 : text === 'Employee'
                                                 ? '/employee'
-                                                : text === 'Applications'
-                                                ? '/applications'
+                                                // : text === 'Applications'
+                                                // ? '/applications'
                                                 : text === 'Projects'
                                                 ? '/projects'
                                                 : text === 'Departments'

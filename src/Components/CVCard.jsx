@@ -207,7 +207,7 @@ function CVCard() {
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <StarIcon sx={{ color: 'green' }} />
                                         <Typography variant="body1">
-                                        <strong>Score:</strong> {application.score !== undefined ? application.score : 'N/A'}
+                                        <strong>Score:</strong> {application.cvScore !== undefined ? application.cvScore : 'N/A'}
                                         </Typography>
                                     </Box>
                                 </Box>
