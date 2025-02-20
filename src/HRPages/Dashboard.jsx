@@ -200,7 +200,7 @@ const DepartmentCard = () => {
 
 const ProjectSummaryCard = () => {
   const [projectStats, setProjectStats] = useState({
-    planning: 0,
+    pending: 0,
     inProgress: 0,
     finished: 0
   });
@@ -218,8 +218,8 @@ const ProjectSummaryCard = () => {
         // Calculate project statistics
         const stats = projects.reduce((acc, project) => {
           switch (project.projectStatus.toLowerCase()) {
-            case 'planning':
-              acc.planning++;
+            case 'pending':
+              acc.pending++;
               break;
             case 'in progress':
             case 'inprogress':
@@ -233,7 +233,7 @@ const ProjectSummaryCard = () => {
               break;
           }
           return acc;
-        }, { planning: 0, inProgress: 0, finished: 0 });
+        }, { pending: 0, inProgress: 0, finished: 0 });
 
         setProjectStats(stats);
         setLoading(false);
@@ -264,10 +264,10 @@ const ProjectSummaryCard = () => {
       <div className='flex mb-20 justify-evenly'>
         <div>
           <p className='text-[90px] font-bold font-sans mx-2 mt-4 text-[#00a36d]'>
-            {projectStats.planning}
+            {projectStats.pending}
           </p>
           <p className='text-lg font-semibold font-sans text-[#1c8552]'>
-            Planning Projects
+            pending Projects
           </p>
         </div>
         

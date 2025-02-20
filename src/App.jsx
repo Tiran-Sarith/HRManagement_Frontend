@@ -33,26 +33,44 @@ function App() {
 
 {/* website pages */}
 
-          <Navbar/>
+<<<<<<< HEAD
+           {/* <Navbar/>
+          <Routes>
+            
+=======
+          {/* <Navbar/>
           <Routes>
 
             <Route path="/apply" element={<JobApplication/>}/>
+<<<<<<< Updated upstream
+=======
+>>>>>>> 489cce200df4fceb7c0f06f3f716b7f205dcda0a
+>>>>>>> Stashed changes
             <Route path="/home" element={<Home/>} />
             <Route path="/" element={<Home/>} />
+            <Route path="/hrlogin" element={<HRLogin/>} />
             <Route path="/career" element={<Career/>} />
             <Route path="/contact" element={<ContactPage/>} />
             <Route path="/services" element={<ServicesPage/>} />
             <Route path="/aboutus" element={<About/>} />
             <Route path="/career/:id" element={<JobDetails/>} />
             <Route path="/career/:id/apply" element={<JobApplication/>} />
+<<<<<<< Updated upstream
             <Route path="/hrlogin" element={<HRLogin/>} /> 
             <Route path="/hrHome" element={<MainHR/>} /> 
+=======
+<<<<<<< HEAD
+
+=======
+            <Route path="/hrlogin" element={<HRLogin/>} /> 
+>>>>>>> 489cce200df4fceb7c0f06f3f716b7f205dcda0a
+>>>>>>> Stashed changes
 
           </Routes>
-          <Footer/>
+          <Footer/> */}
 
 {/* HR Pages */}
-          {/* <MainHR/> */}
+          <MainHR/>
 
 
 
