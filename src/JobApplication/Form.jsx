@@ -245,7 +245,6 @@ export default function Form() {
           >
             Apply
           </Button>
-          <span>Designation: {vacancyId}</span>
         </Box>
       </Box>
 

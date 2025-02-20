@@ -46,8 +46,7 @@ function App() {
             <Route path="/aboutus" element={<About/>} />
             <Route path="/career/:id" element={<JobDetails/>} />
             <Route path="/career/:id/apply" element={<JobApplication/>} />
-            <Route path="/hrlogin" element={<HRLogin/>} />
-
+            <Route path="/hrlogin" element={<HRLogin/>} /> 
 
           </Routes>
           <Footer/>
