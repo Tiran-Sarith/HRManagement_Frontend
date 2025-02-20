@@ -33,30 +33,8 @@ const MissionCard = () => {
           </p>
         </div>
 
-        {/* Footer Section */}
-        <div className="flex justify-between items-center mt-8 px-4">
-          {/* User Info */}
-          <div className="flex items-center gap-4">
-            <img
-              src="https://via.placeholder.com/50"
-              alt="User"
-              className="w-14 h-14 rounded-full"
-            />
-            <div>
-              <h4 className="font-bold text-gray-800">Name</h4>
-              <p className="text-gray-500">Post</p>
-            </div>
-          </div>
-
-          {/* Logo */}
-          <img
-            src="https://via.placeholder.com/100x30"
-            alt="Webflow Logo"
-            className="h-8"
-          />
-        </div>
       </div>
-      <div className="max-w-4xl bg-white rounded-xl shadow-md p-8 relative text-center">
+      <div className="max-w-4xl bg-white rounded-xl shadow-md p-8 relative text-center h-60">
         {/* Header Section */}
         <div>
           <div className="mb-4">

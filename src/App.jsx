@@ -33,7 +33,7 @@ function App() {
 
 {/* website pages */}
 
-          {/* <Navbar/>
+          <Navbar/>
           <Routes>
 
             <Route path="/apply" element={<JobApplication/>}/>
@@ -46,12 +46,13 @@ function App() {
             <Route path="/career/:id" element={<JobDetails/>} />
             <Route path="/career/:id/apply" element={<JobApplication/>} />
             <Route path="/hrlogin" element={<HRLogin/>} /> 
+            <Route path="/hrHome" element={<MainHR/>} /> 
 
           </Routes>
-          <Footer/> */}
+          <Footer/>
 
 {/* HR Pages */}
-          <MainHR/>
+          {/* <MainHR/> */}
 
 
 

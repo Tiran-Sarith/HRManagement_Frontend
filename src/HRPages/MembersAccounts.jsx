@@ -1,4 +1,9 @@
 import React, { useState } from 'react';
+
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import {app} from '../../FirebaseAuth'
+
+
 import {
   AutoComplete,
   Button,
@@ -70,9 +75,25 @@ function MembersAccounts() {
   const [form] = Form.useForm();
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
 
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
-  };
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+  
+  const auth = getAuth(app);
+  
+  const handleUserCreate = async (e) => {
+      try{
+          await createUserWithEmailAndPassword(auth, email, password);
+          console.log('User created');
+              
+        }
+        catch(error){
+            console.log(error.message);
+        }
+
+        
+    }
 
   return (
     <div>
@@ -81,7 +102,7 @@ function MembersAccounts() {
         {...formItemLayout}
         form={form}
         name="register"
-        onFinish={onFinish}
+        onFinish={handleUserCreate}
         initialValues={{
           residence: ['zhejiang', 'hangzhou', 'xihu'],
           prefix: '86',
@@ -97,8 +118,6 @@ function MembersAccounts() {
           label="Employee Name"
           rules={[
             {
-              required: true,
-              message: 'Please input your nickname!',
               whitespace: true,
             },
           ]}
@@ -111,8 +130,6 @@ function MembersAccounts() {
           label="Department"
           rules={[
             {
-              required: true,
-              message: 'Please input your nickname!',
               whitespace: true,
             },
           ]}
@@ -125,8 +142,6 @@ function MembersAccounts() {
           label="Employee ID"
           rules={[
             {
-              required: true,
-              message: 'Please input your nickname!',
               whitespace: true,
             },
           ]}
@@ -139,8 +154,6 @@ function MembersAccounts() {
           label="Username"
           rules={[
             {
-              required: true,
-              message: 'Please input your nickname!',
               whitespace: true,
             },
           ]}
@@ -157,12 +170,14 @@ function MembersAccounts() {
               message: 'The input is not valid E-mail!',
             },
             {
-              required: true,
               message: 'Please input your E-mail!',
             },
           ]}
         >
-          <Input />
+          <Input 
+              value = {email}
+              onChange = {(e) => setEmail(e.target.value)}          
+          />
         </Form.Item>
 
         <Form.Item
@@ -170,13 +185,15 @@ function MembersAccounts() {
           label="Password"
           rules={[
             {
-              required: true,
               message: 'Please input your password!',
             },
           ]}
           hasFeedback
         >
-          <Input.Password />
+          <Input.Password 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </Form.Item>
 
         <Form.Item
@@ -186,7 +203,6 @@ function MembersAccounts() {
           hasFeedback
           rules={[
             {
-              required: true,
               message: 'Please confirm your password!',
             },
             ({ getFieldValue }) => ({
