@@ -83,7 +83,7 @@ export default function Vacancies() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 70 },
+    // { field: "id", headerName: "ID", width: 70 },
     { field: "JobName", headerName: "Job Name", width: 130 },
     { field: "JobType", headerName: "Job Type", width: 130 },
     { field: "Department", headerName: "Department", width: 130 },
@@ -99,7 +99,7 @@ export default function Vacancies() {
           color="success"
           onClick={() => handleApplicationVacancies(params.id)}
         >
-          View aplications
+          Applications
         </Button>
       ),
     },
