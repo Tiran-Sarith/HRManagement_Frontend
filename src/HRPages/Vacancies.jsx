@@ -78,6 +78,10 @@ export default function Vacancies() {
     navigate("/vacanciesAdd");
   };
 
+  const handleApplicationVacancies = (id) => {
+    navigate(`/vacancies/${id}`);
+  };
+
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "JobName", headerName: "Job Name", width: 130 },
@@ -86,12 +90,27 @@ export default function Vacancies() {
     { field: "Created", headerName: "Created", width: 90 },
     { field: "Deadline", headerName: "Deadline", width: 160 },
     {
+      field: "View",
+      headerName: " ",
+      width: 180,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => handleApplicationVacancies(params.id)}
+        >
+          View aplications
+        </Button>
+      ),
+    },
+
+    {
       field: "delete",
       headerName: " ",
       width: 130,
       renderCell: (params) => (
         <Button
-          variant="contained"
+          variant="outlined"
           color="success"
           onClick={() => handleDelete(params.id)}
         >
@@ -113,6 +132,7 @@ export default function Vacancies() {
         </Button>
       ),
     },
+    
   ];
 
   return (

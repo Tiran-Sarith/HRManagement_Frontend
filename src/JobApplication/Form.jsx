@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -7,7 +7,17 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 
+
+import { useParams } from 'react-router-dom';
+
+
 export default function Form() {
+
+  const { id } = useParams(); // Get the ID from the URL
+  const [vacancy, setVacancy] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [portfolio, setPortfolio] = useState("");
@@ -16,7 +26,31 @@ export default function Form() {
   const [file, setFile] = useState(null);
   const [jobTitle, setJobTitle] = useState("");
 
+  const [jobRequirements, setJobRequirements] = useState("");
+  const [vacancyId, setVacancyId] = useState("");
+
   const maxCharacters = 263;
+
+
+  useEffect(() => {
+    // Fetch vacancy details using the ID from the URL
+    axios.get(`http://localhost:8070/vacancies/Vview/${id}`)
+      .then((response) => {
+        setVacancy(response.data);
+        setJobTitle(response.data?.jobTitle || ""); // Auto-fill jobTitle
+        setJobRequirements(response.data?.requirements || ""); // Auto-fill requirements
+        setVacancyId(response.data?._id || ""); // Auto-fill vacancyId
+
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching vacancy details:', error);
+        setLoading(false);
+      });
+  }, [id]);
+
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
@@ -37,6 +71,9 @@ export default function Form() {
     formData.append("file", file);
     formData.append("jobTitle", jobTitle);
 
+    formData.append("jobRequirements", jobRequirements);
+    formData.append("vacancyId", vacancyId);
+
     console.log("Submitting form data:", formData);
 
     try {
@@ -51,6 +88,7 @@ export default function Form() {
       alert("An error occurred while submitting the form. Please try again.");
     }
   };
+  
 
   return (
     <div
@@ -135,19 +173,6 @@ export default function Form() {
           }}
         />
 
-<TextField
-          id="jobTitle"
-          label="Job Title"
-          type="tel"
-          variant="outlined"
-          required
-          onChange={(e) => setJobTitle(e.target.value)}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "10px",
-            },
-          }}
-        />
 
         <TextField
           id="introduction"
@@ -165,7 +190,7 @@ export default function Form() {
             },
           }}
         />
-
+<div className="flex gap-2">
         <Button
           variant="outlined"
           component="label"
@@ -182,15 +207,20 @@ export default function Form() {
             onChange={(e) => setFile(e.target.files[0])}
           />
         </Button>
-
+        {file && (
+        <Typography className="pt-1.5" color="textSecondary">
+          {file.name}
+        </Typography>
+      )}
+        </div>
         <FormControlLabel
           control={<Checkbox />}
-          label="I'd like to receive updates on related career opportunities in the future by signing up for Sysco LABS Select"
+          label="I'd like to receive updates from the company"
         />
 
         <FormControlLabel
           control={<Checkbox required />}
-          label="I agree to the Terms & Conditions of Sysco LABS as specified in the privacy policy and have understood it"
+          label="I agree to the Terms & Conditions"
         />
 
         <Box display="flex" justifyContent="space-between">
@@ -215,8 +245,10 @@ export default function Form() {
           >
             Apply
           </Button>
+          <span>Designation: {vacancyId}</span>
         </Box>
       </Box>
+
     </div>
   );
 }

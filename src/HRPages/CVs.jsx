@@ -1,18 +1,33 @@
-import React from 'react'
+
+
+
+// CVs.jsx
+import React from 'react';
+import { Container, Typography, Box } from '@mui/material';
 import CVCard from '../Components/CVCard'
 
 function CVs() {
   return (
-    <div>
-        
-        <h1 className='font-bold text-3xl text-start'>CVs</h1>
+    <Container maxWidth="xl" sx={{ py: 4 }}>
+      {/* <Typography 
+        variant="h4" 
+        component="h1" 
+        sx={{ 
+          mb: 4, 
+          fontWeight: 'bold',
+          color: 'green',
+          borderBottom: '2px solid #e8f5e9',
+          pb: 2
+        }}
+      >
+        CVs
+      </Typography> */}
 
-        <div>
-            <CVCard/>
-        </div>
-
-    </div>
-  )
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <CVCard />
+      </Box>
+    </Container>
+  );
 }
 
-export default CVs
+export default CVs;

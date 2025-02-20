@@ -42,7 +42,11 @@ import Departments from './Departments';
 import ProjectsPending from '../Components/ProjectsPending';
 import AddProject from './AddProject';
 import Dashboard from './Dashboard';
+
 import MembersAccounts from './MembersAccounts';
+
+import VacancyApplications from './vacancyApplications';
+
 
 
 const drawerWidth = 240;
@@ -218,6 +222,7 @@ export default function MainHR() {
                         <Route path="/projectsPending" element={<ProjectsPending/>} />
                         <Route path="/addProject" element={<AddProject/>} />
                         <Route path="/cvs/:applicationId" element={<CVs />} />
+                        <Route path="/vacancies/:id" element={<VacancyApplications />} />
 
                     </Routes>
                 </Main>
