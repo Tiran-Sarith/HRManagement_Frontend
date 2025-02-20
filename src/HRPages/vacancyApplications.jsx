@@ -1,6 +1,4 @@
 
-
-// export default ApplicationsList;
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -13,7 +11,7 @@ import {
   TableRow, 
   Paper, 
   Typography, 
-  TextField, Container, Box,
+  TextField, Box,
   CircularProgress,
   Button,
   InputAdornment
@@ -33,7 +31,14 @@ const ApplicationsList = () => {
   useEffect(() => {
     axios.get(`http://localhost:8070/applications/Aview/byVacancy/${id}`)
       .then((response) => {
-        setApplications(response.data);
+        // Sort applications by score before setting state
+        const sortedApplications = response.data.sort((a, b) => {
+          // Convert scores to numbers, treating null/undefined as 0
+          const scoreA = Number(a.cvScore) || 0;
+          const scoreB = Number(b.cvScore) || 0;
+          return scoreB - scoreA; // Sort in descending order
+        });
+        setApplications(sortedApplications);
         setLoading(false);
       })
       .catch((error) => {
@@ -83,7 +88,7 @@ const ApplicationsList = () => {
     navigate(`/cvs/${app._id}`);
   };
 
-  // Filter applications based on search term
+  // Filter applications based on search term while maintaining sort order
   const filteredApplications = applications?.filter(app => {
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -126,9 +131,6 @@ const ApplicationsList = () => {
       </Typography>
 
       <Box sx={{ mb: 4 }}>
-        {/* <Typography variant="h4" component="h1" sx={{ mb: 3, fontWeight: 'bold', color: 'green' }}>
-          Applications
-        </Typography> */}
         <TextField
           fullWidth
           variant="outlined"
@@ -174,7 +176,7 @@ const ApplicationsList = () => {
           <TableBody>
             {filteredApplications?.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} align="center">
+                <TableCell colSpan={6} align="center">
                   <Typography sx={{ color: 'gray', py: 3 }}>
                     No applications found matching your search
                   </Typography>
@@ -190,7 +192,7 @@ const ApplicationsList = () => {
                   <TableCell>{app._id?.slice(-10) || 'N/A'}</TableCell>
                   <TableCell>{app.email}</TableCell>
                   <TableCell>{app.phoneNo}</TableCell>
-                  <TableCell>{app.cvScore || 'N/A'}</TableCell>
+                  <TableCell>{app.cvScore || 'N/A'}/1000</TableCell>
                   <TableCell>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <Button
