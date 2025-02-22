@@ -7,6 +7,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 import { useParams } from 'react-router-dom';
 
@@ -34,7 +35,7 @@ export default function Form() {
 
   useEffect(() => {
     // Fetch vacancy details using the ID from the URL
-    axios.get(`http://localhost:8070/vacancies/Vview/${id}`)
+    axios.get(`${API_BASE_URL}vacancies/Vview/${id}`)
       .then((response) => {
         setVacancy(response.data);
         setJobTitle(response.data?.jobTitle || ""); // Auto-fill jobTitle
