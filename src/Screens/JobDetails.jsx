@@ -61,6 +61,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import slide1image from "./Assests/banner-5250179_1280.jpg";
 import { Link } from 'react-router-dom';
+      
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
 const JobDetails = () => {
@@ -68,9 +70,11 @@ const JobDetails = () => {
   const [vacancy, setVacancy] = useState(null);
   const [loading, setLoading] = useState(true);
 
+
+
   useEffect(() => {
     // Fetch vacancy details using the ID from the URL
-    axios.get(`http://localhost:8070/vacancies/Vview/${id}`)
+    axios.get(`${API_BASE_URL}vacancies/Vview/${id}`)
       .then((response) => {
         setVacancy(response.data);
         setLoading(false);
