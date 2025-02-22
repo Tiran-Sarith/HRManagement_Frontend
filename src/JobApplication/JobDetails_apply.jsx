@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
 const JobDetails = () => {
   const { id } = useParams(); // Get the ID from the URL
   const [vacancy, setVacancy] = useState(null);
@@ -10,7 +13,7 @@ const JobDetails = () => {
 
   useEffect(() => {
     // Fetch vacancy details using the ID from the URL
-    axios.get(`http://localhost:8070/vacancies/Vview/${id}`)
+    axios.get(`${API_BASE_URL}vacancies/Vview/${id}`)
       .then((response) => {
         setVacancy(response.data);
         setLoading(false);
