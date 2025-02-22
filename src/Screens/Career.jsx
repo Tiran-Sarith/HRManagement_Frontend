@@ -6,7 +6,10 @@
       import { Search, MapPin, Clock, Briefcase } from 'lucide-react';
       import img11 from '../Screens/Assests/gadget-laptop-insurance.webp';
       import backgroundImage from '../Screens/Assests/careers.jpg';
-      
+
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
       // Enhanced JobCard Component with modern design
       const JobCard = ({ id, title, location, type }) => (
         <div className="group flex items-center justify-between p-6 mb-6 transition-all duration-300 bg-white rounded-xl shadow-sm hover:shadow-lg hover:transform hover:scale-[1.02]">
@@ -47,7 +50,7 @@
         const [filteredJobs, setFilteredJobs] = useState([]);
       
         useEffect(() => {
-          axios.get('https://hr-management-backend-five.vercel.app/vacancies/Vview')
+          axios.get(`${API_BASE_URL}/vacancies/Vview`)
                 
             .then((response) => {
               setJobs(response.data);
