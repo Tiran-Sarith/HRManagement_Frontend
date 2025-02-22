@@ -79,7 +79,7 @@ export default function Form() {
 
     try {
       const result = await axios.post(
-        "http://localhost:8070/applications/Aadd",
+        `${API_BASE_URL}applications/Aadd`,
         formData
       );
       console.log("Server response:", result.data);
