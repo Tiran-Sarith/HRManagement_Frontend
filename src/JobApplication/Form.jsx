@@ -245,7 +245,7 @@ export default function Form() {
           >
             Apply
           </Button>
-                    <span>Designation: </span>
+                    <span>Designation: {vacancy.designation} </span>
 
         </Box>
       </Box>
