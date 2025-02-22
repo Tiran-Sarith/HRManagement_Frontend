@@ -7,7 +7,7 @@
       import img11 from '../Screens/Assests/gadget-laptop-insurance.webp';
       import backgroundImage from '../Screens/Assests/careers.jpg';
 
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+      // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
       // Enhanced JobCard Component with modern design
