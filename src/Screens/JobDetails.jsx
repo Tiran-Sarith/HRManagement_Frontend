@@ -1,60 +1,3 @@
-// //JobDetails.jsx
-// import { useParams } from 'react-router-dom';
-// import { useState, useEffect } from 'react';
-// import axios from 'axios';
-
-// const JobDetails = () => {
-//   const { jobId } = useParams();
-//   const [job, setJob] = useState(null);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     axios.get(`http://localhost:8070/vacancies/Vview/:id`)
-//       .then((response) => {
-//         setJob(response.data);
-//         setLoading(false);
-//       })
-//       .catch((error) => {
-//         console.error('Error fetching job details:', error);
-//         setLoading(false);
-//       });
-//   }, [jobId]);
-
-//   if (loading) {
-//     return <div>Loading...</div>;
-//   }
-
-//   if (!job) {
-//     return <div>Job not found.</div>;
-//   }
-
-//   return (
-//     <div>
-//         <section>
-//         <div className="w-full bg-white h-2/6">
-        
-//         </div>
-//         </section>
-//         <section>
-//     <div className="max-w-4xl py-8 mx-auto bg-white rounded-lg shadow-lg">
-//       <h1 className="text-3xl font-bold text-emerald-600">{job.jobTitle}</h1>
-//       <p className="mb-4 text-gray-600">{job.description}</p>
-//       <div className="space-y-2">
-//         <div><strong>Location:</strong> {job.location || 'Sri Lanka'}</div>
-//         <div><strong>Type:</strong> {job.hireType}</div>
-//         <div><strong>Salary:</strong> Rs {job.salary ? job.salary.toLocaleString() : '150,000'}</div>
-//         <div><strong>Requirements:</strong> {job.requirements || 'Not specified'}</div>
-//         <div><strong>Responsibilities:</strong> {job.responsibilities || 'Not specified'}</div>
-//       </div>
-//     </div>
-//     </section>
-//     </div>
-//   );
-// };
-
-// export default JobDetails;
-
-
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -74,7 +17,7 @@ const JobDetails = () => {
 
   useEffect(() => {
     // Fetch vacancy details using the ID from the URL
-    axios.get(`${API_BASE_URL}/vacancies/Vview/${id}`)
+    axios.get(`${API_BASE_URL}vacancies/Vview/${id}`)
       .then((response) => {
         setVacancy(response.data);
         setLoading(false);
