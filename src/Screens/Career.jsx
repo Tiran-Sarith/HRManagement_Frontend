@@ -47,7 +47,7 @@
         const [filteredJobs, setFilteredJobs] = useState([]);
       
         useEffect(() => {
-          axios.get('https://hr-management-backend-phe8pu3or-tiran-wijerathnes-projects.vercel.app/vacancies/Vview')
+          axios.get('https://hr-management-backend-git-dep-b6c7f2-tiran-wijerathnes-projects.vercel.app/vacancies/Vview')
             .then((response) => {
               setJobs(response.data);
               setFilteredJobs(response.data);
