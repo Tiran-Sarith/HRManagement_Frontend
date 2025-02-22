@@ -74,7 +74,7 @@ const JobDetails = () => {
 
   useEffect(() => {
     // Fetch vacancy details using the ID from the URL
-    axios.get(`${API_BASE_URL}vacancies/Vview/${id}`)
+    axios.get(`${API_BASE_URL}/vacancies/Vview/${id}`)
       .then((response) => {
         setVacancy(response.data);
         setLoading(false);
