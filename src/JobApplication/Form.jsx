@@ -35,7 +35,7 @@ export default function Form() {
 
   useEffect(() => {
     // Fetch vacancy details using the ID from the URL
-    axios.get(`${API_BASE_URL}/vacancies/Vview/${id}`)
+    axios.get(`${API_BASE_URL}vacancies/Vview/${id}`)
       .then((response) => {
         setVacancy(response.data);
         setJobTitle(response.data?.jobTitle || ""); // Auto-fill jobTitle
@@ -79,7 +79,7 @@ export default function Form() {
 
     try {
       const result = await axios.post(
-        `${API_BASE_URL}/applications/Aadd`,
+        `${API_BASE_URL}applications/Aadd`,
         formData
       );
       console.log("Server response:", result.data);
