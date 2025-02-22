@@ -50,7 +50,7 @@
         const [filteredJobs, setFilteredJobs] = useState([]);
       
         useEffect(() => {
-          axios.get(`${API_BASE_URL}vacancies/Vview`)
+          axios.get(`${API_BASE_URL}/vacancies/Vview`)
             .then((response) => {
               setJobs(response.data);
               setFilteredJobs(response.data);
