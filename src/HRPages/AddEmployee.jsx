@@ -81,7 +81,7 @@ function AddEmployee() {
         };
 
         try {
-            await axios.post("http://localhost:8070/Vacancies/Vadd", newVacancy);
+            await axios.post(`${API_BASE_URL}Vacancies/Vadd`, newVacancy);
             alert('Vacancy Added');
         } catch (err) {
             alert(err);
