@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, CardContent, Typography, Grid } from '@mui/material';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 function Departments() {
     const [departments, setDepartments] = useState([]);
