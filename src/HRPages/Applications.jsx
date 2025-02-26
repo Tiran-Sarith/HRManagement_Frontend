@@ -77,6 +77,8 @@ import { TextField, Container, Typography, Box, CircularProgress } from '@mui/ma
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import ApplicationCard from '../Components/ApplicationCard';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const Applications = () => {
   const [applications, setApplications] = useState([]);
