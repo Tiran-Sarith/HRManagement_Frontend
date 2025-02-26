@@ -90,7 +90,7 @@ export default function UpdateVacancies() {
         
         try {
             const vacancyId = JSON.parse(localStorage.getItem('vacancyToUpdate'))._id;
-            await axios.put(`http://localhost:8070/vacancies/Vupdate/${vacancyId}`, formData);
+            await axios.put(`${API_BASE_URL}vacancies/Vupdate/${vacancyId}`, formData);
             alert('Vacancy Updated Successfully');
             localStorage.removeItem('vacancyToUpdate'); // Clean up
             navigate('/vacancies'); // Navigate back to vacancies list
