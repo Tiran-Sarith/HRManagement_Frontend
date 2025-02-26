@@ -21,7 +21,7 @@ export default function Vacancies() {
   // Fetch all vacancies
   const getVacancies = async () => {
     try {
-      const response = await axios.get("http://localhost:8070/vacancies/Vview");
+      const response = await axios.get(`${API_BASE_URL}vacancies/Vview`);
       const formattedVacancies = response.data.map((vacancy, index) => ({
         id: vacancy._id, // Use MongoDB _id as the unique identifier
         JobName: vacancy.jobTitle,
