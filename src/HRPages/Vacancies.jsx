@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function Vacancies() {
   const [vacancies, setVacancies] = useState([]);
   const [rows, setRows] = useState([]);
