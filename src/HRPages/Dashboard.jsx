@@ -9,6 +9,8 @@ import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer, CartesianGrid, LineC
 // import { PieChart } from '@mui/x-charts/PieChart';
 import axios from 'axios';
 import DashboardCharts from './DashboardCharts';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 // Styled component for progress bars
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
