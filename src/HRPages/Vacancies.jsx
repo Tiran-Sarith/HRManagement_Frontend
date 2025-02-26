@@ -51,7 +51,7 @@ export default function Vacancies() {
       if (!vacancyToDelete) return;
 
       // Make DELETE request to backend
-      await axios.delete(`http://localhost:8070/vacancies/Vdelete/${vacancyToDelete.id}`);
+      await axios.delete(`${API_BASE_URL}vacancies/Vdelete/${vacancyToDelete.id}`);
       
       // Update local state after successful deletion
       setRows(prevRows => prevRows.filter(row => row.id !== id));
