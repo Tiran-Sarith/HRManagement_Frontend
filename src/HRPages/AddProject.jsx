@@ -94,7 +94,7 @@ function AddProject() {
     }
 
     try {
-      await axios.post('http://localhost:8070/projects/Padd', formData);
+      await axios.post(`${API_BASE_URL}projects/Padd`, formData);
       alert('Project added successfully!');
       navigate('/projects'); // Navigate back to projects page
     } catch (error) {
