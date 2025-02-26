@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import { BarChart } from '@mui/x-charts';
 import axios from 'axios';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const DashboardCharts = () => {
   // const [projectData, setProjectData] = useState({ xAxis: [], series: [] });
