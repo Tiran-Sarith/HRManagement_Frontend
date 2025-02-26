@@ -26,7 +26,7 @@ function Employees() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('${API_BASE_URL}employee/Eview');
+      const response = await axios.get(`${API_BASE_URL}employee/Eview`);
       const formattedEmployees = response.data.map((employee, index) => ({
         id: employee._id,
         name: employee.employee_name_with_initials,
