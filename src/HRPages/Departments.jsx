@@ -7,7 +7,7 @@ function Departments() {
 
     useEffect(() => {
         // Fetch data from the backend
-        axios.get('http://localhost:8070/departments/Dview')
+        axios.get(`${API_BASE_URL}departments/Dview`)
             .then(response => {
                 setDepartments(response.data);
             })
