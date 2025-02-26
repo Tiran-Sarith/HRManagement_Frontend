@@ -19,6 +19,7 @@ import {
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SearchIcon from '@mui/icons-material/Search';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ApplicationsList = () => {
   const { id } = useParams();
