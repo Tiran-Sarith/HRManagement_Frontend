@@ -1,24 +1,23 @@
-# Use Node.js to build the app
-FROM node:20-alpine AS build
+FROM node:20-alpine
 
-WORKDIR /app
+WORKDIR /frontend
 
-# Copy package.json and install dependencies
-COPY package.json package-lock.json ./
+COPY package.json .
+
 RUN npm install
 
-# Copy all files and build the React app
+RUN npm i -g serve
+
 COPY . .
+
+# Build the production app
 RUN npm run build
 
-# Use Nginx to serve the static files
-FROM nginx:alpine
+# Install 'serve' globally to serve the built app
+RUN npm install -g serve
 
-# Copy the built app to Nginx's default folder
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port 80 for serving the app
+# Expose port 80 instead of 5173
 EXPOSE 80
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Serve the app on port 80
+CMD ["serve", "-s", "dist", "-l", "80"]
