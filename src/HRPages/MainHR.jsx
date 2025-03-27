@@ -24,15 +24,12 @@ import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
 import WorkIcon from '@mui/icons-material/Work';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import HelpCenterIcon from '@mui/icons-material/HelpCenter';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { Routes, Route, Link } from 'react-router-dom';
+import { useNavigate, Routes, Route, Link as RouterLink } from 'react-router-dom';
 
 // Import your components
 import Vacancies from './Vacancies';
 import AddVacancies from './AddVacancies';
 import UpdateVacancy from './UpdateVacancy';
-// import HRHome from './HRHome';
 import Employees from './Employees';
 import AddEmployee from './AddEmployee';
 import Applications from './Applications';
@@ -42,12 +39,8 @@ import Departments from './Departments';
 import ProjectsPending from '../Components/ProjectsPending';
 import AddProject from './AddProject';
 import Dashboard from './Dashboard';
-
 import MembersAccounts from './MembersAccounts';
-
 import VacancyApplications from './vacancyApplications';
-
-
 
 const drawerWidth = 240;
 
@@ -107,6 +100,19 @@ export default function MainHR() {
         setOpen(false);
     };
 
+    // Create a custom Link component that prevents default navigation
+    const CustomLink = React.forwardRef((props, ref) => (
+        <RouterLink 
+            ref={ref} 
+            {...props} 
+            onClick={(e) => {
+                e.preventDefault(); // Prevent default link behavior
+                window.history.pushState({}, '', props.to); // Manually update URL
+                window.dispatchEvent(new PopStateEvent('popstate')); // Trigger route change
+            }}
+        />
+    ));
+
     return (
         <div>
             <Box sx={{ display: 'flex', backgroundColor: 'rgb(240 253 244)', height: '100vh' }}>
@@ -152,14 +158,12 @@ export default function MainHR() {
                             (text, index) => (
                                 <ListItem key={text} disablePadding>
                                     <ListItemButton
-                                        component={Link}
+                                        component={CustomLink}
                                         to={
                                             text === 'Vacancies'
                                                 ? '/vacancies'
                                                 : text === 'Employee'
                                                 ? '/employee'
-                                                // : text === 'Applications'
-                                                // ? '/applications'
                                                 : text === 'Projects'
                                                 ? '/projects'
                                                 : text === 'Departments'
@@ -208,7 +212,6 @@ export default function MainHR() {
                 <Main open={open} className='bg-green-50 h-full'>
                     <DrawerHeader />
                     <Routes>
-                        {/* <Route path="/" element={<HRHome />} /> */}
                         <Route path="/membersaccounts" element={<MembersAccounts/>} />
                         <Route path="/" element={<Dashboard/>} />
                         <Route path="/vacancies" element={<Vacancies />} />
@@ -223,7 +226,6 @@ export default function MainHR() {
                         <Route path="/addProject" element={<AddProject/>} />
                         <Route path="/cvs/:applicationId" element={<CVs />} />
                         <Route path="/vacancies/:id" element={<VacancyApplications />} />
-
                     </Routes>
                 </Main>
             </Box>
