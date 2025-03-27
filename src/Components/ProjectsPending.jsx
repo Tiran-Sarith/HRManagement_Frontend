@@ -101,7 +101,7 @@ export default function ProjectsPending() {
       
       if (employeeAssignSuccess) {
         // Then update project status
-        await axios.put(`http://localhost:8070/projects/Pupdate/${selectedProjectId}`, {
+        await axios.put(`${API_BASE_URL}projects/Pupdate/${selectedProjectId}`, {
           projectStatus: 'Inprogress'
         });
 

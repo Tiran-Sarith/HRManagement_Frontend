@@ -86,7 +86,7 @@ export default function InprogressProjects() {
   const fetchEmployeesByProject = async (projectId) => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8070/employee/Eview');
+      const response = await axios.get(`${API_BASE_URL}employee/Eview`);
       // Filter employees who are assigned to the selected project
       const assignedEmployees = response.data.filter(
         employee => employee.employee_current_project_id === projectId
@@ -118,12 +118,12 @@ export default function InprogressProjects() {
     if (window.confirm('Are you sure you want to finish this project?')) {
       try {
         // First, update the project status to 'Finished'
-        await axios.put(`http://localhost:8070/projects/Pupdate/${id}`, {
+        await axios.put(`${API_BASE_URL}projects/Pupdate/${id}`, {
           projectStatus: 'Finished'
         });
         
         // Then, call the new endpoint to clear project assignments for employees
-        await axios.post(`http://localhost:8070/employee/clearProjectAssignments/${id}`);
+        await axios.post(`${API_BASE_URL}employee/clearProjectAssignments/${id}`);
         
         // Remove from in-progress list
         setRows(rows.filter(row => row.id !== id));

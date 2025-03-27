@@ -10,6 +10,9 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -55,7 +58,7 @@ export default function FinishedProjects() {
 
   const fetchFinishedProjects = async () => {
     try {
-      const response = await axios.get('http://localhost:8070/projects/Pview');
+      const response = await axios.get(`${API_BASE_URL}projects/Pview`);
       const finishedProjects = response.data.filter(project => project.projectStatus === 'Finished');
       setRows(finishedProjects.map(project => createData(
         project.projectName,
