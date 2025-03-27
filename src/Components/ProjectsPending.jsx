@@ -8,8 +8,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
-import Button from '@mui/material/Button';
 import axios from 'axios';
+import { Button, Modal, message } from 'antd';
+import { useState, useRef } from 'react';
+import EmployeeAssigning from './EmployeeAssigning';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,8 +36,11 @@ function createData(name, id, client, deadline, estimatedBudget, estimatedDurati
   return { name, id, client, deadline, estimatedBudget, estimatedDuration };
 }
 
-
 export default function ProjectsPending() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const employeeAssigningRef = useRef(null);
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [rows, setRows] = React.useState([]);
@@ -70,21 +75,43 @@ export default function ProjectsPending() {
     }
   };
 
-  // Handle delete row
-    const handleStart = async (id) => {
-      if (window.confirm('Are you sure you want to start this project?')) {
-        try {
-          await axios.put(`http://localhost:8070/projects/Pupdate/${id}`, {
-            projectStatus: 'Inprogress'
-          });
-          // Remove from pending list
-          setRows(rows.filter(row => row.id !== id));
-        } catch (error) {
-          console.error('Error updating project status:', error);
-        }
-      }
-    };
+  const showModal = (projectId) => {
+    setSelectedProjectId(projectId);
+    setIsModalOpen(true);
+  };
 
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setSelectedProjectId(null);
+  };
+
+  // Handle start project and assign employees
+  const handleStart = async () => {
+    try {
+      if (!selectedProjectId) {
+        message.error('No project selected');
+        return;
+      }
+
+      // First assign employees using the EmployeeAssigning component
+      const employeeAssignSuccess = await employeeAssigningRef.current.handleAssignEmployees();
+      
+      if (employeeAssignSuccess) {
+        // Then update project status
+        await axios.put(`http://localhost:8070/projects/Pupdate/${selectedProjectId}`, {
+          projectStatus: 'Inprogress'
+        });
+
+        // Remove from pending list
+        setRows(rows.filter(row => row.id !== selectedProjectId));
+        message.success('Project started successfully');
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      console.error('Error updating project status:', error);
+      message.error('Failed to start project');
+    }
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -112,7 +139,7 @@ export default function ProjectsPending() {
               <StyledTableCell align="right">{row.estimatedBudget}</StyledTableCell>
               <StyledTableCell align="right">{row.estimatedDuration}</StyledTableCell>
               <StyledTableCell align="center">
-                <Button variant="contained" sx={{backgroundColor: 'black'}} onClick={() => handleStart(row.id)}>
+                <Button className='bg-black text-white' onClick={() => showModal(row.id)}>
                   Start
                 </Button>
               </StyledTableCell>
@@ -129,6 +156,21 @@ export default function ProjectsPending() {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <Modal 
+        width={1000} 
+        className='mr-36' 
+        title="Assign Employees To Project" 
+        open={isModalOpen} 
+        onOk={handleStart} 
+        onCancel={handleCancel}
+      >
+        {selectedProjectId && (
+          <EmployeeAssigning 
+            projectId={selectedProjectId} 
+            ref={employeeAssigningRef} 
+          />
+        )}
+      </Modal>
     </TableContainer>
   );
 }
