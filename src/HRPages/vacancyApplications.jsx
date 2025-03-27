@@ -19,6 +19,7 @@ import {
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SearchIcon from '@mui/icons-material/Search';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ApplicationsList = () => {
   const { id } = useParams();
@@ -29,7 +30,7 @@ const ApplicationsList = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:8070/applications/Aview/byVacancy/${id}`)
+    axios.get(`${API_BASE_URL}applications/Aview/byVacancy/${id}`)
       .then((response) => {
         // Sort applications by score before setting state
         const sortedApplications = response.data.sort((a, b) => {
@@ -56,7 +57,7 @@ const ApplicationsList = () => {
       }
 
       const response = await axios.get(
-        `http://localhost:8070/applications/files/${application.filename}`,
+        `${API_BASE_URL}applications/files/${application.filename}`,
         {
           responseType: 'blob',
           headers: {

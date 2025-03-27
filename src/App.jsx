@@ -54,7 +54,11 @@ function App() {
           <Footer/> */}
 
 {/* HR Pages */}
+
           <MainHR/>
+
+{/*           <MainHR/> */}
+
 
 
 

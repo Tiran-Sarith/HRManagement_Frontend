@@ -11,6 +11,8 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { grey } from '@mui/material/colors';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 
 const customTheme = (outerTheme) =>
@@ -79,7 +81,7 @@ function AddEmployee() {
         };
 
         try {
-            await axios.post("http://localhost:8070/Vacancies/Vadd", newVacancy);
+            await axios.post(`${API_BASE_URL}Vacancies/Vadd`, newVacancy);
             alert('Vacancy Added');
         } catch (err) {
             alert(err);

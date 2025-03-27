@@ -5,6 +5,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const technologies = [
   {
@@ -92,7 +94,7 @@ function AddProject() {
     }
 
     try {
-      await axios.post('http://localhost:8070/projects/Padd', formData);
+      await axios.post(`${API_BASE_URL}projects/Padd`, formData);
       alert('Project added successfully!');
       navigate('/projects'); // Navigate back to projects page
     } catch (error) {

@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function Vacancies() {
   const [vacancies, setVacancies] = useState([]);
   const [rows, setRows] = useState([]);
@@ -21,7 +21,7 @@ export default function Vacancies() {
   // Fetch all vacancies
   const getVacancies = async () => {
     try {
-      const response = await axios.get("http://localhost:8070/vacancies/Vview");
+      const response = await axios.get(`${API_BASE_URL}vacancies/Vview`);
       const formattedVacancies = response.data.map((vacancy, index) => ({
         id: vacancy._id, // Use MongoDB _id as the unique identifier
         JobName: vacancy.jobTitle,
@@ -51,7 +51,7 @@ export default function Vacancies() {
       if (!vacancyToDelete) return;
 
       // Make DELETE request to backend
-      await axios.delete(`http://localhost:8070/vacancies/Vdelete/${vacancyToDelete.id}`);
+      await axios.delete(`${API_BASE_URL}vacancies/Vdelete/${vacancyToDelete.id}`);
       
       // Update local state after successful deletion
       setRows(prevRows => prevRows.filter(row => row.id !== id));

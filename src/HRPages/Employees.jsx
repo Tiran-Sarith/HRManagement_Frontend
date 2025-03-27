@@ -12,6 +12,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import EmployeePopup from "../Components/EmployeePopup";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function Employees() {
   const [rows, setRows] = useState([]);
@@ -26,7 +27,7 @@ function Employees() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('http://localhost:8070/employee/Eview');
+      const response = await axios.get(`${API_BASE_URL}employee/Eview`);
       const formattedEmployees = response.data.map((employee, index) => ({
         id: employee._id,
         name: employee.employee_name_with_initials,
@@ -65,7 +66,7 @@ function Employees() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8070/employee/Edelete/${id}`);
+      await axios.delete(`${API_BASE_URL}employee/Edelete/${id}`);
       fetchEmployees(); // Refresh the list
       setShowMyModel(false);
     } catch (error) {

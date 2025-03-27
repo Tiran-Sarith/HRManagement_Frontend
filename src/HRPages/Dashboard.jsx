@@ -9,6 +9,8 @@ import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer, CartesianGrid, LineC
 // import { PieChart } from '@mui/x-charts/PieChart';
 import axios from 'axios';
 import DashboardCharts from './DashboardCharts';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 // Styled component for progress bars
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
@@ -81,7 +83,7 @@ const DepartmentCard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8070/employee/Eview');
+        const response = await axios.get(`${API_BASE_URL}employee/Eview`);
         console.log('Employee Data:', response.data);
 
         if (!response.data || !Array.isArray(response.data)) {
@@ -211,7 +213,7 @@ const ProjectSummaryCard = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('http://localhost:8070/projects/Pview');
+        const response = await axios.get(`${API_BASE_URL}projects/Pview`);
         const projects = response.data;
         setProjectData(projects);
 
@@ -363,7 +365,7 @@ const EmployeeGrowthChart = () => {
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
-        const response = await axios.get('http://localhost:8070/employee/Eview');
+        const response = await axios.get(`${API_BASE_URL}employee/Eview`);
         console.log('Employee Data:', response.data);
 
         if (!response.data || !Array.isArray(response.data)) {
@@ -445,7 +447,7 @@ const ProjectDistributionChart = () => {
   useEffect(() => {
     const fetchProjectData = async () => {
       try {
-        const response = await axios.get("http://localhost:8070/projects/Pview");
+        const response = await axios.get(`${API_BASE_URL}projects/Pview`);
         console.log("Fetched Projects:", response.data); // ✅ Debug API Response
 
         const projects = response.data;

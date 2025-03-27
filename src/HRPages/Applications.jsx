@@ -77,6 +77,8 @@ import { TextField, Container, Typography, Box, CircularProgress } from '@mui/ma
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import ApplicationCard from '../Components/ApplicationCard';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const Applications = () => {
   const [applications, setApplications] = useState([]);
@@ -90,7 +92,7 @@ const Applications = () => {
 
   const fetchApplications = async () => {
     try {
-      const response = await fetch('http://localhost:8070/applications/Aview');
+      const response = await fetch(`${API_BASE_URL}applications/Aview`);
       const data = await response.json();
       // Sort applications by MongoDB ObjectId (newest first)
       const sortedData = [...data].sort((a, b) => {
