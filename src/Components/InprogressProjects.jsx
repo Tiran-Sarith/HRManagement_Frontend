@@ -1,57 +1,87 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TablePagination from '@mui/material/TablePagination';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
-import { Button, Modal, List, Card, Typography, Spin } from 'antd';
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Paper, 
+  TablePagination,
+  Box,
+  Typography,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button
+} from '@mui/material';
+import { 
+  Delete as DeleteIcon, 
+  CheckCircle as CheckCircleIcon 
+} from '@mui/icons-material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const { Title, Text } = Typography;
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Custom theme with green palette
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#2E7D32', // Dark green
+      light: '#4CAF50', // Lighter green
+      dark: '#1B5E20', // Darker green
+    },
+    background: {
+      default: '#F1F8E9', // Light green background
+      paper: '#ffffff' // Lighter paper background
+    }
+  },
+  components: {
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#2E7D32',
+          color: 'white'
+        }
+      }
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        head: {
+          color: 'white',
+          fontWeight: 'bold',
+          backgroundColor: '#2E7D32'
+        }
+      }
+    }
+  }
+});
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-  '&:hover': {
-    backgroundColor: theme.palette.action.selected,
-    cursor: 'pointer',
-  },
-}));
-
-function createData(name, id, client, deadline, estimatedBudget, estimatedDuration) {
-  return { name, id, client, deadline, estimatedBudget, estimatedDuration };
-}
-
-export default function InprogressProjects() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
-  const [rows, setRows] = React.useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export default function InProgressProjects() {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
+  const [rows, setRows] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [projectEmployees, setProjectEmployees] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [finishDialogOpen, setFinishDialogOpen] = useState(false);
+
+  useEffect(() => {
+    fetchInProgressProjects();
+  }, []);
+
+  const fetchInProgressProjects = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}projects/Pview`);
+      const inProgressProjects = response.data.filter(project => project.projectStatus === 'Inprogress');
+      setRows(inProgressProjects);
+    } catch (error) {
+      console.error('Error fetching in-progress projects:', error);
+    }
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -62,82 +92,50 @@ export default function InprogressProjects() {
     setPage(0);
   };
 
-  useEffect(() => {
-    fetchInProgressProjects();
-  }, []);
+  const handleDeleteProject = async () => {
+    if (!selectedProject) return;
 
-  const fetchInProgressProjects = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}projects/Pview`);
-      const inProgressProjects = response.data.filter(project => project.projectStatus === 'Inprogress');
-      setRows(inProgressProjects.map(project => createData(
-        project.projectName,
-        project._id,
-        project.projectManager,
-        project.projectDeadline,
-        project.projectBudget,
-        project.projectDuration
-      )));
+      await axios.delete(`${API_BASE_URL}projects/Pdelete/${selectedProject._id}`);
+      
+      // Remove the project from the list
+      setRows(rows.filter(project => project._id !== selectedProject._id));
+      
+      // Close the delete dialog
+      setDeleteDialogOpen(false);
+      
+      alert('Project deleted successfully.');
     } catch (error) {
-      console.error('Error fetching in-progress projects:', error);
+      console.error('Error deleting project:', error);
+      alert('An error occurred while deleting the project.');
     }
   };
 
-  const fetchEmployeesByProject = async (projectId) => {
-    setLoading(true);
+  const handleFinishProject = async () => {
+    if (!selectedProject) return;
+
     try {
-      const response = await axios.get('http://localhost:8070/employee/Eview');
-      // Filter employees who are assigned to the selected project
-      const assignedEmployees = response.data.filter(
-        employee => employee.employee_current_project_id === projectId
-      );
-      setProjectEmployees(assignedEmployees);
+      // Update project status to 'Finished'
+      await axios.put(`${API_BASE_URL}projects/Pupdate/${selectedProject._id}`, {
+        projectStatus: 'Finished'
+      });
+      
+      // Clear project assignments for employees
+      await axios.post(`${API_BASE_URL}employee/clearProjectAssignments/${selectedProject._id}`);
+      
+      // Remove from in-progress list
+      setRows(rows.filter(project => project._id !== selectedProject._id));
+      
+      // Close the finish dialog
+      setFinishDialogOpen(false);
+      
+      alert('Project marked as finished and employee assignments cleared.');
     } catch (error) {
-      console.error('Error fetching employees for project:', error);
-    } finally {
-      setLoading(false);
+      console.error('Error updating project status:', error);
+      alert('An error occurred while finishing the project.');
     }
   };
 
-  const showModal = (row) => {
-    setSelectedProject(row);
-    fetchEmployeesByProject(row.id);
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-    setProjectEmployees([]);
-  };
-
-  const handleFinish = async (id) => {
-    if (window.confirm('Are you sure you want to finish this project?')) {
-      try {
-        // First, update the project status to 'Finished'
-        await axios.put(`http://localhost:8070/projects/Pupdate/${id}`, {
-          projectStatus: 'Finished'
-        });
-        
-        // Then, call the new endpoint to clear project assignments for employees
-        await axios.post(`http://localhost:8070/employee/clearProjectAssignments/${id}`);
-        
-        // Remove from in-progress list
-        setRows(rows.filter(row => row.id !== id));
-        
-        // Optional: Show success message
-        alert('Project marked as finished and employee assignments cleared.');
-      } catch (error) {
-        console.error('Error updating project status:', error);
-        alert('An error occurred while finishing the project.');
-      }
-    }
-  };
-
-  // Format the date for display
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -145,109 +143,129 @@ export default function InprogressProjects() {
   };
 
   return (
-    <div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Project Name</StyledTableCell>
-              <StyledTableCell align="right">Project ID</StyledTableCell>
-              <StyledTableCell align="right">Client</StyledTableCell>
-              <StyledTableCell align="right">Deadline</StyledTableCell>
-              <StyledTableCell align="right">Budget($)</StyledTableCell>
-              <StyledTableCell align="right">Duration(Weeks)</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <StyledTableRow 
-                key={row.name}
-                onClick={() => showModal(row)}
-              >
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.id}</StyledTableCell>
-                <StyledTableCell align="right">{row.client}</StyledTableCell>
-                <StyledTableCell align="right">{formatDate(row.deadline)}</StyledTableCell>
-                <StyledTableCell align="right">{row.estimatedBudget}</StyledTableCell>
-                <StyledTableCell align="right">{row.estimatedDuration}</StyledTableCell>
-                <StyledTableCell align="center">
-                  <Button 
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent row click event
-                      handleFinish(row.id);
-                    }} 
-                    type="primary"
-                    style={{ backgroundColor: 'black' }}
-                  >
-                    Finish
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 8, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </TableContainer>
-
-      <Modal 
-        title={selectedProject ? `Team Members for ${selectedProject.name}` : "Project Team"}
-        open={isModalOpen} 
-        onOk={handleOk} 
-        onCancel={handleCancel}
-        width={800}
-        footer={[
-          <Button key="back" onClick={handleCancel}>
-            Close
-          </Button>
-        ]}
-      >
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: '20px' }}>
-            <Spin size="large" />
-            <p>Loading employees...</p>
-          </div>
-        ) : projectEmployees.length > 0 ? (
-          <List
-            grid={{ gutter: 16, column: 1 }}
-            dataSource={projectEmployees}
-            renderItem={employee => (
-              <List.Item>
-                <Card>
-                  <Title level={4}>{employee.employee_full_name}</Title>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <div>
-                      <p><Text strong>Employee ID:</Text> {employee.employee_id}</p>
-                      <p><Text strong>Designation:</Text> {employee.employee_designation || 'N/A'}</p>
-                      <p><Text strong>Email:</Text> {employee.employee_email}</p>
-                    </div>
-                    <div>
-                      <p><Text strong>Department:</Text> {employee.employee_department}</p>
-                      <p><Text strong>Phone:</Text> {employee.employee_telephone}</p>
-                      <p><Text strong>Address:</Text> {employee.employee_address}</p>
-                    </div>
-                  </div>
-                </Card>
-              </List.Item>
-            )}
+    <ThemeProvider theme={theme}>
+      <Box sx={{ width: '100%', padding: 2, backgroundColor: theme.palette.background.default }}>
+        <Typography 
+          variant="h4" 
+          gutterBottom 
+          sx={{ 
+            marginBottom: 3, 
+            fontWeight: 600, 
+            color: theme.palette.primary.dark 
+          }}
+        >
+          In Progress Projects
+        </Typography>
+        <TableContainer component={Paper} elevation={3}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Project Name</TableCell>
+                <TableCell>Project ID</TableCell>
+                <TableCell>Client</TableCell>
+                <TableCell>Deadline</TableCell>
+                <TableCell>Budget ($)</TableCell>
+                <TableCell>Duration (Weeks)</TableCell>
+                <TableCell align="right">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((project) => (
+                <TableRow 
+                  key={project._id} 
+                  hover
+                >
+                  <TableCell>{project.projectName}</TableCell>
+                  <TableCell>{project._id}</TableCell>
+                  <TableCell>{project.projectManager}</TableCell>
+                  <TableCell>{formatDate(project.projectDeadline)}</TableCell>
+                  <TableCell>{project.projectBudget}</TableCell>
+                  <TableCell>{project.projectDuration}</TableCell>
+                  <TableCell align="right">
+                    <IconButton 
+                      color="success" 
+                      onClick={() => {
+                        setSelectedProject(project);
+                        setFinishDialogOpen(true);
+                      }}
+                    >
+                      <CheckCircleIcon />
+                    </IconButton>
+                    <IconButton 
+                      color="error" 
+                      onClick={() => {
+                        setSelectedProject(project);
+                        setDeleteDialogOpen(true);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 8, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        ) : (
-          <div style={{ textAlign: 'center', padding: '20px' }}>
-            <Title level={4}>No employees assigned to this project</Title>
-            <p>There are currently no team members assigned to this project.</p>
-          </div>
-        )}
-      </Modal>
-    </div>
+        </TableContainer>
+
+        {/* Delete Confirmation Dialog */}
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={() => setDeleteDialogOpen(false)}
+          aria-labelledby="delete-project-dialog-title"
+        >
+          <DialogTitle id="delete-project-dialog-title">
+            Delete Project
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete the project "{selectedProject?.projectName}"? 
+              This action cannot be undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteDialogOpen(false)} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleDeleteProject} color="error" autoFocus>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Finish Project Confirmation Dialog */}
+        <Dialog
+          open={finishDialogOpen}
+          onClose={() => setFinishDialogOpen(false)}
+          aria-labelledby="finish-project-dialog-title"
+        >
+          <DialogTitle id="finish-project-dialog-title">
+            Finish Project
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to mark the project "{selectedProject?.projectName}" as finished? 
+              This will clear all employee assignments for this project.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setFinishDialogOpen(false)} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleFinishProject} color="success" autoFocus>
+              Finish Project
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
+    </ThemeProvider>
   );
 }
