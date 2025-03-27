@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Make sure to install axios with: npm install axios
 
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import {app} from '../../FirebaseAuth'
-
 
 import {
   AutoComplete,
@@ -15,6 +15,7 @@ import {
   InputNumber,
   Row,
   Select,
+  message, // Added for showing success/error messages
 } from 'antd';
 
 const { Option } = Select;
@@ -51,49 +52,39 @@ const tailFormItemLayout = {
   },
 };
 
-// Add residences data
-const residences = [
-  {
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          {
-            value: 'xihu',
-            label: 'West Lake',
-          },
-        ],
-      },
-    ],
-  },
-];
-
 function MembersAccounts() {
   const [form] = Form.useForm();
-  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState('');
+  const [loading, setLoading] = useState(false);
   
-  const auth = getAuth(app);
-  
-  const handleUserCreate = async (e) => {
-      try{
-          await createUserWithEmailAndPassword(auth, email, password);
-          console.log('User created');
-              
-        }
-        catch(error){
-            console.log(error.message);
-        }
+  const handleUserCreate = async (values) => {
+    try {
+      setLoading(true);
+      // Prepare the data to send to the backend
+      const userData = {
+        name: values['Employee Name'],
+        department: values['Department'],
+        employeeId: values['Employee ID'],
+        role: values['role'] === 'female' ? 'admin' : 'member', // Mapping role to backend expectation
+        email: values['email'],
+        password: values['password']
+      };
 
-        
+      // Send POST request to backend signup endpoint
+      const response = await axios.post('http://localhost:8070/api/user/register', userData);
+      
+      // Show success message
+      message.success('User created successfully!');
+      
+      // Reset form after successful submission
+      form.resetFields();
+    } catch (error) {
+      // Handle error
+      console.error('Signup error:', error);
+      message.error(error.response?.data?.message || 'Failed to create user');
+    } finally {
+      setLoading(false);
     }
+  };
 
   return (
     <div>
@@ -104,7 +95,6 @@ function MembersAccounts() {
         name="register"
         onFinish={handleUserCreate}
         initialValues={{
-          residence: ['zhejiang', 'hangzhou', 'xihu'],
           prefix: '86',
         }}
         style={{
@@ -118,6 +108,8 @@ function MembersAccounts() {
           label="Employee Name"
           rules={[
             {
+              required: true,
+              message: 'Please input employee name!',
               whitespace: true,
             },
           ]}
@@ -130,6 +122,8 @@ function MembersAccounts() {
           label="Department"
           rules={[
             {
+              required: true,
+              message: 'Please input department!',
               whitespace: true,
             },
           ]}
@@ -142,6 +136,8 @@ function MembersAccounts() {
           label="Employee ID"
           rules={[
             {
+              required: true,
+              message: 'Please input employee ID!',
               whitespace: true,
             },
           ]}
@@ -150,15 +146,19 @@ function MembersAccounts() {
         </Form.Item>
 
         <Form.Item
-          name="Username"
-          label="Username"
+          name="role"
+          label="Role"
           rules={[
             {
-              whitespace: true,
-            },
+              required: true,
+              message: 'Please select a role!'
+            }
           ]}
         >
-          <Input />
+          <Select placeholder="Select the role">
+            <Option value="male">Member</Option>
+            <Option value="female">Admin</Option>
+          </Select>
         </Form.Item>
         
         <Form.Item
@@ -167,17 +167,15 @@ function MembersAccounts() {
           rules={[
             {
               type: 'email',
-              message: 'The input is not valid E-mail!',
+              message: 'The input is not a valid E-mail!',
             },
             {
+              required: true,
               message: 'Please input your E-mail!',
             },
           ]}
         >
-          <Input 
-              value = {email}
-              onChange = {(e) => setEmail(e.target.value)}          
-          />
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -185,15 +183,13 @@ function MembersAccounts() {
           label="Password"
           rules={[
             {
+              required: true,
               message: 'Please input your password!',
             },
           ]}
           hasFeedback
         >
-          <Input.Password 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <Input.Password />
         </Form.Item>
 
         <Form.Item
@@ -203,6 +199,7 @@ function MembersAccounts() {
           hasFeedback
           rules={[
             {
+              required: true,
               message: 'Please confirm your password!',
             },
             ({ getFieldValue }) => ({
@@ -210,7 +207,7 @@ function MembersAccounts() {
                 if (!value || getFieldValue('password') === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error('The new password that you entered do not match!'));
+                return Promise.reject(new Error('The two passwords do not match!'));
               },
             }),
           ]}
@@ -219,7 +216,7 @@ function MembersAccounts() {
         </Form.Item>
 
         <Form.Item {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={loading}>
             Create
           </Button>
         </Form.Item>
