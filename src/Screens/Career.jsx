@@ -233,7 +233,143 @@
         return (
           <div className="min-h-screen bg-gray-50">
             {/* Hero Section with Relative Positioning */}
-            <section className="relative">
+
+
+          
+          {/* Hero Section with Relative Positioning */}
+<section className="relative bg-zinc-100">
+  <div 
+    className="container bg-no-repeat bg-cover mx-auto px-4 pt-16 pb-24 md:pt-24 md:pb-32"
+    style={{ backgroundImage: `url(${backgroundImage})` }}
+  >
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      {/* Text Content */}
+      <div className="text-left ml-20 space-y-6">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+          Ready to build the next big thing in tech?
+        </h1>
+        <div className="space-y-4">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            Life at <span className="text-emerald-600">Intellisense</span> ...
+          </h2>
+          <p className="text-lg text-gray-700 leading-relaxed">
+            Are you looking for challenging work and international exposure in an informal, 
+            fun and creative work environment? Then Intellisense is the place for you. 
+            Together, we build great tech!
+          </p>
+        </div>
+        
+        {/* Action Buttons */}
+        <div className="flex space-x-4">
+          <button className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
+            Join Our Team
+          </button>
+          <button className="px-6 py-3 border-2 border-emerald-600 text-emerald-600 rounded-lg hover:bg-emerald-50 transition-colors">
+            Learn More
+          </button>
+        </div>
+      </div>
+
+      {/* Image Content */}
+      <div className="hidden md:flex justify-center">
+        <img 
+          src={img11}
+          alt="Professional working on laptop"
+          className="rounded-lg max-w-full h-auto object-cover "
+        />
+      </div>
+    </div>
+  </div>
+
+  {/* Overlapping Search Box */}
+  <div className="container mx-auto px-4 relative md:absolute left-0 right-0 md:-bottom-12 z-10">
+    <div className="max-w-2xl mx-auto">
+      <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search for your dream role..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full py-4 px-6 text-lg border-2 border-gray-200 rounded-lg 
+            focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+          />
+          <Search 
+            className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400" 
+            size={24} 
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+{/* 
+<section className="relative">
+  <div 
+    className="min-h-screen md:min-h-[80vh] bg-cover bg-center bg-no-repeat flex items-center"
+    style={{ backgroundImage: `url(${backgroundImage})` }}
+  >
+    <div className="container mx-auto px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div className="space-y-6 text-center md:text-left">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            Ready to build the next big thing in tech?
+          </h1>
+          <div className="space-y-4">
+            <h2 className="text-xl sm:text-2xl font-medium">
+              Life at <span className="text-emerald-600">Intellisense</span> ...
+            </h2>
+            <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
+              Are you looking for challenging work and international exposure in an informal, 
+              fun and creative work environment? Then Intellisense is the place for you. 
+              Together, we build great tech!
+            </p>
+          </div>
+        </div>
+        <div className="hidden md:flex justify-center">
+          <img 
+            src={img11}
+            alt="Professional working on laptop"
+            className="rounded-lg max-w-full h-auto object-cover shadow-lg"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+  <div className="relative md:absolute left-0 right-0 md:bottom-0 md:transform md:translate-y-1/2 px-4 mt-8 md:mt-0">
+    <div className="max-w-3xl mx-auto">
+      <div className="p-4 md:p-8 bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-shadow">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search for your dream role..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full py-3 md:py-4 pl-4 md:pl-6 pr-10 md:pr-12 text-base md:text-lg 
+            transition-all border-2 rounded-xl border-gray-100 
+            focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-100"
+          />
+          <Search 
+            className="absolute text-gray-400 transform -translate-y-1/2 right-4 top-1/2" 
+            size={20} 
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section> */}
+
+
+
+
+            {/* <section className="relative">
               <div className="min-h-[80vh] bg-zinc-100" style={{ backgroundImage: `url(${backgroundImage})` }}>
                 <div className="relative">
                   <div className="px-4 py-12 mx-auto max-w-7xl">
@@ -264,7 +400,7 @@
                 </div>
               </div>
       
-              {/* Overlapping Search Box */}
+              
               <div className="absolute left-0 right-0 bottom-0 transform translate-y-1/2 px-4">
                 <div className="max-w-3xl mx-auto">
                   <div className="p-8 transition-shadow bg-white rounded-2xl shadow-xl hover:shadow-2xl">
@@ -281,7 +417,7 @@
                   </div>
                 </div>
               </div>
-            </section>
+            </section> */}
       
             {/* Job Listings Section - Adjusted spacing to account for overlapping search box */}
             <div className="px-4 pt-32 pb-16">
