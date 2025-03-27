@@ -419,14 +419,14 @@ const Career = () => {
   </div>
   
   {/* Action Buttons */}
-  <div className="flex space-x-4">
+  {/* <div className="flex space-x-4">
     <button className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
       Join Our Team
     </button>
     <button className="px-6 py-3 border-2 border-emerald-600 text-emerald-600 rounded-lg hover:bg-emerald-50 transition-colors">
       Learn More
     </button>
-  </div>
+  </div> */}
 </div>
 
 {/* Image Content */}
