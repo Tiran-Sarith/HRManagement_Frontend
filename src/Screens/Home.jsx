@@ -1,4 +1,5 @@
 import "./styles.css";
+import { useNavigate } from 'react-router-dom';
 
 import slide1image from "./Assests/Section1.png";
 import slide2image from "./Assests/Section 02.png";
@@ -83,6 +84,18 @@ function Home() {
     },
   ];
 
+  const navigate = useNavigate();
+  const handleExplore = () => {
+    // Navigate to the "Services" page
+    navigate('/services');
+  };
+  const handleAboutus = () => {
+    // Navigate to the "Services" page
+    navigate('/aboutus');
+  };
+
+
+
   return (
     <div id="app" className="overflow-hidden">
       {/* Section 1 */}
@@ -98,12 +111,13 @@ function Home() {
               Together, we build{" "}
               <span className="text-green-700">impactful</span> tech!
             </h2>
-            <p className="mb-4 text-base text-left text-zinc-500 md:text-lg">
+            <p className="mb-4 text-base text-left text-zinc-700 md:text-md">
               Leading Sri Lanka s digital transformation through innovative
               machine learning solutions and cutting-edge web development. We
               turn your complex challenges into intelligent, scalable solutions.
             </p>
             <button
+            onClick={handleExplore}
               className="relative  border-none space-x-2 font-sans font-semibold text-base text-white bg-green-900 py-2 px-8
                   rounded-md overflow-hidden cursor-pointer transition-all duration-300 hover:bg-green-800
                   before:content-[''] before:absolute before:top-0 before:w-10 before:h-10 
@@ -171,7 +185,9 @@ function Home() {
       {stats.map((stat, index) => (
         <div
           key={index}
-          className="relative p-8 transition-all duration-500 shadow-lg bg-white/10 backdrop-blur-xl rounded-2xl hover:shadow-2xl hover:scale-105 hover:bg-white/20"
+          // className="relative p-8 transition-all duration-500 shadow-lg bg-white/10 backdrop-blur-xl rounded-2xl hover:shadow-2xl hover:scale-105 hover:bg-white/20"
+          className="relative p-8 transition-all duration-500 shadow-lg bg-green-100 backdrop-blur-xl rounded-2xl hover:shadow-2xl hover:scale-105 hover:bg-white"
+
         >
           {/* Circular Progress with Animated Fill */}
           <div className="relative flex items-center justify-center mx-auto mb-8 h-28 w-28">
@@ -206,10 +222,11 @@ function Home() {
           </div>
 
           {/* Stat Description */}
-          <p className="text-center text-gray-300">{stat.text}</p>
+          {/* <p className="text-center text-gray-300">{stat.text}</p> */}
+          <p className="text-center text-black">{stat.text}</p>
 
           {/* Learn More Button */}
-          <a
+          {/* <a
             href="#"
             className="flex items-center justify-center mt-5 font-semibold text-green-700 transition-all duration-300 hover:text-green-500"
           >
@@ -227,7 +244,7 @@ function Home() {
                 d="M14 5l7 7m0 0l-7 7m7-7H3"
               />
             </svg>
-          </a>
+          </a> */}
 
           {/* Hover Glow Effect */}
           <div className="absolute inset-0 transition-all duration-500 bg-gray-400 opacity-0 rounded-2xl blur-xl hover:opacity-10"></div>
@@ -247,7 +264,7 @@ function Home() {
               OUR SERVICES
               <div className="w-24 h-1 mt-4 bg-green-700 rounded-full"></div>
             </h2>
-            <button className="px-6 py-2 mt-4 text-base text-white transition-colors duration-300 bg-green-700 md:px-10 md:text-lg hover:bg-green-800">
+            <button onClick={handleExplore} className="px-6 py-2 mt-4 text-base text-white transition-colors duration-300 bg-green-700 md:px-10 md:text-lg hover:bg-green-800">
               Explore
             </button>
           </div>
@@ -279,6 +296,7 @@ function Home() {
                   <p className="mb-6 text-gray-600">{service.description}</p>
                   <a
                     href="#"
+                    onClick={handleExplore}
                     className="inline-flex items-center px-5 py-2 text-lg font-semibold text-green-700 transition-colors duration-300 border-2 shadow-inherit rounded-xl hover:text-green-600"
                   >
                     Discover More
@@ -321,7 +339,7 @@ function Home() {
             in machine learning and web development to drive your business
             forward.
           </p>
-          <button className="px-4 py-1 text-lg text-white transition-colors duration-300 bg-green-700 md:px-8 md:py-3 hover:bg-green-600">
+          <button onClick={handleAboutus} className="px-4 py-1 text-lg text-white transition-colors duration-300 bg-green-700 md:px-8 md:py-3 hover:bg-green-600">
             About Us
           </button>
         </div>
@@ -375,7 +393,7 @@ function Home() {
           <p className="mb-4 text-gray-600">
             {feature.description}
           </p>
-          <button className="px-5 py-2.5 text-lg font-semibold text-white transition-all duration-300 bg-green-700  shadow-md hover:bg-green-600 hover:shadow-xl">
+          <button  onClick={handleExplore} className="px-5 py-2.5 text-lg font-semibold text-white transition-all duration-300 bg-green-700  shadow-md hover:bg-green-600 hover:shadow-xl">
             Try Now 
           </button>
         </div>
