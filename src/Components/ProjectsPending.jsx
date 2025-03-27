@@ -13,6 +13,9 @@ import { Button, Modal, message } from 'antd';
 import { useState, useRef } from 'react';
 import EmployeeAssigning from './EmployeeAssigning';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -60,7 +63,7 @@ export default function ProjectsPending() {
 
   const fetchPendingProjects = async () => {
     try {
-      const response = await axios.get('http://localhost:8070/projects/Pview');
+      const response = await axios.get(`${API_BASE_URL}projects/Pview`);
       const pendingProjects = response.data.filter(project => project.projectStatus === 'Pending');
       setRows(pendingProjects.map(project => createData(
         project.projectName,

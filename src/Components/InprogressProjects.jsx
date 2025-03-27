@@ -13,6 +13,8 @@ import { useState, useEffect } from 'react';
 import { Button, Modal, List, Card, Typography, Spin } from 'antd';
 
 const { Title, Text } = Typography;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -66,7 +68,7 @@ export default function InprogressProjects() {
 
   const fetchInProgressProjects = async () => {
     try {
-      const response = await axios.get('http://localhost:8070/projects/Pview');
+      const response = await axios.get(`${API_BASE_URL}projects/Pview`);
       const inProgressProjects = response.data.filter(project => project.projectStatus === 'Inprogress');
       setRows(inProgressProjects.map(project => createData(
         project.projectName,
