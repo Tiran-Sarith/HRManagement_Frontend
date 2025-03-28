@@ -1,95 +1,68 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Make sure to install axios with: npm install axios
-
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
-import {app} from '../../FirebaseAuth'
-
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { app } from '../../FirebaseAuth';
 import {
   AutoComplete,
   Button,
-  Cascader,
-  Checkbox,
-  Col,
   Form,
   Input,
-  InputNumber,
-  Row,
   Select,
-  message, // Added for showing success/error messages
+  message,
 } from 'antd';
 
 const { Option } = Select;
 
 const formItemLayout = {
   labelCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 8,
-    },
+    xs: { span: 24 },
+    sm: { span: 8 },
   },
   wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 16,
-    },
+    xs: { span: 24 },
+    sm: { span: 16 },
   },
 };
 
 const tailFormItemLayout = {
   wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
+    xs: { span: 24, offset: 0 },
+    sm: { span: 16, offset: 8 },
   },
 };
 
 function MembersAccounts() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  
 
-  const handleUserCreate = async (e) => {
-      try{
-          await createUserWithEmailAndPassword(auth, email, password);
-          console.log('User created');
-          alert('User created successfully!');
-        }
-        catch(error){
-            console.log(error.message);
-        }
+  const handleUserCreate = async (values) => {
+    const auth = getAuth(app); // Initialize Firebase Auth
+    const { email, password } = values; // Extract email and password from form values
 
-        
+    try {
+      setLoading(true); // Set loading state
+      await createUserWithEmailAndPassword(auth, email, password);
+      message.success('User created successfully!'); // Show success message
+    } catch (error) {
+      message.error(error.message); // Show error message
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
   return (
     <div>
-      <h1 className='text-start text-xl font-bold pb-10'>Member Accounts</h1>
+      <h1 className="text-start text-xl font-bold pb-10">Member Accounts</h1>
       <Form
         {...formItemLayout}
         form={form}
         name="register"
-        onFinish={handleUserCreate}
-        initialValues={{
-          prefix: '86',
-        }}
-        style={{
-          maxWidth: 600,
-        }}
+        onFinish={handleUserCreate} // Call handleUserCreate when form is submitted
+        initialValues={{ prefix: '86' }}
+        style={{ maxWidth: 600 }}
         scrollToFirstError
       >
-        
         <Form.Item
-          name="Employee Name"
+          name="EmployeeName"
           label="Employee Name"
           rules={[
             {
@@ -101,7 +74,7 @@ function MembersAccounts() {
         >
           <Input />
         </Form.Item>
-        
+
         <Form.Item
           name="Department"
           label="Department"
@@ -117,7 +90,7 @@ function MembersAccounts() {
         </Form.Item>
 
         <Form.Item
-          name="Employee ID"
+          name="EmployeeID"
           label="Employee ID"
           rules={[
             {
@@ -136,16 +109,16 @@ function MembersAccounts() {
           rules={[
             {
               required: true,
-              message: 'Please select a role!'
-            }
+              message: 'Please select a role!',
+            },
           ]}
         >
           <Select placeholder="Select the role">
-            <Option value="male">Member</Option>
-            <Option value="female">Admin</Option>
+            <Option value="Member">Member</Option>
+            <Option value="Admin">Admin</Option>
           </Select>
         </Form.Item>
-        
+
         <Form.Item
           name="email"
           label="E-mail"

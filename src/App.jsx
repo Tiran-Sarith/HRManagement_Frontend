@@ -32,8 +32,8 @@ function App() {
         <div className="App">
 
 {/* website pages */}
-{/* 
-          <Navbar/>
+
+          {/* <Navbar/>
           <Routes>
 
             <Route path="/apply" element={<JobApplication/>}/>
