@@ -1,37 +1,45 @@
 import React, { useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input } from 'antd';
-
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
-import {app} from '../../FirebaseAuth'
+import { Button, Form, Input, message } from 'antd';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function HRLogin() {
-
+const HRLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loginError, setLoginError] = useState('');
-
     const navigate = useNavigate();
 
-    const auth = getAuth(app);
+    const handleLogin = async () => {
+        try {
+            // Validate email and password are not empty
+            if (!email || !password) {
+                message.error('Please enter both email and password');
+                return;
+            }
 
-    const handleLogin = async (e) => {
+            // Make login request to backend
+            const response = await axios.post('http://localhost:8070/api/auth/login', {
+                email,
+                password
+            });
 
-        e.preventDefault();
+            // Store the token in localStorage
+            localStorage.setItem('token', response.data.token);
 
-        try{
-            await signInWithEmailAndPassword(auth, email, password);
-            console.log('Logging Success');
-            
+            // Show success message
+            message.success('Login Successful');
+
+            // Redirect based on user role (you can modify this logic as needed)
             navigate('/hrHome');
+        } catch (error) {
+            // Handle login errors
+            message.error(error.response?.data?.message || 'Login failed. Please try again.');
         }
-        catch(error){
-            console.log(error.message);
-        }
-    }
+    };
 
-
+    const onFinish = (values) => {
+        handleLogin();
+    };
 
     return (
         <div className='flex justify-center items-center mt-32'>
@@ -39,9 +47,7 @@ function HRLogin() {
                 className='mb-36 border rounded-lg p-8 bg-green-50'
                 name="login"
                 layout="vertical"
-                initialValues={{
-                    remember: true,
-                }}
+                onFinish={onFinish}
                 style={{
                     maxWidth: 360,
                 }}
@@ -61,32 +67,33 @@ function HRLogin() {
                     <Input 
                         prefix={<UserOutlined />} 
                         placeholder="User email" 
-                        value = {email}
-                        onChange = {(e) => setEmail(e.target.value)}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </Form.Item>
                 
                 <Form.Item
-                        name="password"
-                        label="Password"
-                        rules={[
-                            {
+                    name="password"
+                    label="Password"
+                    rules={[
+                        {
+                            required: true,
                             message: 'Please input your password!',
-                            },
-                        ]}
-                        hasFeedback
-                        >
-                        <Input.Password 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                        },
+                    ]}
+                    hasFeedback
+                >
+                    <Input.Password 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </Form.Item>
 
                 <Form.Item>
                     <Button 
                         className='bg-green-900 w-72 text-white font-bold' 
-                        type="submit"
-                        onClick={handleLogin}
+                        type="primary"
+                        htmlType="submit"
                     >
                         Log in
                     </Button>   
@@ -94,6 +101,6 @@ function HRLogin() {
             </Form>
         </div>
     );
-}
+};
 
 export default HRLogin;

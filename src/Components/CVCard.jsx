@@ -24,6 +24,9 @@ import LanguageIcon from '@mui/icons-material/Language';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
 function CVCard() {
     const { applicationId } = useParams();
     const [application, setApplication] = useState(null);
@@ -43,7 +46,7 @@ function CVCard() {
     // Existing fetch functions remain the same...
     const fetchApplicationData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8070/applications/Aview/${applicationId}`);
+            const response = await axios.get(`${API_BASE_URL}applications/Aview/${applicationId}`);
             setApplication(response.data);
             if (response.data.filename) {
                 fetchPreview(response.data.filename);
@@ -59,7 +62,7 @@ function CVCard() {
     const fetchPreview = async (filename) => {
         try {
             const response = await axios.get(
-                `http://localhost:8070/applications/files/${filename}`,
+                `${API_BASE_URL}applications/files/${filename}`,
                 {
                     responseType: 'blob'
                 }
@@ -78,7 +81,7 @@ function CVCard() {
             }
 
             const response = await axios.get(
-                `http://localhost:8070/applications/files/${application.filename}`,
+                `${API_BASE_URL}applications/files/${application.filename}`,
                 {
                     responseType: 'blob',
                     headers: {
