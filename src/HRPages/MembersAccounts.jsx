@@ -56,33 +56,18 @@ function MembersAccounts() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   
-  const handleUserCreate = async (values) => {
-    try {
-      setLoading(true);
-      // Prepare the data to send to the backend
-      const userData = {
-        name: values['Employee Name'],
-        department: values['Department'],
-        employeeId: values['Employee ID'],
-        role: values['role'] === 'female' ? 'admin' : 'member', // Mapping role to backend expectation
-        email: values['email'],
-        password: values['password']
-      };
 
-      // Send POST request to backend signup endpoint
-      const response = await axios.post('http://localhost:8070/api/user/register', userData);
-      
-      // Show success message
-      message.success('User created successfully!');
-      
-      // Reset form after successful submission
-      form.resetFields();
-    } catch (error) {
-      // Handle error
-      console.error('Signup error:', error);
-      message.error(error.response?.data?.message || 'Failed to create user');
-    } finally {
-      setLoading(false);
+  const handleUserCreate = async (e) => {
+      try{
+          await createUserWithEmailAndPassword(auth, email, password);
+          console.log('User created');
+          alert('User created successfully!');
+        }
+        catch(error){
+            console.log(error.message);
+        }
+
+        
     }
   };
 

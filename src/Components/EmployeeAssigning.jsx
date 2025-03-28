@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Flex, Table, Tag, Transfer, message } from 'antd';
 import axios from 'axios';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const TableTransfer = (props) => {
   const { leftColumns, rightColumns, ...restProps } = props;
@@ -84,7 +86,7 @@ const filterOption = (input, item) =>
   item.tag?.toLowerCase().includes(input.toLowerCase()) ||
   item.description?.toLowerCase().includes(input.toLowerCase());
 
-const EmployeeAssigning = ({ projectId }) => {
+const EmployeeAssigning = forwardRef(({ projectId }, ref) => {
   const [targetKeys, setTargetKeys] = useState([]);
   const [employeeData, setEmployeeData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -95,7 +97,7 @@ const EmployeeAssigning = ({ projectId }) => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('http://localhost:8070/employee/Eview');
+      const response = await axios.get(`${API_BASE_URL}employee/Eview`);
       const formattedData = response.data.map((employee) => ({
         key: employee._id,
         title: employee.employee_full_name,
@@ -116,30 +118,37 @@ const EmployeeAssigning = ({ projectId }) => {
     setTargetKeys(nextTargetKeys);
   };
 
-  const handleAssignEmployees = async () => {
-    if (!projectId) {
-      message.error('Project ID is missing');
-      return false;
-    }
+  // Use useImperativeHandle to expose the method to the parent component
+  useImperativeHandle(ref, () => ({
+    async handleAssignEmployees() {
+      if (!projectId) {
+        message.error('Project ID is missing');
+        return false;
+      }
 
-    try {
-      // Update all selected employees with the project ID
-      const updatePromises = targetKeys.map(employeeKey => {
-        const employee = employeeData.find(emp => emp.key === employeeKey);
-        return axios.put(`http://localhost:8070/employee/Eupdate/${employeeKey}`, {
-          employee_current_project_id: projectId
-        });
-      });
-      
-      await Promise.all(updatePromises);
-      message.success('Employees assigned successfully');
-      return true;
-    } catch (error) {
-      console.error('Error assigning employees:', error);
-      message.error('Failed to assign employees to the project');
-      return false;
+      if (targetKeys.length === 0) {
+        message.error('Please select at least one employee');
+        return false;
+      }
+
+      try {
+        // Update all selected employees with the project ID
+        const updatePromises = targetKeys.map(employeeKey => 
+          axios.put(`${API_BASE_URL}employee/Eupdate/${employeeKey}`, {
+            employee_current_project_id: projectId
+          })
+        );
+        
+        await Promise.all(updatePromises);
+        message.success('Employees assigned successfully');
+        return true;
+      } catch (error) {
+        console.error('Error assigning employees:', error);
+        message.error('Failed to assign employees to the project');
+        return false;
+      }
     }
-  };
+  }));
 
   return (
     <Flex align="start" gap="middle" vertical className='w-[900px]'>
@@ -154,9 +163,8 @@ const EmployeeAssigning = ({ projectId }) => {
         leftColumns={columns}
         rightColumns={columns}
       />
-      {/* We don't need to add a button here as the modal already has OK button */}
     </Flex>
   );
-};
+});
 
 export default EmployeeAssigning;

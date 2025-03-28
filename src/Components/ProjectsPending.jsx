@@ -15,7 +15,6 @@ import EmployeeAssigning from './EmployeeAssigning';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -96,19 +95,23 @@ export default function ProjectsPending() {
         return;
       }
 
-      // First assign employees using the EmployeeAssigning component
-      const employeeAssignSuccess = await employeeAssigningRef.current.handleAssignEmployees();
-      
-      if (employeeAssignSuccess) {
-        // Then update project status
-        await axios.put(`${API_BASE_URL}projects/Pupdate/${selectedProjectId}`, {
-          projectStatus: 'Inprogress'
-        });
+      // First check if ref exists and call handleAssignEmployees
+      if (employeeAssigningRef.current && employeeAssigningRef.current.handleAssignEmployees) {
+        const employeeAssignSuccess = await employeeAssigningRef.current.handleAssignEmployees();
+        
+        if (employeeAssignSuccess) {
+          // Then update project status
+          await axios.put(`${API_BASE_URL}projects/Pupdate/${selectedProjectId}`, {
+            projectStatus: 'Inprogress'
+          });
 
-        // Remove from pending list
-        setRows(rows.filter(row => row.id !== selectedProjectId));
-        message.success('Project started successfully');
-        setIsModalOpen(false);
+          // Remove from pending list
+          setRows(rows.filter(row => row.id !== selectedProjectId));
+          message.success('Project started successfully');
+          setIsModalOpen(false);
+        }
+      } else {
+        message.error('Employee assignment component is not properly initialized');
       }
     } catch (error) {
       console.error('Error updating project status:', error);
