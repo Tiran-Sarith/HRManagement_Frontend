@@ -86,7 +86,7 @@ function MembersAccounts() {
       try{
           await createUserWithEmailAndPassword(auth, email, password);
           console.log('User created');
-              
+          alert('User created successfully!');
         }
         catch(error){
             console.log(error.message);

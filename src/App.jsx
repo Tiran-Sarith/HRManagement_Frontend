@@ -32,7 +32,7 @@ function App() {
         <div className="App">
 
 {/* website pages */}
-
+{/* 
           <Navbar/>
           <Routes>
 
@@ -51,11 +51,11 @@ function App() {
             <Route path="/hrHome" element={<MainHR/>} /> 
 
           </Routes>
-          <Footer/>
+          <Footer/> */}
 
 {/* HR Pages */}
 
-          {/* <MainHR/> */}
+          <MainHR/>
 
 {/*           <MainHR/> */}
 
