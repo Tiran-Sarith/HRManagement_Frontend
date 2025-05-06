@@ -164,6 +164,8 @@ export default function MainHR() {
                                                 ? '/vacancies'
                                                 : text === 'Employee'
                                                 ? '/employee'
+                                                : text === 'Home'
+                                                ? '/dashboard'
                                                 : text === 'Projects'
                                                 ? '/projects'
                                                 : text === 'Departments'
@@ -213,7 +215,7 @@ export default function MainHR() {
                     <DrawerHeader />
                     <Routes>
                         <Route path="/membersaccounts" element={<MembersAccounts/>} />
-                        <Route path="/" element={<Dashboard/>} />
+                        <Route path="/dashboard" element={<Dashboard/>} />
                         <Route path="/vacancies" element={<Vacancies />} />
                         <Route path="/vacanciesAdd" element={<AddVacancies />} />
                         <Route path="/vacanciesUpdate" element={<UpdateVacancy />} />
