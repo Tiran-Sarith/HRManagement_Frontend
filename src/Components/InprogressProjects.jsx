@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -18,17 +19,20 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: '#2E7D32',
+    fontweight:500,
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+    fontweight: 500,
   },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+    // backgroundColor: theme.palette.action.hover,
+    
   },
   // hide last border
   '&:last-child td, &:last-child th': {
@@ -121,13 +125,13 @@ export default function InprogressProjects() {
         await axios.put(`${API_BASE_URL}projects/Pupdate/${id}`, {
           projectStatus: 'Finished'
         });
-        
+
         // Then, call the new endpoint to clear project assignments for employees
         await axios.post(`${API_BASE_URL}employee/clearProjectAssignments/${id}`);
-        
+
         // Remove from in-progress list
         setRows(rows.filter(row => row.id !== id));
-        
+
         // Optional: Show success message
         alert('Project marked as finished and employee assignments cleared.');
       } catch (error) {
@@ -151,36 +155,36 @@ export default function InprogressProjects() {
           <TableHead>
             <TableRow>
               <StyledTableCell>Project Name</StyledTableCell>
-              <StyledTableCell align="right">Project ID</StyledTableCell>
-              <StyledTableCell align="right">Client</StyledTableCell>
-              <StyledTableCell align="right">Deadline</StyledTableCell>
-              <StyledTableCell align="right">Budget($)</StyledTableCell>
-              <StyledTableCell align="right">Duration(Weeks)</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align="left">Project ID</StyledTableCell>
+              <StyledTableCell align="left">Client</StyledTableCell>
+              <StyledTableCell align="left">Deadline</StyledTableCell>
+              <StyledTableCell align="left">Budget($)</StyledTableCell>
+              <StyledTableCell align="left">Duration(Weeks)</StyledTableCell>
+              <StyledTableCell align="left"></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <StyledTableRow 
+              <StyledTableRow
                 key={row.name}
                 onClick={() => showModal(row)}
               >
                 <StyledTableCell component="th" scope="row">
                   {row.name}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.id}</StyledTableCell>
-                <StyledTableCell align="right">{row.client}</StyledTableCell>
-                <StyledTableCell align="right">{formatDate(row.deadline)}</StyledTableCell>
-                <StyledTableCell align="right">{row.estimatedBudget}</StyledTableCell>
-                <StyledTableCell align="right">{row.estimatedDuration}</StyledTableCell>
+                <StyledTableCell align="left">{row.id}</StyledTableCell>
+                <StyledTableCell align="left">{row.client}</StyledTableCell>
+                <StyledTableCell align="left">{formatDate(row.deadline)}</StyledTableCell>
+                <StyledTableCell align="left">{row.estimatedBudget}</StyledTableCell>
+                <StyledTableCell align="left">{row.estimatedDuration}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <Button 
+                  <Button
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent row click event
                       handleFinish(row.id);
-                    }} 
+                    }}
                     type="primary"
-                    style={{ backgroundColor: 'black' }}
+                    style={{ backgroundColor: 'green' }}
                   >
                     Finish
                   </Button>
@@ -200,10 +204,10 @@ export default function InprogressProjects() {
         />
       </TableContainer>
 
-      <Modal 
+      <Modal
         title={selectedProject ? `Team Members for ${selectedProject.name}` : "Project Team"}
-        open={isModalOpen} 
-        onOk={handleOk} 
+        open={isModalOpen}
+        onOk={handleOk}
         onCancel={handleCancel}
         width={800}
         footer={[

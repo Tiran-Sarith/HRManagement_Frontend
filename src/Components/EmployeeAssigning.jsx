@@ -69,7 +69,7 @@ const columns = [
         style={{
           marginInlineEnd: 0,
         }}
-        color="cyan"
+        color="green"
       >
         {tag}
       </Tag>

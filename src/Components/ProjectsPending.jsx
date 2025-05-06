@@ -12,27 +12,50 @@ import axios from 'axios';
 import { Button, Modal, message } from 'antd';
 import { useState, useRef } from 'react';
 import EmployeeAssigning from './EmployeeAssigning';
+import {
+  Box,
+  Typography
+} from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+// Custom theme with green palette
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#2E7D32', // Dark green
+      light: '#4CAF50', // Lighter green
+      dark: '#1B5E20', // Darker green
+    },
+    background: {
+      default: '#F1F8E9', // Light green background
+      paper: '#ffffff' // Lighter paper background
+    }
   },
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+  components: {
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#2E7D32',
+          color: 'white'
+        }
+      }
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        head: {
+          color: 'white',
+          fontWeight: 'bold',
+          backgroundColor: '#2E7D32'
+        }
+      }
+    }
+  }
+});
+
 
 function createData(name, id, client, deadline, estimatedBudget, estimatedDuration) {
   return { name, id, client, deadline, estimatedBudget, estimatedDuration };
@@ -98,7 +121,7 @@ export default function ProjectsPending() {
       // First check if ref exists and call handleAssignEmployees
       if (employeeAssigningRef.current && employeeAssigningRef.current.handleAssignEmployees) {
         const employeeAssignSuccess = await employeeAssigningRef.current.handleAssignEmployees();
-        
+
         if (employeeAssignSuccess) {
           // Then update project status
           await axios.put(`${API_BASE_URL}projects/Pupdate/${selectedProjectId}`, {
@@ -118,65 +141,84 @@ export default function ProjectsPending() {
       message.error('Failed to start project');
     }
   };
-
+ const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  };
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Project Name</StyledTableCell>
-            <StyledTableCell align="right">Project ID</StyledTableCell>
-            <StyledTableCell align="right">Client</StyledTableCell>
-            <StyledTableCell align="right">Deadline</StyledTableCell>
-            <StyledTableCell align="right">Budget($)</StyledTableCell>
-            <StyledTableCell align="right">Duration(Weeks)</StyledTableCell>
-            <StyledTableCell align="center"></StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-            <StyledTableRow key={row.id}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.id}</StyledTableCell>
-              <StyledTableCell align="right">{row.client}</StyledTableCell>
-              <StyledTableCell align="right">{row.deadline}</StyledTableCell>
-              <StyledTableCell align="right">{row.estimatedBudget}</StyledTableCell>
-              <StyledTableCell align="right">{row.estimatedDuration}</StyledTableCell>
-              <StyledTableCell align="center">
-                <Button className='bg-black text-white' onClick={() => showModal(row.id)}>
-                  Start
-                </Button>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      <Modal 
-        width={1000} 
-        className='mr-36' 
-        title="Assign Employees To Project" 
-        open={isModalOpen} 
-        onOk={handleStart} 
-        onCancel={handleCancel}
-      >
-        {selectedProjectId && (
-          <EmployeeAssigning 
-            projectId={selectedProjectId} 
-            ref={employeeAssigningRef} 
+    <ThemeProvider theme={theme}>
+      <Box sx={{ width: '100%', padding: 2, backgroundColor: theme.palette.background.default }}>
+        {/* <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            marginBottom: 3,
+            fontWeight: 600,
+            color: theme.palette.primary.dark
+          }}
+        >
+          Pending Projects
+        </Typography> */}
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Project Name</TableCell>
+                {/* <TableCell align="right">Project ID</TableCell> */}
+                <TableCell align="left">Client</TableCell>
+                <TableCell align="left">Deadline</TableCell>
+                <TableCell align="left">Budget($)</TableCell>
+                <TableCell align="left">Duration(Weeks)</TableCell>
+                <TableCell align="center"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  {/* <TableCell align="right">{row.id}</TableCell> */}
+                  <TableCell align="left">{row.client}</TableCell>
+                  <TableCell align="left">{formatDate(row.deadline)}</TableCell>
+                  <TableCell align="left">{row.estimatedBudget}</TableCell>
+                  <TableCell align="left">{row.estimatedDuration}</TableCell>
+                  <TableCell align="center">
+                    <Button className='text-white hover:text-white' style={{ backgroundColor: 'green', hover: 'white' }} onClick={() => showModal(row.id)}>
+                      Start
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        )}
-      </Modal>
-    </TableContainer>
+          <Modal
+            width={1000}
+            className='mr-36'
+            title="Assign Employees To Project"
+            open={isModalOpen}
+            onOk={handleStart}
+            onCancel={handleCancel}
+          >
+            {selectedProjectId && (
+              <EmployeeAssigning
+                projectId={selectedProjectId}
+                ref={employeeAssigningRef}
+              />
+            )}
+          </Modal>
+        </TableContainer>
+      </Box>
+    </ThemeProvider>
   );
 }
