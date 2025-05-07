@@ -1,6 +1,8 @@
 import React from "react";
-import header1image from "../Screens/Assests/03.jpg";
-import women1 from "../Screens/Assests/young-woman-suit-confident-smiling-camera-generated-by-artificial-intelligence.png";
+// import header1image from "../Screens/Assests/03.jpg";
+// import header1image from "../Screens/Assests/03.jpg";
+import header1image from "../Assests/03.jpg";
+import women1 from "../Assests/young-woman-suit-confident-smiling-camera-generated-by-artificial-intelligence.png";
 import TeamSlider from "./Slider";
 import MissionVision from "./VisionandMission";
 
