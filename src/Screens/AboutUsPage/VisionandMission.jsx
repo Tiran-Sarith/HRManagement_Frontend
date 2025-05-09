@@ -1,5 +1,5 @@
 import React from "react";
-import Rectangle1 from "../assets/Rectangle1.png"; // Correct the path if necessary
+import Rectangle1 from "../Assests/Rectangle1.png"; // Correct the path if necessary
 
 const MissionCard = () => {
   return (

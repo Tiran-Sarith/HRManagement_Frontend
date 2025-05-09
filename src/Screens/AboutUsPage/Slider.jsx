@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import "./Slider.css";
-import header1image from "../Screens/Assests/02.jpeg";
+import header1image from "../Assests/02.jpeg";
 
 
 const TeamSlider = () => {

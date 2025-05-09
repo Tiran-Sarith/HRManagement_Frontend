@@ -11,7 +11,8 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Button, Modal, List, Card, Typography, Spin } from 'antd';
+import { Button as AntButton, Modal, List, Card, Typography, Spin } from 'antd';
+import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 
 const { Title, Text } = Typography;
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -56,6 +57,19 @@ export default function InprogressProjects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [projectEmployees, setProjectEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
+  
+  // New state for snackbar notifications
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
+  
+  // New state for confirmation dialog
+  const [confirmDialog, setConfirmDialog] = useState({
+    open: false,
+    projectId: null
+  });
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -84,6 +98,11 @@ export default function InprogressProjects() {
       )));
     } catch (error) {
       console.error('Error fetching in-progress projects:', error);
+      setSnackbar({
+        open: true,
+        message: 'Error loading projects. Please try again.',
+        severity: 'error'
+      });
     }
   };
 
@@ -98,6 +117,11 @@ export default function InprogressProjects() {
       setProjectEmployees(assignedEmployees);
     } catch (error) {
       console.error('Error fetching employees for project:', error);
+      setSnackbar({
+        open: true,
+        message: 'Error loading team members. Please try again.',
+        severity: 'error'
+      });
     } finally {
       setLoading(false);
     }
@@ -118,26 +142,59 @@ export default function InprogressProjects() {
     setProjectEmployees([]);
   };
 
-  const handleFinish = async (id) => {
-    if (window.confirm('Are you sure you want to finish this project?')) {
-      try {
-        // First, update the project status to 'Finished'
-        await axios.put(`${API_BASE_URL}projects/Pupdate/${id}`, {
-          projectStatus: 'Finished'
-        });
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar({...snackbar, open: false});
+  };
 
-        // Then, call the new endpoint to clear project assignments for employees
-        await axios.post(`${API_BASE_URL}employee/clearProjectAssignments/${id}`);
+  const openConfirmDialog = (id, e) => {
+    if (e) {
+      e.stopPropagation(); // Prevent row click event
+    }
+    setConfirmDialog({
+      open: true,
+      projectId: id
+    });
+  };
 
-        // Remove from in-progress list
-        setRows(rows.filter(row => row.id !== id));
+  const closeConfirmDialog = () => {
+    setConfirmDialog({
+      open: false,
+      projectId: null
+    });
+  };
 
-        // Optional: Show success message
-        alert('Project marked as finished and employee assignments cleared.');
-      } catch (error) {
-        console.error('Error updating project status:', error);
-        alert('An error occurred while finishing the project.');
-      }
+  const handleFinish = async () => {
+    const id = confirmDialog.projectId;
+    closeConfirmDialog();
+    
+    try {
+      // First, update the project status to 'Finished'
+      await axios.put(`${API_BASE_URL}projects/Pupdate/${id}`, {
+        projectStatus: 'Finished'
+      });
+
+      // Then, call the new endpoint to clear project assignments for employees
+      await axios.post(`${API_BASE_URL}employee/clearProjectAssignments/${id}`);
+
+      // Remove from in-progress list
+      setRows(rows.filter(row => row.id !== id));
+
+      // Show success message
+      setSnackbar({
+        open: true,
+        message: 'Project marked as finished and employee assignments cleared.',
+        severity: 'success'
+      });
+    } catch (error) {
+      console.error('Error updating project status:', error);
+      setSnackbar({
+        open: true,
+        message: 'An error occurred while finishing the project.',
+        severity: 'error'
+      });
     }
   };
 
@@ -178,16 +235,13 @@ export default function InprogressProjects() {
                 <StyledTableCell align="left">{row.estimatedBudget}</StyledTableCell>
                 <StyledTableCell align="left">{row.estimatedDuration}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent row click event
-                      handleFinish(row.id);
-                    }}
+                  <AntButton
+                    onClick={(e) => openConfirmDialog(row.id, e)}
                     type="primary"
                     style={{ backgroundColor: 'green' }}
                   >
                     Finish
-                  </Button>
+                  </AntButton>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
@@ -204,6 +258,7 @@ export default function InprogressProjects() {
         />
       </TableContainer>
 
+      {/* Team Members Modal */}
       <Modal
         title={selectedProject ? `Team Members for ${selectedProject.name}` : "Project Team"}
         open={isModalOpen}
@@ -211,9 +266,9 @@ export default function InprogressProjects() {
         onCancel={handleCancel}
         width={800}
         footer={[
-          <Button key="back" onClick={handleCancel}>
+          <AntButton key="back" onClick={handleCancel}>
             Close
-          </Button>
+          </AntButton>
         ]}
       >
         {loading ? (
@@ -252,6 +307,48 @@ export default function InprogressProjects() {
           </div>
         )}
       </Modal>
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={confirmDialog.open}
+        onClose={closeConfirmDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm Project Completion"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to finish this project? This will mark the project as completed and remove all employee assignments.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeConfirmDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleFinish} color="primary" variant="contained" autoFocus>
+            Finish Project
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar for notifications */}
+      <Snackbar 
+        open={snackbar.open} 
+        autoHideDuration={6000} 
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleSnackbarClose} 
+          severity={snackbar.severity} 
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
