@@ -179,31 +179,7 @@ function CVCard() {
                                             <strong>Job Title:</strong> {application.jobTitle || 'N/A'}
                                         </Typography>
                                     </Box>
-                                </Box>
-                            </Box>
-
-                            <Divider sx={{ my: 2 }} />
-
-                            {/* Additional Information Section */}
-                            <Box sx={{ mb: 3 }}>
-                                <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold' }}>
-                                    Additional Information
-                                </Typography>
-
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                                        <InfoIcon sx={{ color: 'green', mt: 0.5 }} />
-                                        <Box>
-                                            <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
-                                                Introduction
-                                            </Typography>
-                                            <Typography variant="body1" sx={{ textAlign: 'justify' }}>
-                                                {application.introduction || 'No introduction provided'}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <LanguageIcon sx={{ color: 'green' }} />
                                         <Typography variant="body1">
                                             <strong>Portfolio:</strong> {application.portfolio ? (
@@ -227,8 +203,13 @@ function CVCard() {
                                             <strong>Score:</strong> {application.cvScore !== undefined ? application.cvScore : 'N/A'}
                                         </Typography>
                                     </Box>
+                                    
                                 </Box>
                             </Box>
+
+                            <Divider sx={{ my: 2 }} />
+
+                      
 
                             <Box sx={{ mt: 2 }}>
                                 <Button
@@ -250,47 +231,29 @@ function CVCard() {
 
                     {/* Right side - CV Preview */}
                     <Grid item xs={12} md={6}>
-                        <Box sx={{
-                            border: '2px dashed #e8f5e9',
-                            borderRadius: 2,
-                            p: 2,
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-                            <Typography variant="h6" sx={{ color: 'green', mb: 2 }}>
-                                CV Preview
-                            </Typography>
+                        <Box sx={{ mb: 3 }}>
+                                <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold' }}>
+                                    Additional Information
+                                </Typography>
 
-                            {previewUrl ? (
-                                <Box sx={{ width: '100%', height: '600px', position: 'relative' }}>
-                                    <iframe
-                                        src={previewUrl}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            border: 'none',
-                                            borderRadius: '8px'
-                                        }}
-                                        title="CV Preview"
-                                    />
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                                        <InfoIcon sx={{ color: 'green', mt: 0.5 }} />
+                                        <Box>
+                                            <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+                                                Introduction
+                                            </Typography>
+                                            <Typography variant="body1" sx={{ textAlign: 'justify' }}>
+                                                {application.introduction || 'No introduction provided'}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+
+                                    
+
+                                    
                                 </Box>
-                            ) : (
-                                <Box sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: 2
-                                }}>
-                                    <DescriptionIcon sx={{ fontSize: 60, color: 'green' }} />
-                                    <Typography color="textSecondary">
-                                        CV preview not available
-                                    </Typography>
-                                </Box>
-                            )}
-                        </Box>
+                            </Box>
                     </Grid>
                 </Grid>
             </CardContent>
