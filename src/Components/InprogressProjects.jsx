@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -11,29 +10,39 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Button as AntButton, Modal, List, Card, Typography, Spin } from 'antd';
-import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { Button as AntButton, Modal, List, Card, Typography, Spin, Tabs, Divider } from 'antd';
+import { 
+  Snackbar, 
+  Alert, 
+  Dialog, 
+  DialogActions, 
+  DialogContent, 
+  DialogContentText, 
+  DialogTitle, 
+  Button,
+  Box,
+  Grid
+} from '@mui/material';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
+const { TabPane } = Tabs;
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#2E7D32',
-    fontweight:500,
+    fontWeight: 500,
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontweight: 500,
+    fontWeight: 500,
   },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     // backgroundColor: theme.palette.action.hover,
-    
   },
   // hide last border
   '&:last-child td, &:last-child th': {
@@ -45,8 +54,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, id, client, deadline, estimatedBudget, estimatedDuration) {
-  return { name, id, client, deadline, estimatedBudget, estimatedDuration };
+function createData(name, id, client, deadline, estimatedBudget, estimatedDuration, description) {
+  return { name, id, client, deadline, estimatedBudget, estimatedDuration, description };
 }
 
 export default function InprogressProjects() {
@@ -57,6 +66,7 @@ export default function InprogressProjects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [projectEmployees, setProjectEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('details');
   
   // New state for snackbar notifications
   const [snackbar, setSnackbar] = useState({
@@ -94,7 +104,8 @@ export default function InprogressProjects() {
         project.projectManager,
         project.projectDeadline,
         project.projectBudget,
-        project.projectDuration
+        project.projectDuration,
+        project.projectDescription
       )));
     } catch (error) {
       console.error('Error fetching in-progress projects:', error);
@@ -131,6 +142,7 @@ export default function InprogressProjects() {
     setSelectedProject(row);
     fetchEmployeesByProject(row.id);
     setIsModalOpen(true);
+    setActiveTab('details'); // Default to details tab when opening modal
   };
 
   const handleOk = () => {
@@ -258,53 +270,125 @@ export default function InprogressProjects() {
         />
       </TableContainer>
 
-      {/* Team Members Modal */}
+      {/* Project Details and Team Members Modal */}
       <Modal
-        title={selectedProject ? `Team Members for ${selectedProject.name}` : "Project Team"}
+        title={selectedProject ? `Project: ${selectedProject.name}` : "Project Information"}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
         width={800}
         footer={[
+          <AntButton 
+            key="finish" 
+            type="primary" 
+            style={{ backgroundColor: 'green' }}
+            onClick={() => selectedProject && openConfirmDialog(selectedProject.id)}
+          >
+            Finish Project
+          </AntButton>,
           <AntButton key="back" onClick={handleCancel}>
             Close
           </AntButton>
         ]}
       >
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: '20px' }}>
-            <Spin size="large" />
-            <p>Loading employees...</p>
-          </div>
-        ) : projectEmployees.length > 0 ? (
-          <List
-            grid={{ gutter: 16, column: 1 }}
-            dataSource={projectEmployees}
-            renderItem={employee => (
-              <List.Item>
-                <Card>
-                  <Title level={4}>{employee.employee_full_name}</Title>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <div>
-                      <p><Text strong>Employee ID:</Text> {employee.employee_id}</p>
-                      <p><Text strong>Designation:</Text> {employee.employee_designation || 'N/A'}</p>
-                      <p><Text strong>Email:</Text> {employee.employee_email}</p>
-                    </div>
-                    <div>
-                      <p><Text strong>Department:</Text> {employee.employee_department}</p>
-                      <p><Text strong>Phone:</Text> {employee.employee_telephone}</p>
-                      <p><Text strong>Address:</Text> {employee.employee_address}</p>
-                    </div>
-                  </div>
-                </Card>
-              </List.Item>
-            )}
-          />
-        ) : (
-          <div style={{ textAlign: 'center', padding: '20px' }}>
-            <Title level={4}>No employees assigned to this project</Title>
-            <p>There are currently no team members assigned to this project.</p>
-          </div>
+        {selectedProject && (
+          <Tabs 
+            activeKey={activeTab} 
+            onChange={setActiveTab}
+            type="card"
+            style={{ marginBottom: '20px' }}
+          >
+            <TabPane tab="Project Details" key="details">
+              <Card bordered={false}>
+                <Box sx={{ p: 1 }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <Title level={4}>{selectedProject.name}</Title>
+                      <Divider style={{ marginTop: '8px', marginBottom: '16px' }} />
+                    </Grid>
+                    
+                    <Grid item xs={6}>
+                      <Text strong>Project ID:</Text>
+                      <Paragraph style={{ marginTop: '4px' }}>{selectedProject.id}</Paragraph>
+                    </Grid>
+                    
+                    <Grid item xs={6}>
+                      <Text strong>Client:</Text>
+                      <Paragraph style={{ marginTop: '4px' }}>{selectedProject.client}</Paragraph>
+                    </Grid>
+                    
+                    <Grid item xs={6}>
+                      <Text strong>Deadline:</Text>
+                      <Paragraph style={{ marginTop: '4px' }}>{formatDate(selectedProject.deadline)}</Paragraph>
+                    </Grid>
+                    
+                    <Grid item xs={6}>
+                      <Text strong>Budget:</Text>
+                      <Paragraph style={{ marginTop: '4px' }}>${selectedProject.estimatedBudget}</Paragraph>
+                    </Grid>
+                    
+                    <Grid item xs={6}>
+                      <Text strong>Duration:</Text>
+                      <Paragraph style={{ marginTop: '4px' }}>{selectedProject.estimatedDuration} weeks</Paragraph>
+                    </Grid>
+                    
+                    <Grid item xs={12} style={{ marginTop: '8px' }}>
+                      <Text strong>Description:</Text>
+                      <Card 
+                        style={{ 
+                          marginTop: '8px', 
+                          backgroundColor: '#f9f9f9', 
+                          borderRadius: '4px'
+                        }}
+                      >
+                        <Text>
+                          {selectedProject.description || "No description provided."}
+                        </Text>
+                      </Card>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Card>
+            </TabPane>
+            
+            <TabPane tab="Team Members" key="team">
+              {loading ? (
+                <div style={{ textAlign: 'center', padding: '20px' }}>
+                  <Spin size="large" />
+                  <p>Loading employees...</p>
+                </div>
+              ) : projectEmployees.length > 0 ? (
+                <List
+                  grid={{ gutter: 16, column: 1 }}
+                  dataSource={projectEmployees}
+                  renderItem={employee => (
+                    <List.Item>
+                      <Card>
+                        <Title level={4}>{employee.employee_full_name}</Title>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                          <div>
+                            <p><Text strong>Employee ID:</Text> {employee.employee_id}</p>
+                            <p><Text strong>Designation:</Text> {employee.employee_designation || 'N/A'}</p>
+                            <p><Text strong>Email:</Text> {employee.employee_email}</p>
+                          </div>
+                          <div>
+                            <p><Text strong>Department:</Text> {employee.employee_department}</p>
+                            <p><Text strong>Phone:</Text> {employee.employee_telephone}</p>
+                            <p><Text strong>Address:</Text> {employee.employee_address}</p>
+                          </div>
+                        </div>
+                      </Card>
+                    </List.Item>
+                  )}
+                />
+              ) : (
+                <div style={{ textAlign: 'center', padding: '20px' }}>
+                  <Title level={4}>No employees assigned to this project</Title>
+                  <p>There are currently no team members assigned to this project.</p>
+                </div>
+              )}
+            </TabPane>
+          </Tabs>
         )}
       </Modal>
 
