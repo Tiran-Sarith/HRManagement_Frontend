@@ -41,54 +41,36 @@ function CVCard() {
     };
   }, [applicationId]);
 
-  // Existing fetch functions remain the same...
-  const fetchApplicationData = async () => {
+
+    const fetchPreview = async (filename) => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}applications/Aview/${applicationId}`
-      );
-      setApplication(response.data);
-      if (response.data.filename) {
-        fetchPreview(response.data.filename);
-      }
-      setLoading(false);
+        const response = await axios.get(`${API_BASE_URL}applications/get-s3-cv-url/${filename}`);
+        setPreviewUrl(response.data.url);
     } catch (err) {
-      setError("Error fetching application data");
-      setLoading(false);
-      console.error("Error:", err);
+        console.error('Error fetching S3 preview URL:', err);
     }
-  };
+};
 
-  const fetchPreview = async (filename) => {
+    const handleDownload = async () => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}applications/files/${filename}`,
-        {
-          responseType: "blob",
+        if (!application?.filename) {
+            throw new Error('No file available for download');
         }
-      );
-      const url = URL.createObjectURL(response.data);
-      setPreviewUrl(url);
+
+        const response = await axios.get(`${API_BASE_URL}applications/get-s3-cv-url/${application.filename}`);
+        const url = response.data.url;
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', application.filename);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
     } catch (err) {
-      console.error("Error fetching preview:", err);
+        console.error('Error downloading file from S3:', err);
+        alert('Error downloading file: ' + (err.response?.data?.message || err.message));
     }
-  };
-
-  const handleDownload = async () => {
-    try {
-      if (!application?.filename) {
-        throw new Error("No file available for download");
-      }
-
-      const response = await axios.get(
-        `${API_BASE_URL}applications/files/${application.filename}`,
-        {
-          responseType: "blob",
-          headers: {
-            Accept: "application/octet-stream",
-          },
-        }
-      );
+};
 
       const url = URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
