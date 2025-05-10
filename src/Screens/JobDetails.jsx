@@ -94,7 +94,6 @@ const JobDetails = () => {
                 {[
                   { icon: 'briefcase', label: 'Category', value: vacancy.jobCategory },
                   { icon: 'clipboard', label: 'Type', value: vacancy.hireType },
-                  { icon: 'tag', label: 'Department', value: vacancy.department },
                   { icon: 'calendar', label: 'Posted', value: vacancy.postedDate },
                   { icon: 'clock', label: 'Deadline', value: vacancy.deadline },
                   { icon: 'tag', label: 'Designation', value: vacancy.designation }
@@ -143,9 +142,20 @@ const JobDetails = () => {
                 BENEFITS
                 <span className="ml-2 text-4xl text-green-500">♦</span>
               </h2>
-              
               <ul className="space-y-2 text-sm leading-relaxed text-gray-600">
-                {vacancy.benefits.map((benefit, index) => (
+                {[
+                  'US dollar-linked compensation',
+                  'Performance-based annual bonus',
+                  'Comprehensive Health & Life Insurance',
+                  'Hybrid work arrangement',
+                  'Performance matrix-based recognition',
+                  'Special allowances for Health, Wellness & Academic',
+                  'Paid birthday leave',
+                  'Team engagement allowance',
+                  'Comprehensive Health & Life Insurance Cover',
+                  'Overseas travel opportunities',
+                  'Exposure to client environments'
+                ].map((benefit, index) => (
                   <li key={index} className="flex items-start space-x-3">
                     <svg 
                       className="w-5 h-5 mt-1 text-green-500" 
@@ -168,7 +178,11 @@ const JobDetails = () => {
                 <span className="ml-2 text-4xl text-green-500">♦</span>
               </h2>
               <p className="text-sm leading-loose text-gray-600 text-left">
-                {vacancy.whatweoffer}
+                Our careers offer a flexible working environment, attractive remuneration, and
+                a place to grow and flourish. You will be amongst peers at the top of their game,
+                allowing you to sharpen your skills in an inclusive culture. We offer a variety of
+                spaces that support their work-life balance and integrate wellness into our
+                workplace experience, which includes a relaxation zone and gaming area.
               </p>
             </div>
           </div>
@@ -178,7 +192,7 @@ const JobDetails = () => {
             {/* About Section */}
             <div>
               <h2 className="mb-4 text-lg font-bold">ABOUT THIS POSITION</h2>
-              <p className="text-sm leading-loose text-gray-600 text-justify">
+              <p className="text-sm leading-loose text-gray-600">
                 {vacancy.about}
               </p>
             </div>
