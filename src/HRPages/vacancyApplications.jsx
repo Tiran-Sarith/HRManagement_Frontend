@@ -53,9 +53,36 @@ const ApplicationsList = () => {
     fetchApplications();
   }, [id]);
   
+  // const fetchApplications = () => {
+  //   axios.get(`${API_BASE_URL}applications/Aview/byVacancy/${id}`)
+  //     .then((response) => {
+  //       // Sort applications by score before setting state
+  //       const sortedApplications = response.data.sort((a, b) => {
+  //         // Convert scores to numbers, treating null/undefined as 0
+  //         const scoreA = Number(a.cvScore) || 0;
+  //         const scoreB = Number(b.cvScore) || 0;
+  //         return scoreB - scoreA; // Sort in descending order
+  //       });
+  //       setApplications(sortedApplications);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching applications:", error);
+  //       setError("Failed to load applications.");
+  //       setLoading(false);
+  //     });
+  // };
+
   const fetchApplications = () => {
-    axios.get(`${API_BASE_URL}applications/Aview/byVacancy/${id}`)
-      .then((response) => {
+  setLoading(true); // Start loading
+
+  axios.get(`${API_BASE_URL}applications/Aview/byVacancy/${id}`)
+    .then((response) => {
+      if (Array.isArray(response.data) && response.data.length === 0) {
+        // No applications found
+        setApplications([]);
+        setError("No applications available for this vacancy.");
+      } else if (Array.isArray(response.data) && response.data.length > 0) {
         // Sort applications by score before setting state
         const sortedApplications = response.data.sort((a, b) => {
           // Convert scores to numbers, treating null/undefined as 0
@@ -64,14 +91,22 @@ const ApplicationsList = () => {
           return scoreB - scoreA; // Sort in descending order
         });
         setApplications(sortedApplications);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching applications:", error);
-        setError("Failed to load applications.");
-        setLoading(false);
-      });
-  };
+        setError(null); // Clear any previous error
+      } else {
+        // Handle unexpected response structure
+        setApplications([]);
+        setError("Unexpected data format.");
+      }
+      setLoading(false); // Set loading to false
+    })
+    .catch((error) => {
+      console.error("Error fetching applications:", error);
+      setApplications([]); // Set empty array in case of error
+      setError("Failed to load applications.");
+      setLoading(false); // Set loading to false
+    });
+};
+
 
   const handleDownload = async (application) => {
     try {
@@ -206,6 +241,14 @@ const ApplicationsList = () => {
         padding: "1.5rem",
         backgroundColor: "#fafafa"
       }}>
+        {loading ? (
+  <Typography>Loading...</Typography>
+) : error ? (
+  <Typography color="error">Failed to load applications.</Typography>
+) : applications?.length === 0 ? (
+  <Typography>No applications available for this vacancy.</Typography>
+) : (
+  <>
         <Typography 
           variant="h4" 
           align="center" 
@@ -215,8 +258,11 @@ const ApplicationsList = () => {
             marginBottom: "2rem"
           }}
         >
-          {applications?.length > 0 && `Applications for ${applications[0].jobTitle}`}
+          Applications for {applications[0].jobTitle}
         </Typography>
+          
+          {/* {applications?.length > 0 && `Applications for ${applications[0].jobTitle}`} */}
+       
 
         <Box sx={{ mb: 4 }}>
           <TextField
@@ -339,6 +385,8 @@ const ApplicationsList = () => {
             </TableBody>
           </Table>
         </TableContainer>
+      </>
+)}
       </Paper>
       
       {/* Delete Confirmation Dialog */}

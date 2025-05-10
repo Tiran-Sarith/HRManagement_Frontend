@@ -3,13 +3,17 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
+import {Typography} from '@mui/material';
 import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import IconButton from '@mui/material/IconButton';
 import {
     Dialog,
     DialogActions,
@@ -68,12 +72,15 @@ export default function UpdateVacancies() {
         jobTitle: '',
         jobCategory: '',
         hireType: '',
-        jobID: '',
         deadline: '',
         designation: '',
         department: '',
-        postedDate: '',
-        jobDescription: ''
+        about: '',
+        requirements: '',
+        responsibilities: '',
+        whatweoffer: '',
+        benefits: '',
+        
     });
 
     // Cancel confirmation dialog state
@@ -94,12 +101,21 @@ export default function UpdateVacancies() {
                 jobTitle: vacancyData.jobTitle || '',
                 jobCategory: vacancyData.jobCategory || '',
                 hireType: vacancyData.hireType || '',
-                jobID: vacancyData.jobID || '',
                 deadline: vacancyData.deadline || '',
                 designation: vacancyData.designation || '',
                 department: vacancyData.department || '',
-                postedDate: vacancyData.postedDate || '',
-                jobDescription: vacancyData.jobDescription || ''
+                about: vacancyData.about || '',
+                // Convert arrays back to |-separated strings for editing
+                requirements: Array.isArray(vacancyData.requirements) 
+                    ? vacancyData.requirements.join('| ') 
+                    : vacancyData.requirements || '',
+                responsibilities: Array.isArray(vacancyData.responsibilities) 
+                    ? vacancyData.responsibilities.join('| ') 
+                    : vacancyData.responsibilities || '',
+                whatweoffer: vacancyData.whatweoffer || '',
+                benefits: Array.isArray(vacancyData.benefits) 
+                    ? vacancyData.benefits.join('| ') 
+                    : vacancyData.benefits || ''
             });
             setVacancyId(vacancyData._id);
         } else {
@@ -127,7 +143,15 @@ export default function UpdateVacancies() {
 
         setLoading(true);
         try {
-            await axios.put(`${API_BASE_URL}vacancies/Vupdate/${vacancyId}`, formData);
+            // Create a copy of the form data and convert |-separated strings to arrays
+            const updatedData = {
+                ...formData,
+                requirements: formData.requirements.split('|').map(item => item.trim()),
+                responsibilities: formData.responsibilities.split('|').map(item => item.trim()),
+                benefits: formData.benefits.split('|').map(item => item.trim())
+            };
+
+            await axios.put(`${API_BASE_URL}vacancies/Vupdate/${vacancyId}`, updatedData);
             showSnackbar('Vacancy Updated Successfully', 'success');
             
             // Clean up and navigate after delay to show the success message
@@ -176,6 +200,20 @@ export default function UpdateVacancies() {
 
     return (
         <div className='w-[847px]'>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, cursor: 'pointer', width: 'fit-content' }} onClick={() => navigate(-1)}>
+        <IconButton size="small" sx={{ p: 0, pr: 1, color: 'green' }}>
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography variant="body1" sx={{ color: 'green' }}>
+          Go Back
+        </Typography>
+      </Box>
+            <Paper sx={{ 
+                    maxWidth: 2000, 
+                    margin: "2rem auto",
+                    padding: "1.5rem",
+                    backgroundColor: "#fafafa"
+                  }}>
             <h2 className='text-2xl font-semibold mb-4 text-center text-green-700'>Update Vacancy</h2>
             
             <form onSubmit={handleSubmit}>
@@ -226,15 +264,7 @@ export default function UpdateVacancies() {
                     <div className='mb-4 flex justify-start ml-12'>
                         <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField 
-                                    className='w-[272px]' 
-                                    label="Job ID" 
-                                    variant="filled" 
-                                    name="jobID"
-                                    value={formData.jobID}
-                                    onChange={handleInputChange}
-                                    required
-                                />
+                                
                             </ThemeProvider>
                             <ThemeProvider theme={customTheme(outerTheme)}>
                                 <TextField 
@@ -279,28 +309,19 @@ export default function UpdateVacancies() {
                                     required
                                 />
                             </ThemeProvider>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField 
-                                    className='w-[272px]' 
-                                    label="Posted Date" 
-                                    variant="filled" 
-                                    name="postedDate"
-                                    value={formData.postedDate}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </ThemeProvider>
+                            
                         </Box>
                     </div>
 
+                    
                     <div className='mb-4 flex justify-start ml-10'>
                         <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '847px' } }} noValidate autoComplete="off">
                             <div>
                                 <TextField
                                     id="filled-multiline-static"
-                                    label="Job Description"
-                                    name="jobDescription"
-                                    value={formData.jobDescription}
+                                    label="About"
+                                    name="about"
+                                    value={formData.about}
                                     onChange={handleInputChange}
                                     multiline
                                     rows={4}
@@ -312,11 +333,85 @@ export default function UpdateVacancies() {
                         </Box>
                     </div>
 
-                    <div className='flex justify-start gap-36 ml-16'>
-                        <div>
-                            <p>Upload a photo</p>
-                        </div>
+                    <div className='mb-4 flex justify-start ml-10'>
+                        <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '847px' } }} noValidate autoComplete="off">
+                            <div>
+                                <TextField
+                                    id="filled-multiline-static"
+                                    label="Job Responsibilities (Use | to separate Responsibilities)"
+                                    name="responsibilities"
+                                    value={formData.responsibilities}
+                                    onChange={handleInputChange}
+                                    multiline
+                                    rows={4}
+                                    variant="filled"
+                                    className='w-[854px]'
+                                    required
+                                    helperText="Use | to separate items. Example: item1 | item2 | item3"
+                                />
+                            </div>
+                        </Box>
+                    </div>
 
+                    <div className='mb-4 flex justify-start ml-10'>
+                        <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '847px' } }} noValidate autoComplete="off">
+                            <div>
+                                <TextField
+                                    id="filled-multiline-static"
+                                    label="Job Requirements (Use | to separate Requirements)"
+                                    name="requirements"
+                                    value={formData.requirements}
+                                    onChange={handleInputChange}
+                                    multiline
+                                    rows={6}
+                                    variant="filled"
+                                    className='w-[854px]'
+                                    required
+                                    helperText="Use | to separate items. Example: item1 | item2 | item3"
+                                />
+                            </div>
+                        </Box>
+                    </div>
+                    <div className='mb-4 flex justify-start ml-10'>
+                        <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '847px' } }} noValidate autoComplete="off">
+                            <div>
+                                <TextField
+                                    id="filled-multiline-static"
+                                    label="Benefits (Use | to separate Benefits)"
+                                    name="benefits"
+                                    value={formData.benefits}
+                                    onChange={handleInputChange}
+                                    multiline
+                                    rows={6}
+                                    variant="filled"
+                                    className='w-[854px]'
+                                    required
+                                    helperText="Use | to separate items. Example: item1 | item2 | item3"
+                                />
+                            </div>
+                        </Box>
+                    </div>
+                    
+                    <div className='mb-4 flex justify-start ml-10'>
+                        <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '847px' } }} noValidate autoComplete="off">
+                            <div>
+                                <TextField
+                                    id="filled-multiline-static"
+                                    label="What We Offer"
+                                    name="whatweoffer"
+                                    value={formData.whatweoffer}
+                                    onChange={handleInputChange}
+                                    multiline
+                                    rows={6}
+                                    variant="filled"
+                                    className='w-[854px]'
+                                    required
+                                />
+                            </div>
+                        </Box>
+                    </div>
+
+                    <div className='flex justify-start gap-36 ml-16'>
                         <div className=''>
                             <Stack spacing={2} direction="row">
                                 <Button 
@@ -342,6 +437,7 @@ export default function UpdateVacancies() {
                     </div>
                 </div>
             </form>
+            </Paper>
             
             {/* Cancel Confirmation Dialog */}
             <Dialog
@@ -396,7 +492,6 @@ export default function UpdateVacancies() {
         </div>
     );
 }
-
 
 
 
