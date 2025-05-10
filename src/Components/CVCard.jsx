@@ -2,16 +2,16 @@
 // CVCard.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { 
-  Card, 
-  CardContent, 
-  Button, 
-  Typography, 
-  Box, 
-  CircularProgress,
-  Grid,
-  Paper,
-  Divider
+import {
+    Card,
+    CardContent,
+    Button,
+    Typography,
+    Box,
+    CircularProgress,
+    Grid,
+    Paper,
+    Divider
 } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PersonIcon from '@mui/icons-material/Person';
@@ -123,8 +123,8 @@ function CVCard() {
     );
 
     return (
-        <Card 
-            sx={{ 
+        <Card
+            sx={{
                 maxWidth: 1000,
                 width: '100%',
                 boxShadow: 3,
@@ -144,10 +144,10 @@ function CVCard() {
 
                             {/* Basic Information Section */}
                             <Box sx={{ mb: 3 }}>
-                                <Typography variant="h6" sx={{ color: 'green', mb: 2 }}>
+                                <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold' }}>
                                     Basic Information
                                 </Typography>
-                                
+
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <PersonIcon sx={{ color: 'green' }} />
@@ -159,14 +159,32 @@ function CVCard() {
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <EmailIcon sx={{ color: 'green' }} />
                                         <Typography variant="body1">
-                                            <strong>Email:</strong> {application.email}
+                                            <strong>Email:</strong> {application.email ? (
+                                                <a
+                                                    href={`mailto:${application.email}`}
+                                                    style={{ color: 'blue', textDecoration: 'underline' }}
+                                                >
+                                                    {application.email}
+                                                </a>
+                                            ) : (
+                                                'N/A'
+                                            )}
                                         </Typography>
                                     </Box>
 
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <PhoneIcon sx={{ color: 'green' }} />
                                         <Typography variant="body1">
-                                            <strong>Tel No:</strong> {application.phoneNo}
+                                            <strong>Tel No:</strong> {application.phoneNo ? (
+                                                <a
+                                                    href={`tel:${application.phoneNo}`}
+                                                    style={{ color: 'blue', textDecoration: 'underline' }}
+                                                >
+                                                    {application.phoneNo}
+                                                </a>
+                                            ) : (
+                                                'N/A'
+                                            )}
                                         </Typography>
                                     </Box>
 
@@ -183,7 +201,7 @@ function CVCard() {
 
                             {/* Additional Information Section */}
                             <Box sx={{ mb: 3 }}>
-                                <Typography variant="h6" sx={{ color: 'green', mb: 2 }}>
+                                <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold' }}>
                                     Additional Information
                                 </Typography>
 
@@ -191,10 +209,10 @@ function CVCard() {
                                     <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
                                         <InfoIcon sx={{ color: 'green', mt: 0.5 }} />
                                         <Box>
-                                            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                                Introduction:
+                                            <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+                                                Introduction
                                             </Typography>
-                                            <Typography variant="body1">
+                                            <Typography variant="body1" sx={{ textAlign: 'justify' }}>
                                                 {application.introduction || 'No introduction provided'}
                                             </Typography>
                                         </Box>
@@ -203,14 +221,25 @@ function CVCard() {
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <LanguageIcon sx={{ color: 'green' }} />
                                         <Typography variant="body1">
-                                            <strong>Portfolio:</strong> {application.portfolio || 'N/A'}
+                                            <strong>Portfolio:</strong> {application.portfolio ? (
+                                                <a
+                                                    href={application.portfolio}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{ color: 'blue', textDecoration: 'underline' }}
+                                                >
+                                                    {application.portfolio}
+                                                </a>
+                                            ) : (
+                                                'N/A'
+                                            )}
                                         </Typography>
                                     </Box>
 
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <StarIcon sx={{ color: 'green' }} />
                                         <Typography variant="body1">
-                                        <strong>Score:</strong> {application.cvScore !== undefined ? application.cvScore : 'N/A'}
+                                            <strong>Score:</strong> {application.cvScore !== undefined ? application.cvScore : 'N/A'}
                                         </Typography>
                                     </Box>
                                 </Box>
@@ -236,7 +265,7 @@ function CVCard() {
 
                     {/* Right side - CV Preview */}
                     <Grid item xs={12} md={6}>
-                        <Box sx={{ 
+                        <Box sx={{
                             border: '2px dashed #e8f5e9',
                             borderRadius: 2,
                             p: 2,
@@ -249,7 +278,7 @@ function CVCard() {
                             <Typography variant="h6" sx={{ color: 'green', mb: 2 }}>
                                 CV Preview
                             </Typography>
-                            
+
                             {previewUrl ? (
                                 <Box sx={{ width: '100%', height: '600px', position: 'relative' }}>
                                     <iframe
@@ -264,11 +293,11 @@ function CVCard() {
                                     />
                                 </Box>
                             ) : (
-                                <Box sx={{ 
-                                    display: 'flex', 
-                                    flexDirection: 'column', 
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
                                     alignItems: 'center',
-                                    gap: 2 
+                                    gap: 2
                                 }}>
                                     <DescriptionIcon sx={{ fontSize: 60, color: 'green' }} />
                                     <Typography color="textSecondary">
