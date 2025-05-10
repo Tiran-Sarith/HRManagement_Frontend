@@ -60,49 +60,34 @@ function CVCard() {
     };
 
     const fetchPreview = async (filename) => {
-        try {
-            const response = await axios.get(
-                `${API_BASE_URL}applications/files/${filename}`,
-                {
-                    responseType: 'blob'
-                }
-            );
-            const url = URL.createObjectURL(response.data);
-            setPreviewUrl(url);
-        } catch (err) {
-            console.error('Error fetching preview:', err);
-        }
-    };
+    try {
+        const response = await axios.get(`${API_BASE_URL}applications/get-s3-cv-url/${filename}`);
+        setPreviewUrl(response.data.url);
+    } catch (err) {
+        console.error('Error fetching S3 preview URL:', err);
+    }
+};
 
     const handleDownload = async () => {
-        try {
-            if (!application?.filename) {
-                throw new Error('No file available for download');
-            }
-
-            const response = await axios.get(
-                `${API_BASE_URL}applications/files/${application.filename}`,
-                {
-                    responseType: 'blob',
-                    headers: {
-                        'Accept': 'application/octet-stream'
-                    }
-                }
-            );
-
-            const url = URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', application.filename);
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            URL.revokeObjectURL(url);
-        } catch (err) {
-            console.error('Error downloading file:', err);
-            alert('Error downloading file: ' + (err.response?.data?.message || err.message));
+    try {
+        if (!application?.filename) {
+            throw new Error('No file available for download');
         }
-    };
+
+        const response = await axios.get(`${API_BASE_URL}applications/get-s3-cv-url/${application.filename}`);
+        const url = response.data.url;
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', application.filename);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    } catch (err) {
+        console.error('Error downloading file from S3:', err);
+        alert('Error downloading file: ' + (err.response?.data?.message || err.message));
+    }
+};
 
     if (loading) return (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
