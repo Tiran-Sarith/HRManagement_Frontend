@@ -14,7 +14,9 @@ import { useState, useRef } from 'react';
 import EmployeeAssigning from './EmployeeAssigning';
 import {
   Box,
-  Typography
+  Typography,
+  Grid,
+  Divider
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -57,18 +59,21 @@ const theme = createTheme({
 });
 
 
-function createData(name, id, client, deadline, estimatedBudget, estimatedDuration) {
-  return { name, id, client, deadline, estimatedBudget, estimatedDuration };
+function createData(name, id, client, deadline, estimatedBudget, estimatedDuration, description, technology) {
+  return { name, id, client, deadline, estimatedBudget, estimatedDuration, description, technology };
 }
 
 export default function ProjectsPending() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
   const employeeAssigningRef = useRef(null);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [rows, setRows] = React.useState([]);
+  const [projectDetails, setProjectDetails] = useState(null);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -93,21 +98,34 @@ export default function ProjectsPending() {
         project.projectManager,
         project.projectDeadline,
         project.projectBudget,
-        project.projectDuration
+        project.projectDuration,
+        project.projectDescription,
+        project.projectCategory
       )));
     } catch (error) {
       console.error('Error fetching pending projects:', error);
     }
   };
 
-  const showModal = (projectId) => {
+  const showAssignModal = (projectId) => {
     setSelectedProjectId(projectId);
-    setIsModalOpen(true);
+    setIsAssignModalOpen(true);
   };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  const handleCancelAssign = () => {
+    setIsAssignModalOpen(false);
     setSelectedProjectId(null);
+  };
+
+  // Show details modal when clicking on a row
+  const showDetailsModal = (project) => {
+    setSelectedProject(project);
+    setIsDetailsModalOpen(true);
+  };
+
+  const handleCancelDetails = () => {
+    setIsDetailsModalOpen(false);
+    setSelectedProject(null);
   };
 
   // Handle start project and assign employees
@@ -131,7 +149,7 @@ export default function ProjectsPending() {
           // Remove from pending list
           setRows(rows.filter(row => row.id !== selectedProjectId));
           message.success('Project started successfully');
-          setIsModalOpen(false);
+          setIsAssignModalOpen(false);
         }
       } else {
         message.error('Employee assignment component is not properly initialized');
@@ -141,51 +159,54 @@ export default function ProjectsPending() {
       message.error('Failed to start project');
     }
   };
- const formatDate = (dateString) => {
+
+  const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ width: '100%', padding: 2, backgroundColor: theme.palette.background.default }}>
-        {/* <Typography
-          variant="h4"
-          gutterBottom
-          sx={{
-            marginBottom: 3,
-            fontWeight: 600,
-            color: theme.palette.primary.dark
-          }}
-        >
-          Pending Projects
-        </Typography> */}
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
                 <TableCell>Project Name</TableCell>
-                {/* <TableCell align="right">Project ID</TableCell> */}
                 <TableCell align="left">Client</TableCell>
                 <TableCell align="left">Deadline</TableCell>
                 <TableCell align="left">Budget($)</TableCell>
                 <TableCell align="left">Duration(Weeks)</TableCell>
-                <TableCell align="center"></TableCell>
+                <TableCell align="left">Technology</TableCell>
+                <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                <TableRow key={row.id}>
+                <TableRow
+                  key={row.id}
+                  hover
+                  onClick={() => showDetailsModal(row)}
+                  sx={{ cursor: 'pointer' }}
+                >
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  {/* <TableCell align="right">{row.id}</TableCell> */}
                   <TableCell align="left">{row.client}</TableCell>
                   <TableCell align="left">{formatDate(row.deadline)}</TableCell>
                   <TableCell align="left">{row.estimatedBudget}</TableCell>
                   <TableCell align="left">{row.estimatedDuration}</TableCell>
-                  <TableCell align="center">
-                    <Button className='text-white hover:text-white' style={{ backgroundColor: 'green', hover: 'white' }} onClick={() => showModal(row.id)}>
+                  <TableCell align="left">{row.technology}</TableCell>
+                  <TableCell align="center" onClick={(e) => e.stopPropagation()}>
+                    <Button
+                      className='text-white hover:text-white'
+                      style={{ backgroundColor: 'green', hover: 'white' }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        showAssignModal(row.id);
+                      }}
+                    >
                       Start
                     </Button>
                   </TableCell>
@@ -202,19 +223,151 @@ export default function ProjectsPending() {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
+
+          {/* Employee Assignment Modal */}
           <Modal
             width={1000}
             className='mr-36'
             title="Assign Employees To Project"
-            open={isModalOpen}
+            open={isAssignModalOpen}
             onOk={handleStart}
-            onCancel={handleCancel}
+            onCancel={handleCancelAssign}
           >
             {selectedProjectId && (
               <EmployeeAssigning
                 projectId={selectedProjectId}
                 ref={employeeAssigningRef}
               />
+            )}
+          </Modal>
+
+          {/* Project Details Modal */}
+          <Modal
+            title="Project Details"
+            open={isDetailsModalOpen}
+            onCancel={handleCancelDetails}
+            footer={
+              <div style={{ textAlign: 'center' }}>
+                <Button className='iteams-center' key="close" onClick={handleCancelDetails} >
+                  Close
+                </Button>,
+                <Button
+                  key="start"
+                  type="primary"
+                  style={{ backgroundColor: 'green', color: 'white' }}
+                  onClick={() => {
+                    handleCancelDetails();
+                    if (selectedProject) {
+                      showAssignModal(selectedProject.id);
+                    }
+                  }}
+                >
+                  Start Project
+                </Button>
+              </div>
+            }
+          >
+            {selectedProject && (
+              // <Box sx={{ p: 2 }}>
+              //   <Grid container spacing={2}>
+              //     <Grid item xs={12}>
+              //       <Typography variant="h5" fontWeight="bold" color="primary.dark">
+              //         {selectedProject.name}
+              //       </Typography>
+              //       <Divider sx={{ my: 2 }} />
+              //     </Grid>
+
+              //     <Grid item xs={6}>
+              //       <Typography variant="subtitle1" fontWeight="bold">Client:</Typography>
+              //       <Typography variant="body1" gutterBottom>{selectedProject.client}</Typography>
+              //     </Grid>
+
+              //     <Grid item xs={6}>
+              //       <Typography variant="subtitle1" fontWeight="bold">Deadline:</Typography>
+              //       <Typography variant="body1" gutterBottom>{formatDate(selectedProject.deadline)}</Typography>
+              //     </Grid>
+
+              //     <Grid item xs={6}>
+              //       <Typography variant="subtitle1" fontWeight="bold">Budget:</Typography>
+              //       <Typography variant="body1" gutterBottom>${selectedProject.estimatedBudget}</Typography>
+              //     </Grid>
+
+              //     <Grid item xs={6}>
+              //       <Typography variant="subtitle1" fontWeight="bold">Duration:</Typography>
+              //       <Typography variant="body1" gutterBottom>{selectedProject.estimatedDuration} weeks</Typography>
+              //     </Grid>
+
+              //     <Grid item xs={12}>
+              //       <Typography variant="subtitle1" fontWeight="bold">Description:</Typography>
+              //       <Paper elevation={1} sx={{ p: 2, backgroundColor: '#f9f9f9' }}>
+              //         <Typography variant="body1">
+              //           {selectedProject.description || "No description provided."}
+              //         </Typography>
+              //       </Paper>
+              //     </Grid>
+              //   </Grid>
+              // </Box>
+
+
+
+              <Box sx={{ p: 3 }}>
+                <Grid container spacing={3}>
+
+                  {/* Title */}
+                  <Grid item xs={12}>
+                    <Typography variant="h5" fontWeight="bold" color="primary.dark">
+                      {selectedProject.name}
+                    </Typography>
+                    <Divider sx={{ my: 2 }} />
+                  </Grid>
+
+                  {/* Client Info */}
+                  <Grid item xs={6}>
+                    <Typography variant="subtitle1" fontWeight="bold">Client:</Typography>
+                    <Typography variant="body1 " textAlign="left">{selectedProject.client}</Typography>
+                  </Grid>
+
+                  {/* Deadline */}
+                  <Grid item xs={6}>
+                    <Typography variant="subtitle1" fontWeight="bold">Deadline:</Typography>
+                    <Typography variant="body1" textAlign="left">{formatDate(selectedProject.deadline)}</Typography>
+                  </Grid>
+
+                  {/* Budget */}
+                  <Grid item xs={6}>
+                    <Typography variant="subtitle1" fontWeight="bold">Budget:</Typography>
+                    <Typography variant="body1" textAlign="left">${selectedProject.estimatedBudget}</Typography>
+                  </Grid>
+
+                  {/* Duration */}
+                  <Grid item xs={6}>
+                    <Typography variant="subtitle1" fontWeight="bold">Duration:</Typography>
+                    <Typography variant="body1" textAlign="left">{selectedProject.estimatedDuration} weeks</Typography>
+                  </Grid>
+
+                  {/* Technology Used */}
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1" fontWeight="bold">Technology Used:</Typography>
+                    <Paper elevation={1} sx={{ p: 2, backgroundColor: '#eef6fb' }}>
+                      <Typography variant="body1" textAlign="left">
+                        {selectedProject.technology || "No technologies specified."}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+
+                  {/* Description */}
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1" fontWeight="bold">Description:</Typography>
+                    <Paper elevation={1} sx={{ p: 2, backgroundColor: '#f9f9f9' }}>
+                      <Typography variant="body1" textAlign="justify">
+                        {selectedProject.description || "No description provided."}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+
+                </Grid>
+              </Box>
+
             )}
           </Modal>
         </TableContainer>
