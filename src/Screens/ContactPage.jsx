@@ -41,7 +41,7 @@ const ContactPage = () => {
 
     emailjs
       .send(
-        "service_0qsjkm8", // Replace with your service ID
+        "service_0qsjkm8", // service ID new
         "template_yhd51rq", // Replace with your template ID
         {
           firstName: formData.firstName,
@@ -52,7 +52,7 @@ const ContactPage = () => {
           message: formData.message,
           termsAccepted: formData.termsAccepted ? "Yes" : "No",
         },
-        "5FAVnNohYmKg4nXIi" // Replace with your public key
+        "5FAVnNohYmKg4nXIi" // public key
       )
       .then((response) => {
         console.log("SUCCESS!", response.status, response.text);
