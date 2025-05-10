@@ -119,14 +119,15 @@ function CVCard() {
             }}
         >
             <CardContent>
+                <Typography variant="h5" sx={{ color: 'green', mb: 2, fontWeight: 'bold' }}>
+                                Application Details
+                            </Typography>
                 <Grid container spacing={4}>
                     {/* Left side - Application Info */}
                     <Grid item xs={12} md={6}>
+                        
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                            <Typography variant="h5" sx={{ color: 'green', mb: 2, fontWeight: 'bold' }}>
-                                Application Details
-                            </Typography>
-
+                            
                             {/* Basic Information Section */}
                             <Box sx={{ mb: 3 }}>
                                 <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold' }}>
