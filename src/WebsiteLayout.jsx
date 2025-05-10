@@ -8,7 +8,7 @@ export default function WebsiteLayout() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-green-50">
+      <main className="min-h-screen ">
         <Outlet />
       </main>
       <Footer />
