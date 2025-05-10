@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { 
+import React, { useState } from "react";
+import {
   Box,
   TextField,
   Button,
@@ -12,52 +12,52 @@ import {
   createTheme,
   ThemeProvider,
   Snackbar,
-    Alert
-} from '@mui/material';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import CodeIcon from '@mui/icons-material/Code';
-import PersonIcon from '@mui/icons-material/Person';
-import EventIcon from '@mui/icons-material/Event';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+  Alert,
+} from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import CodeIcon from "@mui/icons-material/Code";
+import PersonIcon from "@mui/icons-material/Person";
+import EventIcon from "@mui/icons-material/Event";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function AddProject() {
   const navigate = useNavigate();
-  
+
   // Create green theme
   const greenTheme = createTheme({
     palette: {
       primary: {
-        main: '#2e7d32', // green[800]
-        light: '#4caf50', // green[500]
-        dark: '#1b5e20', // green[900]
-        contrastText: '#fff',
+        main: "#2e7d32", // green[800]
+        light: "#4caf50", // green[500]
+        dark: "#1b5e20", // green[900]
+        contrastText: "#fff",
       },
       secondary: {
-        main: '#81c784', // green[300]
+        main: "#81c784", // green[300]
       },
       background: {
-        default: '#f1f8e9', // light green background
-        paper: '#ffffff',
+        default: "#f1f8e9", // light green background
+        paper: "#ffffff",
       },
       error: {
-        main: '#d32f2f',
+        main: "#d32f2f",
       },
     },
     components: {
       MuiTextField: {
         styleOverrides: {
           root: {
-            '& .MuiOutlinedInput-root': {
-              '&:hover fieldset': {
-                borderColor: '#4caf50',
+            "& .MuiOutlinedInput-root": {
+              "&:hover fieldset": {
+                borderColor: "#4caf50",
               },
-              '&.Mui-focused fieldset': {
-                borderColor: '#2e7d32',
+              "&.Mui-focused fieldset": {
+                borderColor: "#2e7d32",
               },
             },
           },
@@ -67,46 +67,50 @@ function AddProject() {
   });
 
   const [formData, setFormData] = useState({
-    projectName: '',
-    projectManager: '', // This will be used as client in the UI
-    projectDeadline: '',
-    projectBudget: '',
-    projectDuration: '',
-    projectCategory: '', // Technology field that will now be written in
-    projectStatus: 'Pending', // Default status for new projects
-    departmentID: '65c8acf641f64fa8ccd1dbda', // Replace with actual department ID
-    projectDescription: 'New project', // Default description
-    Number_of_members: 1 // Default number of members
+    projectName: "",
+    projectManager: "", // This will be used as client in the UI
+    projectDeadline: "",
+    projectBudget: "",
+    projectDuration: "",
+    projectCategory: "", // Technology field that will now be written in
+    projectStatus: "Pending", // Default status for new projects
+    departmentID: "65c8acf641f64fa8ccd1dbda", // Replace with actual department ID
+    projectDescription: "New project", // Default description
+    Number_of_members: 1, // Default number of members
   });
 
   const [errors, setErrors] = useState({});
   const [snackbar, setSnackbar] = useState({
     open: false,
-    message: '',
-    severity: 'success'
+    message: "",
+    severity: "success",
   });
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.projectName.trim()) {
-      newErrors.projectName = 'Project Name is required';
+      newErrors.projectName = "Project Name is required";
     }
     if (!formData.projectManager.trim()) {
-      newErrors.projectManager = 'Client is required';
+      newErrors.projectManager = "Client is required";
     }
     if (!formData.projectDeadline) {
-      newErrors.projectDeadline = 'Deadline is required';
+      newErrors.projectDeadline = "Deadline is required";
     }
     if (!formData.projectBudget || formData.projectBudget <= 0) {
-      newErrors.projectBudget = 'Valid budget is required';
+      newErrors.projectBudget = "Valid budget is required";
     }
     if (!formData.projectDuration || formData.projectDuration <= 0) {
-      newErrors.projectDuration = 'Valid duration is required';
+      newErrors.projectDuration = "Valid duration is required";
     }
     if (!formData.projectCategory.trim()) {
-      newErrors.projectCategory = 'Technology is required';
+      newErrors.projectCategory = "Technology is required";
     }
+    if (!formData.projectDescription.trim()) {
+  newErrors.projectDescription = 'Description is required';
+}
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -114,23 +118,23 @@ function AddProject() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
-    
+
     // Clear error when field is edited
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -139,12 +143,12 @@ function AddProject() {
       await axios.post(`${API_BASE_URL}projects/Padd`, formData);
       setSnackbar({
         open: true,
-        message: 'Project added successfully!',
-        severity: 'success'
+        message: "Project added successfully!",
+        severity: "success",
       });
       // Navigate after a short delay to allow the user to see the success message
       setTimeout(() => {
-        navigate('/projects');
+        navigate("/projects");
       }, 2000);
 
       // alert('Project added successfully!');
@@ -152,60 +156,60 @@ function AddProject() {
     } catch (error) {
       setSnackbar({
         open: true,
-        message: 'Error adding project. Please try again.',
-        severity: 'error'
+        message: "Error adding project. Please try again.",
+        severity: "error",
       });
 
-      console.error('Error adding project:', error);
+      console.error("Error adding project:", error);
       // alert('Error adding project. Please try again.');
     }
   };
 
   const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
-    setSnackbar({...snackbar, open: false});
+    setSnackbar({ ...snackbar, open: false });
   };
 
   const handleCancel = () => {
     // Navigate back to projects page without saving
-    navigate('/projects');
+    navigate("/projects");
   };
 
   return (
     <ThemeProvider theme={greenTheme}>
       <Container maxWidth="md" sx={{ py: 4 }}>
-        <Paper 
-          elevation={3} 
-          sx={{ 
-            p: 4, 
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
             borderRadius: 2,
-            border: '1px solid',
-            borderColor: 'primary.light',
-            position: 'relative',
-            overflow: 'hidden'
+            border: "1px solid",
+            borderColor: "primary.light",
+            position: "relative",
+            overflow: "hidden",
           }}
         >
-          <Box 
-            sx={{ 
-              position: 'absolute', 
-              top: 0, 
-              left: 0, 
-              right: 0, 
-              height: '8px', 
-              bgcolor: 'primary.main' 
-            }} 
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "8px",
+              bgcolor: "primary.main",
+            }}
           />
-          
-          <Typography 
-            variant="h5" 
-            component="h1" 
-            fontWeight="bold" 
-            color="primary.dark" 
-            sx={{ mb: 4, display: 'flex', alignItems: 'center' }}
+
+          <Typography
+            variant="h5"
+            component="h1"
+            fontWeight="bold"
+            color="primary.dark"
+            sx={{ mb: 4, display: "flex", alignItems: "center" }}
           >
-            <AddCircleIcon sx={{ mr: 1 }} /> 
+            <AddCircleIcon sx={{ mr: 1 }} />
             New Project
           </Typography>
 
@@ -223,7 +227,7 @@ function AddProject() {
                   error={!!errors.projectName}
                   helperText={errors.projectName}
                   InputProps={{
-                    sx: { borderRadius: 2 }
+                    sx: { borderRadius: 2 },
                   }}
                 />
               </Grid>
@@ -245,7 +249,7 @@ function AddProject() {
                         <PersonIcon color="primary" />
                       </InputAdornment>
                     ),
-                    sx: { borderRadius: 2 }
+                    sx: { borderRadius: 2 },
                   }}
                 />
               </Grid>
@@ -269,7 +273,7 @@ function AddProject() {
                         <EventIcon color="primary" />
                       </InputAdornment>
                     ),
-                    sx: { borderRadius: 2 }
+                    sx: { borderRadius: 2 },
                   }}
                 />
               </Grid>
@@ -292,7 +296,7 @@ function AddProject() {
                         <AttachMoneyIcon color="primary" />
                       </InputAdornment>
                     ),
-                    sx: { borderRadius: 2 }
+                    sx: { borderRadius: 2 },
                   }}
                 />
               </Grid>
@@ -315,7 +319,7 @@ function AddProject() {
                         <AccessTimeIcon color="primary" />
                       </InputAdornment>
                     ),
-                    sx: { borderRadius: 2 }
+                    sx: { borderRadius: 2 },
                   }}
                 />
               </Grid>
@@ -331,32 +335,55 @@ function AddProject() {
                   value={formData.projectCategory}
                   onChange={handleChange}
                   error={!!errors.projectCategory}
-                  helperText={errors.projectCategory || "Specify the technology stack used for this project"}
+                  helperText={
+                    errors.projectCategory ||
+                    "Specify the technology stack used for this project"
+                  }
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
                         <CodeIcon color="primary" />
                       </InputAdornment>
                     ),
-                    sx: { borderRadius: 2 }
+                    sx: { borderRadius: 2 },
                   }}
                 />
               </Grid>
 
-              <Grid item xs={12} sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                
-              <Stack direction="row" spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  name="projectDescription"
+                  label="Project Description"
+                  variant="outlined"
+                  multiline
+                  minRows={3}
+                  placeholder="Describe the project briefly"
+                  value={formData.projectDescription}
+                  onChange={handleChange}
+                  InputProps={{
+                    sx: { borderRadius: 2 },
+                  }}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}
+              >
+                <Stack direction="row" spacing={2}>
                   <Button
                     type="button"
                     variant="outlined"
                     color="primary"
                     size="large"
                     onClick={handleCancel}
-                    sx={{ 
-                      borderRadius: 2, 
-                      px: 4, 
+                    sx={{
+                      borderRadius: 2,
+                      px: 4,
                       py: 1,
-                      fontWeight: 'medium'
+                      fontWeight: "medium",
                     }}
                   >
                     Cancel
@@ -366,12 +393,12 @@ function AddProject() {
                     variant="contained"
                     color="primary"
                     size="large"
-                    sx={{ 
-                      borderRadius: 2, 
-                      px: 4, 
+                    sx={{
+                      borderRadius: 2,
+                      px: 4,
                       py: 1,
-                      fontWeight: 'medium',
-                      boxShadow: 2
+                      fontWeight: "medium",
+                      boxShadow: 2,
                     }}
                   >
                     Add Project
@@ -397,17 +424,17 @@ function AddProject() {
           </form>
         </Paper>
       </Container>
-      <Snackbar 
-        open={snackbar.open} 
-        autoHideDuration={6000} 
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert 
-          onClose={handleSnackbarClose} 
-          severity={snackbar.severity} 
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbar.severity}
           variant="filled"
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           {snackbar.message}
         </Alert>
@@ -418,9 +445,6 @@ function AddProject() {
 
 export default AddProject;
 
-
-
-
 // import React, { useState } from 'react';
 // import Box from '@mui/material/Box';
 // import TextField from '@mui/material/TextField';
@@ -429,7 +453,6 @@ export default AddProject;
 // import axios from 'axios';
 // import { useNavigate } from 'react-router-dom';
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
 
 // const technologies = [
 //   {
@@ -469,7 +492,7 @@ export default AddProject;
 
 //   const validateForm = () => {
 //     const newErrors = {};
-    
+
 //     if (!formData.projectName.trim()) {
 //       newErrors.projectName = 'Project Name is required';
 //     }
@@ -499,7 +522,7 @@ export default AddProject;
 //       ...prevData,
 //       [name]: value
 //     }));
-    
+
 //     // Clear error when field is edited
 //     if (errors[name]) {
 //       setErrors(prev => ({
@@ -511,7 +534,7 @@ export default AddProject;
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
-    
+
 //     if (!validateForm()) {
 //       return;
 //     }
@@ -614,10 +637,10 @@ export default AddProject;
 //           </div>
 //         </Box>
 
-//         <Button 
+//         <Button
 //           type="submit"
-//           variant="contained" 
-//           color="success" 
+//           variant="contained"
+//           color="success"
 //           sx={{marginLeft: 45, marginTop: 10}}
 //         >
 //           Add Project
