@@ -107,6 +107,10 @@ function AddProject() {
     if (!formData.projectCategory.trim()) {
       newErrors.projectCategory = "Technology is required";
     }
+    if (!formData.projectDescription.trim()) {
+  newErrors.projectDescription = 'Description is required';
+}
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
