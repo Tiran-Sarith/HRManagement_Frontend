@@ -30,7 +30,7 @@ export default function Form() {
   const maxCharacters = 263;
 
   useEffect(() => {
-    // Fetch vacancy details using the ID from the URL
+    // Fetch vacancy details using the ID from the  backend URL
     axios.get(`${API_BASE_URL}vacancies/Vview/${id}`)
       .then((response) => {
         setVacancy(response.data);
