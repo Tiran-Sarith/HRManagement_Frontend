@@ -154,7 +154,7 @@ export default function MainHR() {
                     </DrawerHeader>
                     <Divider />
                     <List> 
-                        {['Home', 'Employee', 'Projects', 'Departments', 'Vacancies','Members Accounts'].map(
+                        {['Home', 'Employee', 'Projects', 'Vacancies','Members Accounts'].map(
                             (text, index) => (
                                 <ListItem key={text} disablePadding>
                                     <ListItemButton
@@ -168,8 +168,6 @@ export default function MainHR() {
                                                 ? '/dashboard'
                                                 : text === 'Projects'
                                                 ? '/projects'
-                                                : text === 'Departments'
-                                                ? '/departments'
                                                 : text === 'Members Accounts'
                                                 ? '/membersaccounts'
                                                 : '/'
@@ -198,7 +196,7 @@ export default function MainHR() {
                     </List>
                     <Divider />
 
-                    <Card sx={{ display: 'flex' }} className="mt-56">
+                    <Card sx={{ display: 'flex' }} className="mt-64">
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <CardContent sx={{ flex: '1 0 auto' }}>
                                 <Typography component="div">Username</Typography>
@@ -223,7 +221,7 @@ export default function MainHR() {
                         <Route path="/AddEmployee" element={<AddEmployee />} />
                         <Route path="/applications" element={<Applications />} />
                         <Route path="/projects" element={<Projects/>} />
-                        <Route path="/departments" element={<Departments/>} />
+                        {/* <Route path="/departments" element={<Departments/>} /> */}
                         <Route path="/projectsPending" element={<ProjectsPending/>} />
                         <Route path="/addProject" element={<AddProject/>} />
                         <Route path="/cvs/:applicationId" element={<CVs />} />
