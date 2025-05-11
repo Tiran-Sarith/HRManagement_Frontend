@@ -14,6 +14,8 @@ import ServicesPage from "./Screens/ServicesPage";
 import About from "./Screens/AboutUsPage/About";
 import JobApplication from "./JobApplication/JobApplication";
 import HRLogin from "./Screens/HRLogin";
+import QuestionsPage from "./Screens/QuestionsPage";
+
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
           <Route path="career/:id" element={<JobDetails />} />
           <Route path="career/:id/apply" element={<JobApplication />} />
           <Route path="hrlogin" element={<HRLogin/>} /> 
+          <Route path="/questions/:id" element={<QuestionsPage />} />
+
         </Route>
 
         {/* Admin Layout */}
