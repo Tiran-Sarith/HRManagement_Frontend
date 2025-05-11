@@ -1,5 +1,3 @@
-
-// CVCard.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -11,7 +9,10 @@ import {
     CircularProgress,
     Grid,
     Paper,
-    Divider
+    Divider,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails
 } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PersonIcon from '@mui/icons-material/Person';
@@ -22,10 +23,11 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import WorkIcon from '@mui/icons-material/Work';
 import LanguageIcon from '@mui/icons-material/Language';
 import InfoIcon from '@mui/icons-material/Info';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
 
 function CVCard() {
     const { applicationId } = useParams();
@@ -43,7 +45,6 @@ function CVCard() {
         };
     }, [applicationId]);
 
-    // Existing fetch functions remain the same...
     const fetchApplicationData = async () => {
         try {
             const response = await axios.get(`${API_BASE_URL}applications/Aview/${applicationId}`);
@@ -60,34 +61,34 @@ function CVCard() {
     };
 
     const fetchPreview = async (filename) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}applications/get-s3-cv-url/${filename}`);
-        setPreviewUrl(response.data.url);
-    } catch (err) {
-        console.error('Error fetching S3 preview URL:', err);
-    }
-};
+        try {
+            const response = await axios.get(`${API_BASE_URL}applications/get-s3-cv-url/${filename}`);
+            setPreviewUrl(response.data.url);
+        } catch (err) {
+            console.error('Error fetching S3 preview URL:', err);
+        }
+    };
 
     const handleDownload = async () => {
-    try {
-        if (!application?.filename) {
-            throw new Error('No file available for download');
+        try {
+            if (!application?.filename) {
+                throw new Error('No file available for download');
+            }
+
+            const response = await axios.get(`${API_BASE_URL}applications/get-s3-cv-url/${application.filename}`);
+            const url = response.data.url;
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', application.filename);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (err) {
+            console.error('Error downloading file from S3:', err);
+            alert('Error downloading file: ' + (err.response?.data?.message || err.message));
         }
-
-        const response = await axios.get(`${API_BASE_URL}applications/get-s3-cv-url/${application.filename}`);
-        const url = response.data.url;
-
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', application.filename);
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-    } catch (err) {
-        console.error('Error downloading file from S3:', err);
-        alert('Error downloading file: ' + (err.response?.data?.message || err.message));
-    }
-};
+    };
 
     if (loading) return (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
@@ -120,14 +121,12 @@ function CVCard() {
         >
             <CardContent>
                 <Typography variant="h5" sx={{ color: 'green', mb: 2, fontWeight: 'bold' }}>
-                                Application Details
-                            </Typography>
+                    Application Details
+                </Typography>
                 <Grid container spacing={4}>
                     {/* Left side - Application Info */}
                     <Grid item xs={12} md={6}>
-                        
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                            
                             {/* Basic Information Section */}
                             <Box sx={{ mb: 3 }}>
                                 <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold' }}>
@@ -180,7 +179,7 @@ function CVCard() {
                                             <strong>Job Title:</strong> {application.jobTitle || 'N/A'}
                                         </Typography>
                                     </Box>
-                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <LanguageIcon sx={{ color: 'green' }} />
                                         <Typography variant="body1">
                                             <strong>Portfolio:</strong> {application.portfolio ? (
@@ -204,13 +203,10 @@ function CVCard() {
                                             <strong>Score:</strong> {application.cvScore !== undefined ? application.cvScore : 'N/A'}
                                         </Typography>
                                     </Box>
-                                    
                                 </Box>
                             </Box>
 
                             <Divider sx={{ my: 2 }} />
-
-                      
 
                             <Box sx={{ mt: 2 }}>
                                 <Button
@@ -230,33 +226,68 @@ function CVCard() {
                         </Box>
                     </Grid>
 
-                    {/* Right side - aditional information */}
+                    {/* Right side - additional information */}
                     <Grid item xs={12} md={6}>
                         <Box sx={{ mb: 3 }}>
-                                <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold' }}>
-                                    Additional Information
-                                </Typography>
+                            <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold' }}>
+                                Additional Information
+                            </Typography>
 
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                                        <InfoIcon sx={{ color: 'green', mt: 0.5 }} />
-                                        <Box>
-                                            <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
-                                                Introduction
-                                            </Typography>
-                                            <Typography variant="body1" sx={{ textAlign: 'justify' }}>
-                                                {application.introduction || 'No introduction provided'}
-                                            </Typography>
-                                        </Box>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                                    <InfoIcon sx={{ color: 'green', mt: 0.5 }} />
+                                    <Box>
+                                        <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+                                            Introduction
+                                        </Typography>
+                                        <Typography variant="body1" sx={{ textAlign: 'justify' }}>
+                                            {application.introduction || 'No introduction provided'}
+                                        </Typography>
                                     </Box>
-
-                                    
-
-                                    
                                 </Box>
                             </Box>
+                        </Box>
                     </Grid>
                 </Grid>
+
+                {/* Questions and Answers Section */}
+                <Divider sx={{ my: 3 }} />
+                
+                <Box sx={{ mt: 4 }}>
+                    <Typography variant="h6" sx={{ color: 'black', mb: 2, display: 'flex', alignItems: 'center', gap: 1, fontWeight: 'bold' }}>
+                        <QuestionAnswerIcon sx={{ color: 'green' }} />
+                        Interview Questions & Answers
+                    </Typography>
+                    
+                    {application.questions && application.questions.length > 0 ? (
+                        application.questions.map((question, index) => (
+                            <Accordion key={index} sx={{ mb: 2, border: '1px solid #e8f5e9' }}>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon sx={{ color: 'green' }} />}
+                                    sx={{ bgcolor: '#f5f5f5' }}
+                                >
+                                    <Typography sx={{ fontWeight: 'bold' }}>
+                                        Question {index + 1}: {question}
+                                    </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails sx={{ bgcolor: 'white', p: 2 }}>
+                                    <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1, color: 'green' }}>
+                                        Answer:
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
+                                        {application.answers && application.answers[index] 
+                                            ? application.answers[index]
+                                            : 'No answer provided yet.'}
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                        ))
+                    ) : (
+                        <Paper sx={{ p: 3, bgcolor: '#f5f5f5', color: 'gray' }}>
+                            No interview questions available for this application.
+                        </Paper>
+                    )}
+                </Box>
             </CardContent>
         </Card>
     );

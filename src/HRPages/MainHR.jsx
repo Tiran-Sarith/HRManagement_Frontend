@@ -236,6 +236,7 @@ export default function MainHR() {
                     </DrawerHeader>
                     <Divider />
                     <List> 
+
                         {filteredMenuItems.map((item, index) => (
                             <ListItem key={item.text} disablePadding>
                                 <ListItemButton
@@ -253,6 +254,7 @@ export default function MainHR() {
                     <Divider />
 
                     <Card sx={{ display: 'flex' }} className="mt-[310px]">
+
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <CardContent sx={{ flex: '1 0 auto' }}>
                                 <Typography component="div">{userName}</Typography>
@@ -298,6 +300,7 @@ export default function MainHR() {
                                 Return to Dashboard
                             </button>
                         </div>} />
+
                     </Routes>
                 </Main>
             </Box>
