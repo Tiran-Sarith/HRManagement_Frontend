@@ -6,7 +6,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { useParams, useNavigate } from 'react-router-dom'; // Added useNavigate
+import { useParams, useNavigate } from 'react-router-dom';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -30,7 +30,7 @@ export default function Form() {
   const maxCharacters = 263;
 
   useEffect(() => {
-    // Fetch vacancy details using the ID from the  backend URL
+    // Fetch vacancy details using the ID from the URL
     axios.get(`${API_BASE_URL}vacancies/Vview/${id}`)
       .then((response) => {
         setVacancy(response.data);
@@ -50,7 +50,7 @@ export default function Form() {
     e.preventDefault(); // Prevent default form submission
 
     // Validate required fields
-    if (!name || !email || !phoneNo || !introduction || !file ||!jobTitle) {
+    if (!name || !email || !phoneNo || !introduction || !file || !jobTitle) {
       alert("Please fill out all required fields and upload a file!");
       return;
     }
@@ -76,12 +76,17 @@ export default function Form() {
       );
       console.log("Server response:", result.data);
       
-      // Extract the applicationId from the response
-      const applicationId = result.data.applicationId;
+      // Extract the application ID from the response
+      // The backend now returns the ID in the response
+      const applicationId = result.data._id;
       
-      // Redirect to the questions page with the application ID
-      alert("Application submitted successfully! Redirecting to questions page...");
-      navigate(`/questions/${applicationId}`);
+      if (applicationId) {
+        // Redirect to the questions page with the application ID
+        alert("Application submitted successfully! Redirecting to questions page...");
+        navigate(`/questions/${applicationId}`);
+      } else {
+        alert("Application submitted but couldn't retrieve application ID. Please contact support.");
+      }
     } catch (error) {
       console.error("Error submitting form:", error.response || error.message);
       alert("An error occurred while submitting the form. Please try again.");
