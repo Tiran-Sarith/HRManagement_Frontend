@@ -109,7 +109,7 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
     }
 
     if (!token) {
-        return <Navigate to="/login" />;
+        return <Navigate to="/hrlogin" />;
     }
 
     if (allowedRoles && !allowedRoles.includes(userRole)) {
@@ -131,7 +131,7 @@ export default function MainHR() {
         // Check if user is logged in
         const token = localStorage.getItem('token');
         if (!token) {
-            navigate('/login');
+            navigate('/hrlogin');
             return;
         }
 
@@ -144,7 +144,7 @@ export default function MainHR() {
         } catch (error) {
             console.error('Invalid token:', error);
             localStorage.removeItem('token');
-            navigate('/login');
+            navigate('/hrlogin');
         }
     }, [navigate]);
 
