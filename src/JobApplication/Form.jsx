@@ -6,19 +6,15 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
+import { useParams, useNavigate } from 'react-router-dom'; // Added useNavigate
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-
-import { useParams } from 'react-router-dom';
-
-
 export default function Form() {
-
   const { id } = useParams(); // Get the ID from the URL
+  const navigate = useNavigate(); // Initialize navigate
   const [vacancy, setVacancy] = useState(null);
   const [loading, setLoading] = useState(true);
-
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -32,7 +28,6 @@ export default function Form() {
   const [vacancyId, setVacancyId] = useState("");
 
   const maxCharacters = 263;
-
 
   useEffect(() => {
     // Fetch vacancy details using the ID from the URL
@@ -50,9 +45,6 @@ export default function Form() {
         setLoading(false);
       });
   }, [id]);
-
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
@@ -72,7 +64,6 @@ export default function Form() {
     formData.append("introduction", introduction);
     formData.append("file", file);
     formData.append("jobTitle", jobTitle);
-
     formData.append("jobRequirements", jobRequirements);
     formData.append("vacancyId", vacancyId);
 
@@ -84,13 +75,18 @@ export default function Form() {
         formData
       );
       console.log("Server response:", result.data);
-      alert("Form submitted successfully!");
+      
+      // Extract the applicationId from the response
+      const applicationId = result.data.applicationId;
+      
+      // Redirect to the questions page with the application ID
+      alert("Application submitted successfully! Redirecting to questions page...");
+      navigate(`/questions/${applicationId}`);
     } catch (error) {
       console.error("Error submitting form:", error.response || error.message);
       alert("An error occurred while submitting the form. Please try again.");
     }
   };
-  
 
   return (
     <div
@@ -175,7 +171,6 @@ export default function Form() {
           }}
         />
 
-
         <TextField
           id="introduction"
           label="Say something about you*"
@@ -192,28 +187,28 @@ export default function Form() {
             },
           }}
         />
-<div className="flex gap-2">
-        <Button
-          variant="outlined"
-          component="label"
-          style={{
-            borderRadius: "10px",
-          }}
-        >
-          Upload CV*
-          <input
-            type="file"
-            accept="application/pdf"
-            hidden
-            required
-            onChange={(e) => setFile(e.target.files[0])}
-          />
-        </Button>
-        {file && (
-        <Typography className="pt-1.5" color="textSecondary">
-          {file.name}
-        </Typography>
-      )}
+        <div className="flex gap-2">
+          <Button
+            variant="outlined"
+            component="label"
+            style={{
+              borderRadius: "10px",
+            }}
+          >
+            Upload CV*
+            <input
+              type="file"
+              accept="application/pdf"
+              hidden
+              required
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+          </Button>
+          {file && (
+          <Typography className="pt-1.5" color="textSecondary">
+            {file.name}
+          </Typography>
+        )}
         </div>
         <FormControlLabel
           control={<Checkbox />}
@@ -247,11 +242,8 @@ export default function Form() {
           >
             Apply
           </Button>
-          {/* <span>Designation: {vacancy.designation}</span> */}
-
         </Box>
       </Box>
-
     </div>
   );
 }
