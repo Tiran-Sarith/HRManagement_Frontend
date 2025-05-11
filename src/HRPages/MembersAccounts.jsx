@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { app } from '../../FirebaseAuth';
-import {
-  AutoComplete,
-  Button,
-  Form,
-  Input,
-  Select,
-  message,
-} from 'antd';
+import { Button, Form, Input, Select, message } from 'antd';
+import axios from 'axios'; // Added axios for API communication
 
 const { Option } = Select;
 
@@ -35,17 +27,31 @@ function MembersAccounts() {
   const [loading, setLoading] = useState(false);
 
   const handleUserCreate = async (values) => {
-    const auth = getAuth(app); // Initialize Firebase Auth
-    const { email, password } = values; // Extract email and password from form values
-
     try {
-      setLoading(true); // Set loading state
-      await createUserWithEmailAndPassword(auth, email, password);
-      message.success('User created successfully!'); // Show success message
+      setLoading(true);
+      
+      // Prepare data according to your backend API structure
+      const userData = {
+        name: values.EmployeeName,
+        department: values.Department,
+        employeeId: values.EmployeeID,
+        role: values.role.toLowerCase(), // Convert to lowercase to match enum in model
+        email: values.email,
+        password: values.password
+      };
+
+      // Make API call to your backend endpoint
+      const response = await axios.post('http://localhost:8070/api/user/register', userData);
+      
+      if (response.status === 201) {
+        message.success('User created successfully!');
+        form.resetFields(); // Reset form after successful submission
+      }
     } catch (error) {
-      message.error(error.message); // Show error message
+      const errorMessage = error.response?.data?.message || 'Failed to create user';
+      message.error(errorMessage);
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
@@ -56,7 +62,7 @@ function MembersAccounts() {
         {...formItemLayout}
         form={form}
         name="register"
-        onFinish={handleUserCreate} // Call handleUserCreate when form is submitted
+        onFinish={handleUserCreate}
         initialValues={{ prefix: '86' }}
         style={{ maxWidth: 600 }}
         scrollToFirstError
@@ -114,8 +120,8 @@ function MembersAccounts() {
           ]}
         >
           <Select placeholder="Select the role">
-            <Option value="Member">Member</Option>
-            <Option value="Admin">Admin</Option>
+            <Option value="member">Member</Option>
+            <Option value="admin">Admin</Option>
           </Select>
         </Form.Item>
 
