@@ -3,7 +3,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Button, Input, Space, Table, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function Members() {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
@@ -18,7 +18,7 @@ function Members() {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:8070/api/users');
+            const response = await axios.get(`${API_BASE_URL}users`);
             // Transform the data to match the table structure with keys
             const formattedData = response.data.map((user, index) => ({
                 key: user._id,
@@ -168,7 +168,7 @@ function Members() {
     // Function to handle delete button click
     const handleDelete = async (userId) => {
         try {
-            await axios.delete(`http://localhost:8070/api/users/delete/${userId}`);
+            await axios.delete(`${API_BASE_URL}users/delete/${userId}`);
             message.success("User deleted successfully");
             // Refresh the data
             fetchUsers();
