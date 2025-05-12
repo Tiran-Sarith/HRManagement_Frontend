@@ -46,7 +46,7 @@ const HRLogin = () => {
             const payload = JSON.parse(window.atob(base64));
             
             if (payload.role === 'admin') {
-                navigate('/admin/dashboard');
+                navigate('/dashboard');
             } else if (payload.role === 'hr') {
                 navigate('/hrHome');
             } else {

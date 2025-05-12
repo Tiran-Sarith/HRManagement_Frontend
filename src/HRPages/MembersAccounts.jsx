@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, Select, message } from 'antd';
 import axios from 'axios'; // Added axios for API communication
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import IconButton from '@mui/material/IconButton';
+import { Typography,Box} from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -55,8 +59,23 @@ function MembersAccounts() {
     }
   };
 
+      const navigate = useNavigate();
+
+      const handleNavigation = () => {
+          navigate('/membersaccounts');
+      };
+
   return (
     <div>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, cursor: 'pointer', width: 'fit-content' }} onClick={handleNavigation}>
+                    <IconButton size="small" sx={{ p: 0, pr: 1, color: 'green' }}>
+                    <ArrowBackIcon />
+                    </IconButton>
+                    <Typography variant="body1" sx={{ color: 'green' }}>
+                    Go Back
+                    </Typography>
+                </Box>  
+    <div className='ml-32 mt-10'>
       <h1 className="text-start text-xl font-bold pb-10">Member Accounts</h1>
       <Form
         {...formItemLayout}
@@ -185,6 +204,7 @@ function MembersAccounts() {
           </Button>
         </Form.Item>
       </Form>
+    </div>    
     </div>
   );
 }

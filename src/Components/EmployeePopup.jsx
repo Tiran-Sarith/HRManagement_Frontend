@@ -12,13 +12,9 @@ function EmployeePopup({visible, onClose, data, onDelete, onUpdate}) {
         <div id='container' onClick={handleOnClose} className='fixed inset-0 bg-black bg-opacity-10 backdrop-blur-sm flex justify-center items-center'>
             <div className='bg-green-50 p-2 rounded-3xl w-[600px] font-sans h-[550px]'>
                 <div className='mt-12'>
+                <p className='text-4xl font-bold'>{data.name}</p>
                     <div className='flex justify-evenly'>
-                        <img src="" alt="" className='border border-green-500 w-32 h-32 rounded-full border-b-4' />
                         <div className='mt-6'>
-                            <div className='flex justify-between p-[2px] font-sans'>
-                                <p className='font-bold pr-4'>Name:</p>
-                                <p>{data.name}</p>
-                            </div>
                             <div className='flex justify-between p-[2px] font-sans'>
                                 <p className='font-bold pr-4'>Designation: </p>
                                 <p>{data.designation}</p>

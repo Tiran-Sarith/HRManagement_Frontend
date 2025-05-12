@@ -12,6 +12,11 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import IconButton from '@mui/material/IconButton';
+import { Typography} from "@mui/material";
+import { useNavigate } from 'react-router-dom'; 
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
@@ -217,199 +222,219 @@ export default function AddVacancies() {
         }
     };
 
+        const navigate = useNavigate();
+        // Function to handle navigation   
+        const handleNavigation = () => {
+            navigate('/vacancies');
+        };
+
     return (
-        <div className='w-[847px]'>
-            <form onSubmit={submitVacancy}>
-                <div className='w-[560px] '>
-                    <div className='mb-4 flex justify-start ml-12'>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[560px]' label="Job Name*" variant="filled" onChange={(e) => setJobTitle(e.target.value)} />
-                            </ThemeProvider>
-                        </Box>
-                    </div>
-                    <div className='mb-4 flex justify-start ml-12'>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField 
-                                className='w-[560px]' 
-                                id="filled-select-currency"
-                                select
-                                label="Job Category*" 
-                                variant="filled" 
-                                align="left"
-                                onChange={(e) => setJobCategory(e.target.value)} >
-                                    {Category.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </ThemeProvider>
-                        </Box>
-                    </div>
 
-                    <div className='mb-4 flex justify-start ml-12'>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField className='w-[272px]' label="Job ID*" variant="filled" onChange={(e) => setJobID(e.target.value)} />
-                            </ThemeProvider>
-                            
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                            <TextField
-                            sx={{ width: 273 }}
-                            id="filled-select-currency"
-                            select
-                            label="Hire Type*"
-                            variant="filled"
-                            onChange={(e) => setHireType(e.target.value)}
-                            >
-                            {HireType.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                            </ThemeProvider>
-                        </Box>
-                    </div>
+        <div>
 
-                    <div className='mb-4 flex justify-start ml-12'>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DemoContainer components={['DatePicker', 'DatePicker']} sx={{width: 273 }}>
-                                            <DatePicker
-                                            sx={{width: 273 }}
-                                            label="Posted Date*"
-                                            onChange={(newValue) => setPostedDate(newValue)}
-                                            />
-                                        </DemoContainer>
-                                    </LocalizationProvider>
-                            </ThemeProvider>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={['DatePicker', 'DatePicker']} sx={{width: 273 }}>
-                                        <DatePicker
-                                        sx={{width: 273 }}
-                                        label="Deadline*"
-                                        value={deadline}
-                                        onChange={(newValue) => setDeadline(newValue)}
-                                        />
-                                    </DemoContainer>
-                                </LocalizationProvider>
-                            </ThemeProvider>
-                        </Box>
-                    </div>
+                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, cursor: 'pointer', width: 'fit-content' }} onClick={handleNavigation}>
+                                <IconButton size="small" sx={{ p: 0, pr: 1, color: 'green' }}>
+                                <ArrowBackIcon />
+                                </IconButton>
+                                <Typography variant="body1" sx={{ color: 'green' }}>
+                                Go Back
+                                </Typography>
+                            </Box>  
 
-                    <div className='mb-4 flex justify-start ml-12'>
-                        <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField
-                                    sx={{ width: 273, marginTop:1 }}
+            <div className='w-[847px] ml-52'>
+                <form onSubmit={submitVacancy}>
+                    <div className='w-[560px] '>
+                        <div className='mb-4 flex justify-start ml-12'>
+                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
+                                <ThemeProvider theme={customTheme(outerTheme)}>
+                                    <TextField className='w-[560px]' label="Job Name*" variant="filled" onChange={(e) => setJobTitle(e.target.value)} />
+                                </ThemeProvider>
+                            </Box>
+                        </div>
+                        <div className='mb-4 flex justify-start ml-12'>
+                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
+                                <ThemeProvider theme={customTheme(outerTheme)}>
+                                    <TextField 
+                                    className='w-[560px]' 
                                     id="filled-select-currency"
                                     select
-                                    label="Department*"
-                                    variant="filled"
-                                    onChange={(e) => setDepartment(e.target.value)}
-                                    >
-                                    {Department.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
+                                    label="Job Category*" 
+                                    variant="filled" 
+                                    align="left"
+                                    onChange={(e) => setJobCategory(e.target.value)} >
+                                        {Category.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </ThemeProvider>
+                            </Box>
+                        </div>
+
+                        <div className='mb-4 flex justify-start ml-12'>
+                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
+                                <ThemeProvider theme={customTheme(outerTheme)}>
+                                    <TextField className='w-[272px]' label="Job ID*" variant="filled" onChange={(e) => setJobID(e.target.value)} />
+                                </ThemeProvider>
+                                
+                                <ThemeProvider theme={customTheme(outerTheme)}>
                                 <TextField
-                                sx={{ width: 273,  marginTop:1 }}
+                                sx={{ width: 273 }}
                                 id="filled-select-currency"
                                 select
-                                label="Designation*"
+                                label="Hire Type*"
                                 variant="filled"
-                                onChange={(e) => setDesignation(e.target.value)}
+                                onChange={(e) => setHireType(e.target.value)}
                                 >
-                                {Designation.map((option) => (
+                                {HireType.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
                                     {option.label}
                                     </MenuItem>
                                 ))}
                             </TextField>
-                            </ThemeProvider>
-                        </Box>
-                    </div>
-                    <div className='mb-4 flex justify-start ml-10'>
-                        <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '560px' } }} noValidate autoComplete="off">
-                            <div>
-                                <TextField
-                                    id="filled-multiline-static"
-                                    label="Job Description*"
-                                    onChange={(e) => setAbout(e.target.value)}
-                                    multiline
-                                    rows={4}
-                                    variant="filled"
-                                />
-                            </div>
-                        </Box>
-                    </div>
+                                </ThemeProvider>
+                            </Box>
+                        </div>
 
-                    <div className='mb-1 flex justify-start ml-12'>
-                        <Box component="form" sx={{'& .MuiTextField-root': { marginBottom:2, width: '560px' }  }}>
-                            <ThemeProvider theme={customTheme(outerTheme)}>
-                                <TextField
+                        <div className='mb-4 flex justify-start ml-12'>
+                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
+                                <ThemeProvider theme={customTheme(outerTheme)}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DemoContainer components={['DatePicker', 'DatePicker']} sx={{width: 273 }}>
+                                                <DatePicker
+                                                sx={{width: 273 }}
+                                                label="Posted Date*"
+                                                onChange={(newValue) => setPostedDate(newValue)}
+                                                />
+                                            </DemoContainer>
+                                        </LocalizationProvider>
+                                </ThemeProvider>
+                                <ThemeProvider theme={customTheme(outerTheme)}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoContainer components={['DatePicker', 'DatePicker']} sx={{width: 273 }}>
+                                            <DatePicker
+                                            sx={{width: 273 }}
+                                            label="Deadline*"
+                                            value={deadline}
+                                            onChange={(newValue) => setDeadline(newValue)}
+                                            />
+                                        </DemoContainer>
+                                    </LocalizationProvider>
+                                </ThemeProvider>
+                            </Box>
+                        </div>
+
+                        <div className='mb-4 flex justify-start ml-12'>
+                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
+                                <ThemeProvider theme={customTheme(outerTheme)}>
+                                    <TextField
+                                        sx={{ width: 273, marginTop:1 }}
+                                        id="filled-select-currency"
+                                        select
+                                        label="Department*"
+                                        variant="filled"
+                                        onChange={(e) => setDepartment(e.target.value)}
+                                        >
+                                        {Department.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                    <TextField
+                                    sx={{ width: 273,  marginTop:1 }}
+                                    id="filled-select-currency"
+                                    select
+                                    label="Designation*"
+                                    variant="filled"
+                                    onChange={(e) => setDesignation(e.target.value)}
+                                    >
+                                    {Designation.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                                </ThemeProvider>
+                            </Box>
+                        </div>
+                        <div className='mb-4 flex justify-start ml-10'>
+                            <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '560px' } }} noValidate autoComplete="off">
+                                <div>
+                                    <TextField
                                         id="filled-multiline-static"
-                                        label="Requirements*  (Use | to separate Responsibilities)"
-                                        onChange={(e) => setRequirements(e.target.value.split('|').map(item => item.trim()))}
+                                        label="Job Description*"
+                                        onChange={(e) => setAbout(e.target.value)}
+                                        multiline
+                                        rows={4}
+                                        variant="filled"
+                                    />
+                                </div>
+                            </Box>
+                        </div>
+
+                        <div className='mb-1 flex justify-start ml-12'>
+                            <Box component="form" sx={{'& .MuiTextField-root': { marginBottom:2, width: '560px' }  }}>
+                                <ThemeProvider theme={customTheme(outerTheme)}>
+                                    <TextField
+                                            id="filled-multiline-static"
+                                            label="Requirements*  (Use | to separate Responsibilities)"
+                                            onChange={(e) => setRequirements(e.target.value.split('|').map(item => item.trim()))}
+                                            multiline
+                                            rows={2}
+                                            variant="filled"
+                                        />
+                                    <TextField
+                                        id="filled-multiline-static"
+                                        label="Responsibilities* (Use | to separate Responsibilities)"
+                                        onChange={(e) => setResponsibilities(e.target.value.split('|').map(item => item.trim()))}
                                         multiline
                                         rows={2}
                                         variant="filled"
                                     />
-                                <TextField
-                                    id="filled-multiline-static"
-                                    label="Responsibilities* (Use | to separate Responsibilities)"
-                                    onChange={(e) => setResponsibilities(e.target.value.split('|').map(item => item.trim()))}
-                                    multiline
-                                    rows={2}
-                                    variant="filled"
-                                />
-                                <TextField
-                                    id="filled-multiline-static"
-                                    label="Benefits (Use | to separate Benefits)"
-                                    onChange={(e) => setBenefits(e.target.value.split('|').map(item => item.trim()))}
-                                    multiline
-                                    rows={2}
-                                    variant="filled"
-                                />
-                            </ThemeProvider>
-                        </Box>
-                    </div>
+                                    <TextField
+                                        id="filled-multiline-static"
+                                        label="Benefits (Use | to separate Benefits)"
+                                        onChange={(e) => setBenefits(e.target.value.split('|').map(item => item.trim()))}
+                                        multiline
+                                        rows={2}
+                                        variant="filled"
+                                    />
+                                </ThemeProvider>
+                            </Box>
+                        </div>
 
-                    
-                    <div className='mb-4 flex justify-start ml-10'>
-                        <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '560px' } }} noValidate autoComplete="off">
-                            <div>
-                                <TextField
-                                    id="filled-multiline-static"
-                                    label="What We Offer"
-                                    onChange={(e) => setWhatWeOffer(e.target.value)}
-                                    multiline
-                                    rows={4}
-                                    variant="filled"
-                                />
-                            </div>
-                        </Box>
-                    </div>
-
-                    <div className='flex justify-start gap-36 ml-16 mb-20'>
                         
+                        <div className='mb-4 flex justify-start ml-10'>
+                            <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '560px' } }} noValidate autoComplete="off">
+                                <div>
+                                    <TextField
+                                        id="filled-multiline-static"
+                                        label="What We Offer"
+                                        onChange={(e) => setWhatWeOffer(e.target.value)}
+                                        multiline
+                                        rows={4}
+                                        variant="filled"
+                                    />
+                                </div>
+                            </Box>
+                        </div>
 
-                        <div className='mb-20'>
-                            <Stack spacing={2} direction="row">
-                                <Button type="submit" variant="contained" color="success">Add </Button>
-                                <Button variant="outlined" color="success">Cancel</Button>
-                            </Stack>
+                        <div className='flex justify-start gap-36 ml-16 mb-20'>
+                            
+
+                            <div className='mb-20'>
+                                <Stack spacing={2} direction="row">
+                                    <Button type="submit" variant="contained" color="success">Add </Button>
+                                    <Button variant="outlined" color="success">Cancel</Button>
+                                </Stack>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
+
     );
 }
