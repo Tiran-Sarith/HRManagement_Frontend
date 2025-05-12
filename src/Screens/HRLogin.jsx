@@ -3,6 +3,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const HRLogin = () => {
     const [form] = Form.useForm();
@@ -13,7 +14,7 @@ const HRLogin = () => {
             const { email, password } = values;
             
             // Make login request to backend
-            const response = await axios.post('http://localhost:8070/api/auth/login', {
+            const response = await axios.post(`${API_BASE_URL}auth/login`, {
                 email,
                 password
             });
