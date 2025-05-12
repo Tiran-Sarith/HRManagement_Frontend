@@ -45,7 +45,7 @@ function MembersAccounts() {
       };
 
       // Make API call to your backend endpoint
-      const response = await axios.post('http://localhost:8070/api/user/register', userData);
+      const response = await axios.post(`${API_BASE_URL}user/register`, userData);
       
       if (response.status === 201) {
         message.success('User created successfully!');
