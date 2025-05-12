@@ -7,7 +7,7 @@ import { Typography,Box} from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
