@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from "react";
-import {useTheme } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
+import {
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  Stack,
+  Snackbar,
+  Alert,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { 
-  Dialog,
-  DialogActions, 
-  DialogContent, 
-  DialogContentText, 
-  DialogTitle,
-  Snackbar,
-  Alert,
-  CircularProgress
-} from "@mui/material";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -34,31 +32,27 @@ export default function Vacancies() {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  // Delete confirmation dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [vacancyToDelete, setVacancyToDelete] = useState(null);
-  
-  // Snackbar state
+
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
-    severity: "success"
+    severity: "success",
   });
 
-  // Fetch all vacancies
   const getVacancies = async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}vacancies/Vview`);
-      const formattedVacancies = response.data.map((vacancy, index) => ({
-        id: vacancy._id, // Use MongoDB _id as the unique identifier
+      const formattedVacancies = response.data.map((vacancy) => ({
+        id: vacancy._id,
         JobName: vacancy.jobTitle,
         JobType: vacancy.hireType,
         Department: vacancy.department,
         Created: vacancy.postedDate,
         Deadline: vacancy.deadline,
-        // Store all vacancy data for potential updates
-        originalData: vacancy
+        originalData: vacancy,
       }));
       setRows(formattedVacancies);
       setVacancies(response.data);
@@ -74,32 +68,29 @@ export default function Vacancies() {
     getVacancies();
   }, []);
 
-  // Open delete confirmation dialog
   const handleDeleteClick = (id) => {
-    const vacancy = rows.find(row => row.id === id);
+    const vacancy = rows.find((row) => row.id === id);
     if (vacancy) {
       setVacancyToDelete(vacancy);
       setDeleteDialogOpen(true);
     }
   };
 
-  // Close delete confirmation dialog
   const handleCloseDeleteDialog = () => {
     setDeleteDialogOpen(false);
     setVacancyToDelete(null);
   };
 
-  // Confirm deletion
   const handleConfirmDelete = async () => {
     if (!vacancyToDelete) return;
-    
     try {
       setLoading(true);
-      // Make DELETE request to backend
-      await axios.delete(`${API_BASE_URL}vacancies/Vdelete/${vacancyToDelete.id}`);
-      
-      // Update local state after successful deletion
-      setRows(prevRows => prevRows.filter(row => row.id !== vacancyToDelete.id));
+      await axios.delete(
+        `${API_BASE_URL}vacancies/Vdelete/${vacancyToDelete.id}`
+      );
+      setRows((prevRows) =>
+        prevRows.filter((row) => row.id !== vacancyToDelete.id)
+      );
       showSnackbar("Vacancy deleted successfully!", "success");
     } catch (error) {
       console.error("Error deleting vacancy:", error);
@@ -111,14 +102,12 @@ export default function Vacancies() {
   };
 
   const handleUpdate = (id) => {
-    // Find the vacancy data to update
-    const vacancyToUpdate = rows.find(row => row.id === id);
+    const vacancyToUpdate = rows.find((row) => row.id === id);
     if (!vacancyToUpdate) return;
-
-    // Store the vacancy data in localStorage for use in the update form
-    localStorage.setItem('vacancyToUpdate', JSON.stringify(vacancyToUpdate.originalData));
-    
-    // Navigate to update page
+    localStorage.setItem(
+      "vacancyToUpdate",
+      JSON.stringify(vacancyToUpdate.originalData)
+    );
     navigate("/vacanciesUpdate");
   };
 
@@ -130,34 +119,24 @@ export default function Vacancies() {
     navigate(`/vacancies/${id}`);
   };
 
-  // Show snackbar with custom message and severity
   const showSnackbar = (message, severity = "success") => {
-    setSnackbar({
-      open: true,
-      message,
-      severity
-    });
+    setSnackbar({ open: true, message, severity });
   };
-  
-  // Close snackbar
+
   const handleCloseSnackbar = () => {
-    setSnackbar({
-      ...snackbar,
-      open: false
-    });
+    setSnackbar({ ...snackbar, open: false });
   };
 
   const columns = [
-    // { field: "id", headerName: "ID", width: 70 },
-    { field: "JobName", headerName: "Job Name", width: 130 },
-    { field: "JobType", headerName: "Job Type", width: 130 },
-    { field: "Department", headerName: "Department", width: 130 },
-    { field: "Created", headerName: "Created", width: 90 },
-    { field: "Deadline", headerName: "Deadline", width: 160 },
+    { field: "JobName", headerName: "Job Name", flex: 1 },
+    { field: "JobType", headerName: "Job Type", flex: 1 },
+    { field: "Department", headerName: "Department", flex: 1 },
+    { field: "Created", headerName: "Created", flex: 1 },
+    { field: "Deadline", headerName: "Deadline", flex: 1 },
     {
       field: "View",
       headerName: "Applications",
-      width: 140,
+      flex: 1,
       renderCell: (params) => (
         <Button
           variant="contained"
@@ -173,22 +152,14 @@ export default function Vacancies() {
     {
       field: "update",
       headerName: "Edit",
-      width: 130,
+      flex: 1,
       renderCell: (params) => (
         <Button
           variant="outlined"
-          color="primary"
+          color="success"
           startIcon={<EditIcon />}
           size="small"
           onClick={() => handleUpdate(params.id)}
-          sx={{ 
-            borderColor: '#2196f3',
-            color: '#2196f3',
-            '&:hover': {
-              borderColor: '#0d47a1',
-              backgroundColor: '#e3f2fd'
-            }
-          }}
         >
           Update
         </Button>
@@ -197,7 +168,7 @@ export default function Vacancies() {
     {
       field: "delete",
       headerName: "Remove",
-      width: 130,
+      flex: 1,
       renderCell: (params) => (
         <Button
           variant="outlined"
@@ -205,14 +176,6 @@ export default function Vacancies() {
           startIcon={<DeleteIcon />}
           size="small"
           onClick={() => handleDeleteClick(params.id)}
-          sx={{ 
-            borderColor: '#f44336',
-            color: '#f44336',
-            '&:hover': {
-              borderColor: '#d32f2f',
-              backgroundColor: '#ffebee'
-            }
-          }}
         >
           Delete
         </Button>
@@ -221,98 +184,115 @@ export default function Vacancies() {
   ];
 
   return (
-    <div>
-      <div className="flex justify-between">
-        <Card sx={{ maxWidth: 275 }} className="mb-6">
-          <CardContent>
-            <Typography variant="h5" component="div" className="flex justify-start">
-              Total Vacancies
-            </Typography>
-            <Typography variant="h5" component="div" className="flex justify-start pt-3">
-              {rows.length}
-            </Typography>
-          </CardContent>
-        </Card>
-        <Stack direction="row" spacing={2} className="mr-36 mt-5">
-          <Button
-            onClick={handleAddVacancy}
-            variant="contained"
-            color="success"
-            className="h-9 bg-green-500"
-            startIcon={<AddIcon />}
-          >
-            Add Vacancies
-          </Button>
-        </Stack>
-      </div>
-      
-      <div style={{ height: 450, width: "90%" }}>
-        {loading ? (
-          <div style={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
-            <CircularProgress style={{ color: "#4CAF50" }} />
+    <div className="p-2 sm:p-4 md:p-6 bg-gray-50 min-h-screen">
+      <div className="px-2 py-6 sm:px-4 md:px-6 bg-gray-50 min-h-screen">
+        {/* Top section with cards and button */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {/* Total Vacancies Card */}
+          <Card className="w-full shadow-md rounded-lg">
+            <CardContent>
+              <Typography variant="h6" className="text-gray-700 font-semibold">
+                Total Vacancies
+              </Typography>
+              <Typography variant="h4" className="text-green-600 mt-2">
+                {rows.length}
+              </Typography>
+            </CardContent>
+          </Card>
+
+          {/* Spacer */}
+          <div className="hidden md:block"></div>
+
+          {/* Add Vacancy Button */}
+          <div className="flex justify-start md:justify-end items-center">
+            <Button
+              onClick={handleAddVacancy}
+              variant="contained"
+              color="success"
+              startIcon={<AddIcon />}
+              className="w-full md:w-auto"
+            >
+              Add Vacancy
+            </Button>
           </div>
-        ) : (
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 6 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-          />
-        )}
+        </div>
+
+        {/* DataGrid section with horizontal scroll */}
+        <div className="bg-white shadow-md rounded-lg p-4 overflow-x-auto">
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <CircularProgress style={{ color: "#4CAF50" }} />
+            </div>
+          ) : (
+            <div style={{ minWidth: "800px" }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                initialState={{
+                  pagination: { paginationModel: { page: 0, pageSize: 10 } },
+                }}
+                pageSizeOptions={[5, 10]}
+                autoHeight
+                // checkboxSelection
+                sx={{
+                  '& .MuiDataGrid-columnHeaders': {
+                    backgroundColor: '#f1f5f9', // Tailwind gray-100
+                    color: '#1f2937',           // Tailwind gray-800
+                    fontWeight: 600,
+                    fontSize: '1rem',
+                  },
+                  '& .MuiDataGrid-columnHeaderTitle': {
+                    fontWeight: 'bold',
+                  },
+                  '& .MuiDataGrid-cell': {
+                    fontSize: '0.95rem',
+                  },
+                  '& .MuiDataGrid-footerContainer': {
+                    backgroundColor: '#f9fafb', // Tailwind gray-50
+                  },
+                }}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={deleteDialogOpen}
-        onClose={handleCloseDeleteDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title" sx={{ color: "#d32f2f" }}>
-          Delete Vacancy
-        </DialogTitle>
+      <Dialog open={deleteDialogOpen} onClose={handleCloseDeleteDialog}>
+        <DialogTitle sx={{ color: "#d32f2f" }}>Delete Vacancy</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the vacancy "{vacancyToDelete?.JobName}"? 
-            This action cannot be undone and will also remove all associated applications.
+          <DialogContentText>
+            Are you sure you want to delete the vacancy "
+            {vacancyToDelete?.JobName}"? This will also remove all associated
+            applications.
           </DialogContentText>
         </DialogContent>
-        <DialogActions sx={{ padding: "16px" }}>
-          <Button 
-            onClick={handleCloseDeleteDialog} 
-            color="primary"
-            variant="outlined"
-          >
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog} variant="outlined">
             Cancel
           </Button>
-          <Button 
-            onClick={handleConfirmDelete} 
-            color="error" 
-            variant="contained" 
-            autoFocus
+          <Button
+            onClick={handleConfirmDelete}
+            color="error"
+            variant="contained"
             startIcon={<DeleteIcon />}
           >
             Delete
           </Button>
         </DialogActions>
       </Dialog>
-      
-      {/* Snackbar for notifications */}
-      <Snackbar 
-        open={snackbar.open} 
-        autoHideDuration={6000} 
+
+      {/* Snackbar Notification */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={snackbar.severity} 
-          sx={{ width: '100%' }}
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
         >
           {snackbar.message}
         </Alert>
@@ -320,204 +300,3 @@ export default function Vacancies() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useEffect, useState } from "react";
-// import {useTheme } from "@mui/material/styles";
-// import Typography from "@mui/material/Typography";
-// import { DataGrid } from "@mui/x-data-grid";
-// import Card from "@mui/material/Card";
-// import CardContent from "@mui/material/CardContent";
-// import Autocomplete from "@mui/material/Autocomplete";
-// import TextField from "@mui/material/TextField";
-// import Stack from "@mui/material/Stack";
-// import Button from "@mui/material/Button";
-// import AddIcon from "@mui/icons-material/Add";
-// import { useNavigate } from "react-router-dom";
-// import axios from "axios";
-// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-// export default function Vacancies() {
-//   const [vacancies, setVacancies] = useState([]);
-//   const [rows, setRows] = useState([]);
-//   const theme = useTheme();
-//   const navigate = useNavigate();
-
-//   // Fetch all vacancies
-//   const getVacancies = async () => {
-//     try {
-//       const response = await axios.get(`${API_BASE_URL}vacancies/Vview`);
-//       const formattedVacancies = response.data.map((vacancy, index) => ({
-//         id: vacancy._id, // Use MongoDB _id as the unique identifier
-//         JobName: vacancy.jobTitle,
-//         JobType: vacancy.hireType,
-//         Department: vacancy.department,
-//         Created: vacancy.postedDate,
-//         Deadline: vacancy.deadline,
-//         // Store all vacancy data for potential updates
-//         originalData: vacancy
-//       }));
-//       setRows(formattedVacancies);
-//       setVacancies(response.data);
-//     } catch (error) {
-//       console.error("Error fetching vacancies:", error);
-//       alert("Error fetching vacancies: " + error.message);
-//     }
-//   };
-
-//   useEffect(() => {
-//     getVacancies();
-//   }, []);
-
-//   const handleDelete = async (id) => {
-//     try {
-//       // Find the original vacancy data
-//       const vacancyToDelete = rows.find(row => row.id === id);
-//       if (!vacancyToDelete) return;
-
-//       // Make DELETE request to backend
-//       await axios.delete(`${API_BASE_URL}vacancies/Vdelete/${vacancyToDelete.id}`);
-      
-//       // Update local state after successful deletion
-//       setRows(prevRows => prevRows.filter(row => row.id !== id));
-//       alert("Vacancy deleted successfully!");
-//     } catch (error) {
-//       console.error("Error deleting vacancy:", error);
-//       alert("Error deleting vacancy: " + error.message);
-//     }
-//   };
-
-//   const handleUpdate = (id) => {
-//     // Find the vacancy data to update
-//     const vacancyToUpdate = rows.find(row => row.id === id);
-//     if (!vacancyToUpdate) return;
-
-//     // Store the vacancy data in localStorage for use in the update form
-//     localStorage.setItem('vacancyToUpdate', JSON.stringify(vacancyToUpdate.originalData));
-    
-//     // Navigate to update page
-//     navigate("/vacanciesUpdate");
-//   };
-
-//   const handleAddVacancy = () => {
-//     navigate("/vacanciesAdd");
-//   };
-
-//   const handleApplicationVacancies = (id) => {
-//     navigate(`/vacancies/${id}`);
-//   };
-
-//   const columns = [
-//     // { field: "id", headerName: "ID", width: 70 },
-//     { field: "JobName", headerName: "Job Name", width: 130 },
-//     { field: "JobType", headerName: "Job Type", width: 130 },
-//     { field: "Department", headerName: "Department", width: 130 },
-//     { field: "Created", headerName: "Created", width: 90 },
-//     { field: "Deadline", headerName: "Deadline", width: 160 },
-//     {
-//       field: "View",
-//       headerName: " ",
-//       width: 180,
-//       renderCell: (params) => (
-//         <Button
-//           variant="contained"
-//           color="success"
-//           onClick={() => handleApplicationVacancies(params.id)}
-//         >
-//           Applications
-//         </Button>
-//       ),
-//     },
-
-//     {
-//       field: "delete",
-//       headerName: " ",
-//       width: 130,
-//       renderCell: (params) => (
-//         <Button
-//           variant="outlined"
-//           color="success"
-//           onClick={() => handleDelete(params.id)}
-//         >
-//           Delete
-//         </Button>
-//       ),
-//     },
-//     {
-//       field: "update",
-//       headerName: " ",
-//       width: 130,
-//       renderCell: (params) => (
-//         <Button
-//           variant="outlined"
-//           color="success"
-//           onClick={() => handleUpdate(params.id)}
-//         >
-//           Update
-//         </Button>
-//       ),
-//     },
-    
-//   ];
-
-//   return (
-//     <div>
-//       <div className="flex justify-between">
-//         <Card sx={{ maxWidth: 275 }} className="mb-6">
-//           <CardContent>
-//             <Typography variant="h5" component="div" className="flex justify-start">
-//               Total Vacancies
-//             </Typography>
-//             <Typography variant="h5" component="div" className="flex justify-start pt-3">
-//               {rows.length}
-//             </Typography>
-//           </CardContent>
-//         </Card>
-//         <Stack direction="row" spacing={2} className="mr-36 mt-5">
-//           <Button
-//             onClick={handleAddVacancy}
-//             variant="contained"
-//             color="success"
-//             className="h-9 bg-green-500"
-//             startIcon={<AddIcon />}
-//           >
-//             Add Vacancies
-//           </Button>
-//         </Stack>
-//       </div>
-      
-//       <div style={{ height: 450, width: "90%" }}>
-//         <DataGrid
-//           rows={rows}
-//           columns={columns}
-//           initialState={{
-//             pagination: {
-//               paginationModel: { page: 0, pageSize: 6 },
-//             },
-//           }}
-//           pageSizeOptions={[5, 10]}
-//           checkboxSelection
-//         />
-//       </div>
-//     </div>
-//   );
-// }

@@ -470,10 +470,13 @@ const RecentApplicationsTable = ({ applications, vacancies }) => {
 
   return (
     <Card sx={{ height: '100%', borderRadius: '12px', boxShadow: '0 4px 20px 0 rgba(0,0,0,0.05)' }}>
-      <CardHeader
-        title="Recent Applications"
+      <CardHeader />
+      <Typography variant="h6" sx={{ fontWeight: 600, color: "#1c8552", mb: 2 }}>
+            Top 5 Applications
+          </Typography>
 
-      />
+      
+      
       <CardContent sx={{ pt: 0, pb: 2 }}>
         <TableContainer component={Paper} elevation={0}>
           <Table sx={{ minWidth: 650 }} size="small">
@@ -633,170 +636,6 @@ const VacancyFillRateGauge = ({ vacancies, applications }) => {
     </Card>
   );
 };
-
-// NEW COMPONENT: Project Timeline
-// const ProjectTimeline = ({ projects }) => {
-//   // Sort projects by start date
-//   const sortedProjects = [...projects]
-//     .filter(project => project.projectStartDate && project.projectEndDate)
-//     .sort((a, b) => new Date(a.projectStartDate) - new Date(b.projectStartDate))
-//     .slice(0, 6); // Limit to 6 for display purposes
-
-//   // Format date for display
-//   const formatDate = (dateString) => {
-//     if (!dateString) return "N/A";
-//     const date = new Date(dateString);
-//     return date.toLocaleDateString();
-//   };
-
-//   // Get status color
-//   const getStatusColor = (status) => {
-//     if (!status) return "#757575";
-//     const statusLower = status.toLowerCase();
-//     if (statusLower === "pending") return "#FFB74D";
-//     if (statusLower === "in progress" || statusLower === "inprogress") return "#42A5F5";
-//     if (statusLower === "finished" || statusLower === "completed") return "#66BB6A";
-//     return "#757575";
-//   };
-
-//   // Prepare the scatter chart data - each project is a point in time
-//   const scatterData = sortedProjects.map(project => {
-//     const startDate = new Date(project.projectStartDate);
-//     const endDate = new Date(project.projectEndDate);
-
-//     return {
-//       name: project.projectName,
-//       start: startDate.getTime(),
-//       end: endDate.getTime(),
-//       duration: (endDate - startDate) / (1000 * 60 * 60 * 24), // in days
-//       status: project.projectStatus,
-//       statusColor: getStatusColor(project.projectStatus)
-//     };
-//   });
-
-//   return (
-//     <Card sx={{ height: "100%", borderRadius: "12px", boxShadow: "0 4px 20px 0 rgba(0,0,0,0.05)" }}>
-//       <CardContent>
-//         <Typography variant="h6" sx={{ fontWeight: 600, color: "#1c8552", mb: 3 }}>
-//           Project Timeline
-//         </Typography>
-
-//         {sortedProjects.length > 0 ? (
-//           <>
-//             <Box sx={{ mb: 4 }}>
-//               <ResponsiveContainer width="100%" height={200}>
-//                 <ScatterChart
-//                   margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
-//                 >
-//                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
-//                   <XAxis 
-//                     type="number" 
-//                     dataKey="start" 
-//                     name="Start Date" 
-//                     domain={['dataMin', 'dataMax']} 
-//                     tickFormatter={(tick) => new Date(tick).toLocaleDateString()}
-//                     tick={{ fontSize: 12 }}
-//                   />
-//                   <YAxis 
-//                     type="category" 
-//                     dataKey="name" 
-//                     name="Project" 
-//                     tick={{ fontSize: 12 }}
-//                     width={100}
-//                   />
-//                   <ZAxis range={[50, 50]} />
-//                   <RechartsTooltip 
-//                     formatter={(value, name) => {
-//                       if (name === "start") return ["Starts: " + new Date(value).toLocaleDateString()];
-//                       if (name === "end") return ["Ends: " + new Date(value).toLocaleDateString()];
-//                       return [value, name];
-//                     }}
-//                     labelFormatter={(label) => ""}
-//                   />
-//                   <Legend />
-
-//                   {/* Start points */}
-//                   <Scatter name="Start Date" data={scatterData} fill="#4caf50" shape="circle">
-//                     {scatterData.map((entry, index) => (
-//                       <Cell key={`cell-start-${index}`} fill={entry.statusColor} />
-//                     ))}
-//                   </Scatter>
-
-//                   {/* End points - we're not showing these directly, but connecting with line */}
-//                   <Scatter name="End Date" data={scatterData} dataKey="end" fill="none" />
-
-//                   {/* Lines connecting start to end */}
-//                   {scatterData.map((entry, index) => (
-//                     <Line 
-//                       key={`line-${index}`}
-//                       data={[
-//                         { name: entry.name, date: entry.start },
-//                         { name: entry.name, date: entry.end }
-//                       ]}
-//                       type="monotone"
-//                       dataKey="date"
-//                       stroke={entry.statusColor}
-//                       strokeWidth={4}
-//                       dot={false}
-//                       activeDot={false}
-//                     />
-//                   ))}
-//                 </ScatterChart>
-//               </ResponsiveContainer>
-//             </Box>
-
-//             <Box sx={{ maxHeight: 150, overflow: "auto", mt: 2 }}>
-//               {sortedProjects.map((project, index) => (
-//                 <Box 
-//                   key={index} 
-//                   sx={{ 
-//                     display: "flex", 
-//                     alignItems: "center", 
-//                     mb: 1.5,
-//                     p: 1, 
-//                     borderRadius: 1,
-//                     bgcolor: index % 2 === 0 ? "#f5f5f5" : "transparent"
-//                   }}
-//                 >
-//                   <Box 
-//                     sx={{ 
-//                       width: 12, 
-//                       height: 12, 
-//                       borderRadius: '50%', 
-//                       bgcolor: getStatusColor(project.projectStatus),
-//                       mr: 1.5 
-//                     }} 
-//                   />
-//                   <Box sx={{ flexGrow: 1 }}>
-//                     <Typography variant="body2" sx={{ fontWeight: 600 }}>
-//                       {project.projectName}
-//                     </Typography>
-//                     <Typography variant="caption" color="text.secondary">
-//                       {formatDate(project.projectStartDate)} - {formatDate(project.projectEndDate)}
-//                     </Typography>
-//                   </Box>
-//                   <Chip 
-//                     label={project.projectStatus || "N/A"} 
-//                     size="small" 
-//                     sx={{ 
-//                       bgcolor: `${getStatusColor(project.projectStatus)}20`,
-//                       color: getStatusColor(project.projectStatus),
-//                       fontWeight: 500
-//                     }} 
-//                   />
-//                 </Box>
-//               ))}
-//             </Box>
-//           </>
-//         ) : (
-//           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: 200 }}>
-//             <Typography color="text.secondary">No project timeline data available</Typography>
-//           </Box>
-//         )}
-//       </CardContent>
-//     </Card>
-//   );
-// };
 
 // NEW COMPONENT: Application to Vacancy Ratio Trend
 const ApplicationVacancyRatioTrend = ({ vacancies, applications }) => {
