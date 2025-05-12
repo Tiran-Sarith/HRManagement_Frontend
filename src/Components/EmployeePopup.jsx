@@ -1,112 +1,99 @@
-import React from 'react'
-import Button from "@mui/material/Button";
+import React from 'react';
+import Button from '@mui/material/Button';
+import { IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
-function EmployeePopup({visible, onClose, data, onDelete, onUpdate}) {
-    const handleOnClose = (e)=> {
-        if(e.target.id === "container") onClose()
+function EmployeePopup({ visible, onClose, data, onDelete, onUpdate }) {
+    const handleOnClose = (e) => {
+        if (e.target.id === 'popup-container') onClose();
     };
 
     if (!visible || !data) return null;
 
     return (
-        <div id='container' onClick={handleOnClose} className='fixed inset-0 bg-black bg-opacity-10 backdrop-blur-sm flex justify-center items-center'>
-            <div className='bg-green-50 p-2 rounded-3xl w-[600px] font-sans h-[550px]'>
-                <div className='mt-12'>
-                <p className='text-4xl font-bold'>{data.name}</p>
-                    <div className='flex justify-evenly'>
-                        <div className='mt-6'>
-                            <div className='flex justify-between p-[2px] font-sans'>
-                                <p className='font-bold pr-4'>Designation: </p>
-                                <p>{data.designation}</p>
-                            </div>
-                            <div className='flex justify-between p-[2px] font-sans'>
-                                <p className='font-bold pr-4'>Employee ID:</p>
-                                <p>{data.employeeId}</p>
-                            </div>
-                        </div>
-                    </div>
+        <div
+            id="popup-container"
+            onClick={handleOnClose}
+    className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-40 backdrop-blur-sm"
+        >
+    <div className="flex mt-20 min-h-screen items-start justify-center px-4 py-8">
+        <div className="relative w-full max-w-3xl rounded-xl bg-white px-8 py-6 shadow-2xl">                {/* Close Button */}
+                <IconButton
+                    onClick={onClose}
+                    className="!absolute right-4 top-4 text-gray-600 hover:text-black"
+                >
+                    <CloseIcon />
+                </IconButton>
 
-                    <div className='mt-5 mb-3'>
-                        <div className='flex justify-between mx-[32.5px]'>
-                            <div className='flex justify-between p-[2px] font-sans'>
-                                <p className='font-bold pr-1'>Email:</p>
-                                <p>{data.email}</p>
-                            </div>
-                            <div className='flex justify-between p-[2px] font-sans'>
-                                <p className='font-bold pr-1'>Department: </p>
-                                <p>{data.department}</p>
-                            </div>
-                        </div>
-                    </div>
+                {/* Header */}
+                <div className="mb-6 border-b pb-4 text-left">
+                    <h2 className="text-3xl font-bold text-gray-800 text-left">{data.fullName}</h2>
+                    <p className="text-sm text-gray-500 mt-1 text-left">
+                        {data.designation} | ID: {data.employeeId}
+                    </p>
+                </div>
 
-                    <hr className='border border-gray-400'/>
+                {/* Info Sections */}
+                <div className="space-y-6 text-sm text-left">
+                    {/* Basic Info */}
+                    <Section title="Basic Information">
+                        <Grid>
+                            <Info label="First Name"  value={data.firstName} />
+                            <Info label="Last Name" value={data.lastName} />
+                            <Info label="Name with Initials" value={data.name} />
+                            <Info label="NIC Number" value={data.nic} />
+                            <Info label="Department" value={data.department} />
+                            <Info label="Designation" value={data.designation} />
+                        </Grid>
+                    </Section>
 
-                    <p className='font-bold font-sans text-green-600 text-start ml-[32.5px] mt-2'>Personal Information</p>
+                    {/* Contact Info */}
+                    <Section title="Contact Information">
+                        <Grid>
+                            <Info label="Email" value={data.email} />
+                            <Info label="Telephone" value={data.telephone} />
+                            <Info label="Address" value={data.address} colSpan />
+                        </Grid>
+                    </Section>
+                </div>
 
-                    <div className='grid grid-flow-col mx-6 mt-4'>
-                        <div className=''>
-                            <div className='flex justify-start p-[2px] font-sans'>
-                                <p className='font-bold pr-4'>Full Name: </p>
-                                <p>{data.fullName}</p>
-                            </div>
-                            <div className='flex justify-start p-[2px] font-sans'>
-                                <p className='font-bold pr-4'>First name: </p>
-                                <p>{data.firstName}</p>
-                            </div>
-                            <div className='flex justify-start p-[2px] font-sans'>
-                                <p className='font-bold pr-4'>NIC No: </p>
-                                <p>{data.nic}</p>
-                            </div>
-                        </div>
-                        <div className=''>
-                            <div className='flex justify-start p-[2px] font-sans'>
-                                <p className='font-bold pr-4'>Name with Initials:</p>
-                                <p>{data.name}</p>
-                            </div>
-                            <div className='flex justify-start p-[2px] font-sans'>
-                                <p className='font-bold pr-4'>Last name: </p>
-                                <p>{data.lastName}</p>
-                            </div>
-                            <div className='flex justify-start p-[2px] font-sans'>
-                                <p className='font-bold pr-4'>Telephone No: </p>
-                                <p>{data.telephone}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='ml-6'>
-                        <div className='flex justify-start p-[2px] font-sans'>
-                            <p className='font-bold pr-4'>Email: </p>
-                            <p>{data.email}</p>
-                        </div>
-                        <div className='flex justify-start p-[2px] font-sans'>
-                            <p className='font-bold pr-4'>Address </p>
-                            <p>{data.address}</p>
-                        </div>
-                    </div>
-
-                    <div className='mt-4 flex justify-end gap-5 mr-8'>
-                        <Button
-                            onClick={() => onDelete(data.id)}
-                            variant="contained"
-                            color="error"
-                            className="h-9"
-                        >
-                            Delete
-                        </Button>
-                        <Button
-                            onClick={() => onUpdate(data.id)}
-                            variant="outlined"
-                            color="success"
-                            className="h-9"
-                        >
-                            Update
-                        </Button>
-                    </div>
+                {/* Buttons */}
+                <div className="mt-4 mb-4 flex justify-end gap-4">
+                    <Button onClick={() => onDelete(data.id)} variant="contained" color="error">
+                        Delete
+                    </Button>
+                    <Button onClick={() => onUpdate(data.id)} variant="outlined" color="success">
+                        Update
+                    </Button>
                 </div>
             </div>
+            </div>
         </div>
-    )
+    );
 }
+
+// Reusable section block
+const Section = ({ title, children }) => (
+    <div>
+        <h3 className="mb-3 text-lg font-semibold text-green-700">{title}</h3>
+        {children}
+    </div>
+);
+
+// Responsive grid
+const Grid = ({ children }) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">{children}</div>
+);
+
+// Info display component
+const Info = ({ label, value, colSpan }) => (
+    <div className={`${colSpan ? 'col-span-full' : ''} flex flex-col gap-1`}>
+        <label className="text-sm font-semibold text-gray-700">{label}</label>
+        <div className="text-sm text-gray-800 bg-gray-100 rounded-md px-4 py-2 border border-gray-200">
+            {value || '—'}
+        </div>
+    </div>
+);
+
 
 export default EmployeePopup;

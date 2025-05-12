@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { DataGrid } from "@mui/x-data-grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import { useNavigate } from "react-router-dom";
@@ -53,11 +54,27 @@ function Employees() {
 
   const columns = [
     { field: "employeeId", headerName: "Employee ID", width: 130 },
-    { field: "name", headerName: "Name", width: 130 },
-    { field: "email", headerName: "E-mail", width: 130 },
+    { field: "name", headerName: "Name", width: 160 },
+    { field: "email", headerName: "E-mail", width: 200 },
     { field: "department", headerName: "Department", width: 130 },
     { field: "projectId", headerName: "Project ID", width: 130 },
     { field: "designation", headerName: "Designation", width: 130 },
+    {
+      field: "update",
+      headerName: "Edit",
+      flex: 1,
+      renderCell: (params) => (
+        <Button
+          variant="outlined"
+          color="success"
+          startIcon={<EditIcon />}
+          size="small"
+          onClick={() => handleUpdate(params.id)}
+        >
+          Update
+        </Button>
+      ),
+    },
   ];
 
   const handleAddEmployee = () => {
@@ -79,6 +96,18 @@ function Employees() {
     navigate(`/employeeUpdate/${id}`);
   };
 
+  //for future edits
+
+  //  const handleUpdate = (id) => {
+  //   const vacancyToUpdate = rows.find((row) => row.id === id);
+  //   if (!vacancyToUpdate) return;
+  //   localStorage.setItem(
+  //     "vacancyToUpdate",
+  //     JSON.stringify(vacancyToUpdate.originalData)
+  //   );
+  //   navigate("/vacanciesUpdate");
+  // };
+
   const handleOnClose = () => setShowMyModel(false);
 
   const handleRowClick = (params) => {
@@ -87,55 +116,85 @@ function Employees() {
   };
 
   return (
-    <div>
-      <div className="flex justify-between">
-        <Card sx={{ maxWidth: 400 }} className="mb-6">
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <Card sx={{ minWidth: 275 }} className="shadow-md w-full md:w-1/3 mb-4 md:mb-0">
           <CardContent>
-            <Typography variant="h5" component="div" className="flex justify-start">
+            <Typography marginBottom={2} variant="h5" fontWeight={700} className="text-gray-700  mb-4 font-bold mb-2 text-left">
               Total Employees
             </Typography>
-            <Typography variant="h5" component="div" className="flex justify-start pt-3">
+            <Typography variant="h4" fontWeight={500} className="text-green-600 font-bold mb-4 text-left pl-2">
               {rows.length}
             </Typography>
-            <AvatarGroup total={24} className=" ml-40">
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-              <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+            
+            <AvatarGroup max={4}>
+              <Avatar alt="Remy Sharp" src="https://i.pravatar.cc/150?img=1" />
+              <Avatar alt="Travis Howard" src="https://i.pravatar.cc/150?img=2" />
+              <Avatar alt="Agnes Walker" src="https://i.pravatar.cc/150?img=3" />
+              <Avatar alt="Trevor Henderson" src="https://i.pravatar.cc/150?img=4" />
             </AvatarGroup>
+            {/* <AvatarGroup max={4}>
+              <Avatar sx={{ bgcolor: theme.palette.primary.main }}>RS</Avatar>
+              <Avatar sx={{ bgcolor: theme.palette.secondary.main }}>TH</Avatar>
+              <Avatar sx={{ bgcolor: theme.palette.success.main }}>AW</Avatar>
+              <Avatar sx={{ bgcolor: theme.palette.error.main }}>TH</Avatar>
+            </AvatarGroup> */}
           </CardContent>
         </Card>
-        <Stack direction="row" spacing={2} className="mr-36 mt-5">
-          <Button
-            onClick={handleAddEmployee}
-            variant="contained"
-            color="success"
-            className="h-9 bg-green-500"
-            startIcon={<AddIcon />}
-          >
-            Add Employees
-          </Button>
-        </Stack>
+
+        <Button
+          onClick={handleAddEmployee}
+          variant="contained"
+          color="success"
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md shadow-md"
+          startIcon={<AddIcon />}
+        >
+          Add Employee
+        </Button>
       </div>
 
-      <div style={{ height: 450, width: 850 }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: { paginationModel: { page: 0, pageSize: 8 } },
-          }}
-          pageSizeOptions={[5, 10]}
-          onRowClick={handleRowClick}
-        />
-        <EmployeePopup 
-          onClose={handleOnClose} 
-          visible={showMyModel} 
-          data={selectedRow}
-          onDelete={handleDelete}
-          onUpdate={handleUpdate}
-        />
+      <div className="bg-white p-4 rounded-lg shadow-md w-full overflow-x-auto">
+        {/* <Typography variant="h6" className="text-gray-700 mb-4 font-semibold">
+        Employee List
+      </Typography> */}
+        <div style={{ height: 500, width: '100%', }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: { paginationModel: { page: 0, pageSize: 8 } },
+            }}
+            pageSizeOptions={[5, 10]}
+            onRowClick={handleRowClick}
+            sx={{
+              '& .MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1f2937', // Tailwind gray-100
+                color: '#1f2937',           // Tailwind gray-800
+                fontWeight: '600',
+                fontSize: '1rem',
+              },
+              '& .MuiDataGrid-columnHeaderTitle': {
+                fontWeight: 'bold',
+                color: "#1b5e20",
+              },
+              '& .MuiDataGrid-cell': {
+                fontSize: '0.95rem',
+              },
+              '& .MuiDataGrid-footerContainer': {
+                backgroundColor: '#f9fafb',
+              },
+            }}
+          />
+        </div>
       </div>
+
+      <EmployeePopup
+        onClose={handleOnClose}
+        visible={showMyModel}
+        data={selectedRow}
+        onDelete={handleDelete}
+        onUpdate={handleUpdate}
+      />
     </div>
   );
 }
