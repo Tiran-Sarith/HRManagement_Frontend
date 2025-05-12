@@ -1,54 +1,169 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import axios from 'axios';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import MenuItem from '@mui/material/MenuItem';
+import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import IconButton from '@mui/material/IconButton';
-import { Typography} from "@mui/material";
-import MenuItem from '@mui/material/MenuItem';
-import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
+import InfoIcon from '@mui/icons-material/Info';
+
+import {
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Snackbar,
+    Alert,
+    IconButton
+} from '@mui/material';
 
 // Update this to match your server configuration
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8070/api/';
 
+// Modern theme with green accents and white base
 const customTheme = (outerTheme) =>
     createTheme({
+        typography: {
+            fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+            h5: {
+                fontWeight: 600,
+                fontSize: '1.5rem',
+                color: '#2e7d32',
+            },
+            subtitle1: {
+                fontSize: '1rem',
+                fontWeight: 500,
+                color: '#4caf50',
+            },
+        },
         palette: {
             mode: outerTheme.palette.mode,
+            primary: {
+                main: "#2e7d32", // Green for primary
+                dark: "#1b5e20",
+                light: "#4caf50",
+                contrastText: '#ffffff',
+            },
+            success: {
+                main: '#4caf50',
+                dark: '#2e7d32',
+            },
+            background: {
+                default: '#f9f9f9',
+                paper: '#ffffff',
+            },
+            text: {
+                primary: '#333333',
+                secondary: '#666666',
+            },
+            divider: 'rgba(0, 0, 0, 0.08)',
+        },
+        shape: {
+            borderRadius: 8,
         },
         components: {
+            MuiPaper: {
+                styleOverrides: {
+                    root: {
+                        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
+                        borderRadius: 12,
+                    },
+                },
+            },
+            MuiDivider: {
+                styleOverrides: {
+                    root: {
+                        margin: '24px 0',
+                    },
+                },
+            },
+            MuiContainer: {
+                styleOverrides: {
+                    root: {
+                        paddingTop: 24,
+                        paddingBottom: 24,
+                    },
+                },
+            },
+            MuiOutlinedInput: {
+                styleOverrides: {
+                    root: {
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#81c784',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: "#2e7d32",
+                            borderWidth: 2,
+                        },
+                    },
+                    notchedOutline: {
+                        borderColor: 'rgba(0, 0, 0, 0.12)',
+                    },
+                },
+            },
             MuiTextField: {
                 styleOverrides: {
                     root: {
-                        '--TextField-brandBorderColor': '#E0E3E7',
-                        '--TextField-brandBorderHoverColor': '#B2BAC2',
-                        '--TextField-brandBorderFocusedColor': '#6F7E8C',
+                        marginBottom: 16,
                         '& label.Mui-focused': {
-                            color: 'var(--TextField-brandBorderFocusedColor)',
+                            color: "#2e7d32",
                         },
                     },
                 },
             },
-            MuiFilledInput: {
+            MuiButton: {
                 styleOverrides: {
                     root: {
-                        '&::before, &::after': {
-                            borderBottom: '2px solid var(--TextField-brandBorderColor)',
+                        borderRadius: 8,
+                        padding: '10px 24px',
+                        fontWeight: 600,
+                        textTransform: 'none',
+                        boxShadow: 'none',
+                        '&:hover': {
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                         },
-                        '&:hover:not(.Mui-disabled, .Mui-error):before': {
-                            borderBottom: '2px solid var(--TextField-brandBorderHoverColor)',
+                    },
+                    containedPrimary: {
+                        backgroundColor: "#2e7d32",
+                        '&:hover': {
+                            backgroundColor: '#2e7d32',
                         },
-                        '&.Mui-focused:after': {
-                            borderBottom: '2px solid var(--TextField-brandBorderFocusedColor)',
+                    },
+                    outlinedPrimary: {
+                        borderColor: '#4caf50',
+                        color: "#2e7d32",
+                        '&:hover': {
+                            borderColor: '#2e7d32',
+                            backgroundColor: 'rgba(76, 175, 80, 0.04)',
+                        },
+                    },
+                },
+            },
+            MuiMenuItem: {
+                styleOverrides: {
+                    root: {
+                        '&.Mui-selected': {
+                            backgroundColor: 'rgba(76, 175, 80, 0.08)',
+                        },
+                        '&.Mui-selected:hover': {
+                            backgroundColor: 'rgba(76, 175, 80, 0.12)',
                         },
                     },
                 },
@@ -56,77 +171,33 @@ const customTheme = (outerTheme) =>
         },
     });
 
-        const Designation = [
-        {
-          value: 'Head of Department',
-          label: 'HOD',
-        },
-        {
-          value: 'Senior Manager',
-          label: 'Senior Manager',
-        },
-        {
-          value: 'Senior Engineer',
-          label: 'Senior Engineer',
-        },
-        {
-          value: 'Engineer',
-          label: 'Engineer',
-        },
-        {
-          value: 'Assistant Engineer',
-          label: 'Assistant Engineer',
-        },
-        {
-          value: 'Trainee Engineer',
-          label: 'Trainee Engineer',
-        },
-      ];
+const Designation = [
+    { value: 'Head of Department', label: 'HOD' },
+    { value: 'Senior Manager', label: 'Senior Manager' },
+    { value: 'Senior Engineer', label: 'Senior Engineer' },
+    { value: 'Engineer', label: 'Engineer' },
+    { value: 'Assistant Engineer', label: 'Assistant Engineer' },
+    { value: 'Trainee Engineer', label: 'Trainee Engineer' },
+];
 
-    const Department = [
-        {
-          value: 'Networking',
-          label: 'Networking',
-        },
-        {
-          value: 'Software Development',
-          label: 'Software Development',
-        },
-        {
-          value: 'Cyber Security',
-          label: 'Cyber Security',
-        },
-        {
-          value: 'DevOps',
-          label: 'DevOps',
-        },
-        {
-          value: 'Quality Assurance',
-          label: 'QA',
-        },
-        {
-          value: 'UI/UX Design',
-          label: 'UI/UX',
-        },
-        {
-          value: 'Data Science',
-          label: 'Data Science',
-        },
-        {
-          value: 'Machine Learning/AI',
-          label: 'Machine Learning/AI',
-        },
-        {
-          value: 'Human Resources',
-          label: 'Human Resources',
-        },
-      ];
-
+const Department = [
+    { value: 'Networking', label: 'Networking' },
+    { value: 'Software Development', label: 'Software Development' },
+    { value: 'Cyber Security', label: 'Cyber Security' },
+    { value: 'DevOps', label: 'DevOps' },
+    { value: 'Quality Assurance', label: 'QA' },
+    { value: 'UI/UX Design', label: 'UI/UX' },
+    { value: 'Data Science', label: 'Data Science' },
+    { value: 'Machine Learning/AI', label: 'Machine Learning/AI' },
+    { value: 'Human Resources', label: 'Human Resources' },
+];
 
 function AddEmployee() {
     const outerTheme = useTheme();
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
-    // Employee state variables mapped to backend model
+    // Employee state variables
     const [employeeFullName, setEmployeeFullName] = useState('');
     const [employeeNameWithInitials, setEmployeeNameWithInitials] = useState('');
     const [employeeFirstName, setEmployeeFirstName] = useState('');
@@ -143,8 +214,19 @@ function AddEmployee() {
     const [employeeID, setEmployeeID] = useState('');
     const [hiredDate, setHiredDate] = useState(dayjs());
 
+    // Cancel confirmation dialog state
+    const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+
+    // Snackbar state
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        severity: "success"
+    });
+
     const submitEmployee = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         const newEmployee = {
             employee_full_name: employeeFullName,
@@ -158,24 +240,24 @@ function AddEmployee() {
             employee_address: employeeAddress,
             employee_designation: employeeDesignation,
             employee_department: employeeDepartment,
-            // These fields aren't directly in your form but are in the model:
             employee_current_project_id: "", // Empty by default for new employees
         };
 
         try {
-            const response = await axios.post(`${API_BASE_URL}employee/Eadd`, newEmployee);
-            alert('Employee Added Successfully');
-            console.log('Response:', response.data);
+            await axios.post(`${API_BASE_URL}employee/Eadd`, newEmployee);
+            showSnackbar('Employee Added Successfully', 'success');
             
-            // Reset form after successful submission
-            resetForm();
+            setTimeout(() => {
+                resetForm();
+                navigate('/employee');
+            }, 2000);
         } catch (err) {
-            console.error('Error:', err);
-            if (err.response && err.response.data && err.response.data.message) {
-                alert(`Error: ${err.response.data.message}`);
-            } else {
-                alert('Failed to add employee. Please try again.');
-            }
+            showSnackbar(
+                "Error Adding Employee: " +
+                (err.response?.data?.message || err.message),
+                "error"
+            );
+            setLoading(false);
         }
     };
 
@@ -197,248 +279,360 @@ function AddEmployee() {
         setHiredDate(dayjs());
     };
 
-    const navigate = useNavigate();
-    // Function to handle navigation   
+    // Handle navigation back
     const handleNavigation = () => {
         navigate('/employee');
     };
+
+    // Open cancel confirmation dialog
+    const handleCancelClick = () => {
+        setCancelDialogOpen(true);
+    };
+
+    // Close cancel confirmation dialog
+    const handleCloseCancelDialog = () => {
+        setCancelDialogOpen(false);
+    };
+
+    // Confirm cancel action
+    const handleConfirmCancel = () => {
+        resetForm();
+        setCancelDialogOpen(false);
+        navigate('/employee');
+    };
+
+    // Show snackbar with custom message and severity
+    const showSnackbar = (message, severity = "success") => {
+        setSnackbar({
+            open: true,
+            message,
+            severity
+        });
+    };
+
+    // Close snackbar
+    const handleCloseSnackbar = () => {
+        setSnackbar({
+            ...snackbar,
+            open: false
+        });
+    };
+
     return (
-
-        <div>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, cursor: 'pointer', width: 'fit-content' }} onClick={handleNavigation}>
-                    <IconButton size="small" sx={{ p: 0, pr: 1, color: 'green' }}>
-                    <ArrowBackIcon />
+        <ThemeProvider theme={customTheme(outerTheme)}>
+            <Container maxWidth="md">
+                {/* <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, cursor: 'pointer', width: 'fit-content' }} onClick={handleNavigation}>
+                    <IconButton size="small" sx={{ p: 0, pr: 1, color: 'primary.main' }}>
+                        <ArrowBackIcon />
                     </IconButton>
-                    <Typography variant="body1" sx={{ color: 'green' }}>
-                    Go Back
+                    <Typography variant="body1" sx={{ color: 'primary.main' }}>
+                        Go Back
                     </Typography>
-                </Box>
-            <div className='w-[847px] border border-green-500 rounded-lg ml-10'>
+                </Box> */}
+                
+                <Paper elevation={3} sx={{ padding: 4, mb: 4,p: 4,
+            borderRadius: 2,
+            border: "1px solid",
+            borderColor: "primary.light",
+            position: "relative",
+            overflow: "hidden", }}>
+                <Box
+                            sx={{
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              height: "8px",
+                              bgcolor: "primary.main",
+                            }}
+                          />
+                    <Typography variant="h5" sx={{color:'primary.dark'}} className='text-left' gutterBottom>
+                        <AddCircleIcon sx={{ mr: 1 }} />
+                        Add New Employee
+                    </Typography>
+                    <Typography variant="subtitle1" gutterBottom sx={{ mb: 3, color: 'text.secondary', fontWeight: 400 }} className='text-left font-semibold'>
+                        Complete the form below to add a new employee to the system
+                    </Typography>
 
+                    <form onSubmit={submitEmployee}>
+                        <Grid container spacing={2}>
+                            {/* Personal Information Section */}
+                            <Grid item xs={12}>
+                                <Typography variant="body1" fontSize={18} align='left' fontWeight={700} color="text.primary">
+                                    Personal Information
+                                </Typography>
+                                <Divider />
+                            </Grid>
 
-                <form onSubmit={submitEmployee}>
-                    <div className='w-[560px] ml-20'>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Full Name"
+                                    variant="outlined"
+                                    required
+                                    value={employeeFullName}
+                                    onChange={(e) => setEmployeeFullName(e.target.value)}
+                                />
+                            </Grid>
 
-                        <p className='pr-[290px] py-7 text-green-600 text-lg font-semibold font-sans'>Personal Information</p>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Name with Initials"
+                                    variant="outlined"
+                                    required
+                                    value={employeeNameWithInitials}
+                                    onChange={(e) => setEmployeeNameWithInitials(e.target.value)}
+                                />
+                            </Grid>
 
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[560px]' 
-                                        label="Full Name" 
-                                        variant="filled" 
-                                        value={employeeFullName}
-                                        onChange={(e) => setEmployeeFullName(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                            </Box>
-                        </div>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="First Name"
+                                    variant="outlined"
+                                    required
+                                    value={employeeFirstName}
+                                    onChange={(e) => setEmployeeFirstName(e.target.value)}
+                                />
+                            </Grid>
 
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[560px]' 
-                                        label="Name with initials" 
-                                        variant="filled" 
-                                        value={employeeNameWithInitials}
-                                        onChange={(e) => setEmployeeNameWithInitials(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                            </Box>
-                        </div>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Last Name"
+                                    variant="outlined"
+                                    required
+                                    value={employeeLastName}
+                                    onChange={(e) => setEmployeeLastName(e.target.value)}
+                                />
+                            </Grid>
 
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[272px]' 
-                                        label="First Name" 
-                                        variant="filled" 
-                                        value={employeeFirstName}
-                                        onChange={(e) => setEmployeeFirstName(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[272px]' 
-                                        label="Last Name" 
-                                        variant="filled" 
-                                        value={employeeLastName}
-                                        onChange={(e) => setEmployeeLastName(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                            </Box>
-                        </div>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Age"
+                                    variant="outlined"
+                                    type="number"
+                                    value={employeeAge}
+                                    onChange={(e) => setEmployeeAge(e.target.value)}
+                                />
+                            </Grid>
 
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[272px]' 
-                                        label="Age" 
-                                        variant="filled" 
-                                        value={employeeAge}
-                                        onChange={(e) => setEmployeeAge(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[272px]' 
-                                        label="Tel No:" 
-                                        variant="filled" 
-                                        value={employeeTelephone}
-                                        onChange={(e) => setEmployeeTelephone(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                            </Box>
-                        </div>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Telephone"
+                                    variant="outlined"
+                                    required
+                                    value={employeeTelephone}
+                                    onChange={(e) => setEmployeeTelephone(e.target.value)}
+                                />
+                            </Grid>
 
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[272px]' 
-                                        label="NIC:" 
-                                        variant="filled" 
-                                        value={employeeNIC}
-                                        onChange={(e) => setEmployeeNIC(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[272px]' 
-                                        label="EPF No:" 
-                                        variant="filled" 
-                                        value={employeeEPF}
-                                        onChange={(e) => setEmployeeEPF(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                            </Box>
-                        </div>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="NIC"
+                                    variant="outlined"
+                                    required
+                                    value={employeeNIC}
+                                    onChange={(e) => setEmployeeNIC(e.target.value)}
+                                />
+                            </Grid>
 
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[560px]' 
-                                        label="Address" 
-                                        variant="filled" 
-                                        value={employeeAddress}
-                                        onChange={(e) => setEmployeeAddress(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                            </Box>
-                        </div>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="EPF Number"
+                                    variant="outlined"
+                                    value={employeeEPF}
+                                    onChange={(e) => setEmployeeEPF(e.target.value)}
+                                />
+                            </Grid>
 
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[560px]' 
-                                        label="Private E-mail" 
-                                        variant="filled" 
-                                        value={employeePrivateEmail}
-                                        onChange={(e) => setEmployeePrivateEmail(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                            </Box>
-                        </div>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Address"
+                                    variant="outlined"
+                                    required
+                                    value={employeeAddress}
+                                    onChange={(e) => setEmployeeAddress(e.target.value)}
+                                />
+                            </Grid>
 
-                        <p className='pr-[290px] py-7 text-green-600 text-lg font-semibold font-sans'>Company Information</p>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Private Email"
+                                    variant="outlined"
+                                    type="email"
+                                    value={employeePrivateEmail}
+                                    onChange={(e) => setEmployeePrivateEmail(e.target.value)}
+                                />
+                            </Grid>
 
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[560px]' 
-                                        label="Company E-mail" 
-                                        variant="filled" 
-                                        value={employeeEmail}
-                                        onChange={(e) => setEmployeeEmail(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                            </Box>
-                        </div>
-                        
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                            <TextField
-                                    sx={{ width: 273,  marginTop:1 }}
-                                    id="filled-select-currency"
+                            {/* Company Information Section */}
+                            <Grid item xs={12}>
+                                <Typography variant="body1" fontSize={18} align='left' fontWeight={700} color="text.primary" sx={{ mt: 2 }}>
+                                    Company Information
+                                </Typography>
+                                <Divider />
+                            </Grid>
+
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Company Email"
+                                    variant="outlined"
+                                    required
+                                    type="email"
+                                    value={employeeEmail}
+                                    onChange={(e) => setEmployeeEmail(e.target.value)}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
                                     select
-                                    label="Designation*"
-                                    variant="filled"
+                                    label="Designation"
+                                    variant="outlined"
+                                    required
+                                    value={employeeDesignation}
                                     onChange={(e) => setEmployeeDesignation(e.target.value)}
-                                    >
+                                >
                                     {Designation.map((option) => (
                                         <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
+                                            {option.label}
                                         </MenuItem>
                                     ))}
                                 </TextField>
-                            </Box>
-                        </div>
+                            </Grid>
 
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField
-                                        sx={{ width: 273, marginTop:1 }}
-                                        id="filled-select-currency"
-                                        select
-                                        label="Department*"
-                                        variant="filled"
-                                        onChange={(e) => setEmployeeDepartment(e.target.value)}
-                                        >
-                                        {Department.map((option) => (
-                                            <MenuItem key={option.value} value={option.value}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    select
+                                    label="Department"
+                                    variant="outlined"
+                                    required
+                                    value={employeeDepartment}
+                                    onChange={(e) => setEmployeeDepartment(e.target.value)}
+                                >
+                                    {Department.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
                                             {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </ThemeProvider>
-                            </Box>
-                        </div>
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid>
 
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 0 }}>
-                                <ThemeProvider theme={customTheme(outerTheme)}>
-                                    <TextField 
-                                        className='w-[272px]' 
-                                        label="Company ID:" 
-                                        variant="filled" 
-                                        value={employeeID}
-                                        onChange={(e) => setEmployeeID(e.target.value)} 
-                                    />
-                                </ThemeProvider>
-                            </Box>
-                        </div>
-                        <div className='mb-4 flex justify-start ml-12'>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['DatePicker']}>
-                                    <DatePicker 
-                                        label="Hired Date"
-                                        value={hiredDate}
-                                        onChange={(newValue) => setHiredDate(newValue)}
-                                    />
-                                </DemoContainer>
-                            </LocalizationProvider>
-                        </div>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Employee ID"
+                                    variant="outlined"
+                                    required
+                                    value={employeeID}
+                                    onChange={(e) => setEmployeeID(e.target.value)}
+                                />
+                            </Grid>
 
-                        <div className='flex justify-start gap-36 mt-10 ml-96 mb-6'>
-                            <div className=''>
-                                <Stack spacing={2} direction="row">
-                                    <Button type="submit" variant="contained" color="success">Add</Button>
-                                    <Button variant="outlined" color="success" onClick={resetForm}>Cancel</Button>
-                                </Stack>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+                            <Grid item xs={12} sm={6}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoContainer components={['DatePicker']} sx={{ padding: '0 1 0 0' }}>
+                                        <DatePicker
+                                            label="Hired Date"
+                                            value={hiredDate}
+                                            onChange={(newValue) => setHiredDate(newValue)}
+                                            sx={{ width: '100%' }}
+                                        />
+                                    </DemoContainer>
+                                </LocalizationProvider>
+                            </Grid>
+
+                            {/* Form Actions */}
+                            <Grid item xs={12} sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                                <Button 
+                                    variant="outlined" 
+                                    color="primary" 
+                                    onClick={handleCancelClick} 
+                                    disabled={loading}
+                                    startIcon={<CancelIcon />}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={loading}
+                                    startIcon={<SaveIcon />}
+                                >
+                                    {loading ? "Adding..." : "Add Employee"}
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Paper>
+
+                {/* Cancel Confirmation Dialog */}
+                <Dialog
+                    open={cancelDialogOpen}
+                    onClose={handleCloseCancelDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title" sx={{ color: "#ff9800" }}>
+                        <InfoIcon sx={{ verticalAlign: "middle", mr: 1 }} />
+                        Confirm Cancel
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure you want to cancel adding this employee? All entered information
+                            will be lost.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions sx={{ padding: "16px" }}>
+                        <Button
+                            onClick={handleCloseCancelDialog}
+                            color="primary"
+                            variant="outlined"
+                        >
+                            Continue Editing
+                        </Button>
+                        <Button
+                            onClick={handleConfirmCancel}
+                            color="warning"
+                            variant="contained"
+                            autoFocus
+                        >
+                            Discard Changes
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                {/* Snackbar for notifications */}
+                <Snackbar
+                    open={snackbar.open}
+                    autoHideDuration={6000}
+                    onClose={handleCloseSnackbar}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                >
+                    <Alert
+                        onClose={handleCloseSnackbar}
+                        severity={snackbar.severity}
+                        variant="filled"
+                        elevation={6}
+                        sx={{ width: "100%" }}
+                    >
+                        {snackbar.message}
+                    </Alert>
+                </Snackbar>
+            </Container>
+        </ThemeProvider>
     );
 }
 
