@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -24,7 +24,10 @@ import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
 import WorkIcon from '@mui/icons-material/Work';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import { useNavigate, Routes, Route, Link as RouterLink } from 'react-router-dom';
+import { useNavigate, Routes, Route, Link as RouterLink, Navigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode'; // You might need to install this package
+import { Button} from 'antd';
+
 
 // Import your components
 import Vacancies from './Vacancies';
@@ -41,6 +44,7 @@ import AddProject from './AddProject';
 import Dashboard from './Dashboard';
 import MembersAccounts from './MembersAccounts';
 import VacancyApplications from './vacancyApplications';
+import Members from './Members';
 
 const drawerWidth = 240;
 
@@ -88,9 +92,61 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
+// Protected Route component to restrict access based on role
+const ProtectedRoute = ({ element, allowedRoles }) => {
+    const token = localStorage.getItem('token');
+    let userRole = '';
+    let userName = '';
+    
+    if (token) {
+        try {
+            const decoded = jwtDecode(token);
+            userRole = decoded.role;
+            userName = decoded.name;
+        } catch (error) {
+            console.error('Invalid token:', error);
+        }
+    }
+
+    if (!token) {
+        return <Navigate to="/hrlogin" />;
+    }
+
+    if (allowedRoles && !allowedRoles.includes(userRole)) {
+        return <Navigate to="/unauthorized" />;
+    }
+
+    return element;
+};
+
 export default function MainHR() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate();
+    const [userRole, setUserRole] = useState('');
+    const [userName, setUserName] = useState('');
+    const [userDepartment, setUserDepartment] = useState('');
+
+    useEffect(() => {
+        // Check if user is logged in
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/hrlogin');
+            return;
+        }
+
+        // Decode the token to get user information
+        try {
+            const decoded = jwtDecode(token);
+            setUserRole(decoded.role);
+            setUserName(decoded.name);
+            setUserDepartment(decoded.department || 'Department');
+        } catch (error) {
+            console.error('Invalid token:', error);
+            localStorage.removeItem('token');
+            navigate('/hrlogin');
+        }
+    }, [navigate]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -100,6 +156,11 @@ export default function MainHR() {
         setOpen(false);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/');
+    };
+
     // Create a custom Link component that prevents default navigation
     const CustomLink = React.forwardRef((props, ref) => (
         <RouterLink 
@@ -107,11 +168,22 @@ export default function MainHR() {
             {...props} 
             onClick={(e) => {
                 e.preventDefault(); // Prevent default link behavior
-                window.history.pushState({}, '', props.to); // Manually update URL
-                window.dispatchEvent(new PopStateEvent('popstate')); // Trigger route change
+                navigate(props.to); // Use navigate from react-router-dom
             }}
         />
     ));
+
+    // Define menu items based on user role
+    const menuItems = [
+        { text: 'Home', path: '/dashboard', icon: <HomeIcon />, roles: ['admin','member'] },
+        { text: 'Employee', path: '/employee', icon: <PeopleAltIcon />, roles: ['admin','member'] },
+        { text: 'Projects', path: '/projects', icon: <AccountTreeIcon />, roles: ['admin','member'] },
+        { text: 'Vacancies', path: '/vacancies', icon: <WorkIcon />, roles: ['admin','member'] },
+        { text: 'Members Accounts', path: '/membersaccounts', icon: <InsertDriveFileIcon />, roles: ['admin'] }
+    ];
+
+    // Filter menu items based on user role
+    const filteredMenuItems = menuItems.filter(item => item.roles.includes(userRole));
 
     return (
         <div>
@@ -131,6 +203,16 @@ export default function MainHR() {
                         <Typography variant="h6" noWrap component="div" className="text-[#1A7A08]">
                             <span className='font-bold'>ADMIN PANEL</span> 
                         </Typography>
+                        <Box sx={{ flexGrow: 1 }} />
+                        <Button 
+                            className="bg-[#1A7A08] text-white hover:bg-[#1A7A08] rounded-lg"
+                            variant="contained" 
+                            color="error" 
+                            onClick={handleLogout}
+                            sx={{ ml: 2 }}
+                        >
+                            Logout
+                        </Button>
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -154,78 +236,71 @@ export default function MainHR() {
                     </DrawerHeader>
                     <Divider />
                     <List> 
-                        {['Home', 'Employee', 'Projects', 'Vacancies','Members Accounts'].map(
-                            (text, index) => (
-                                <ListItem key={text} disablePadding>
-                                    <ListItemButton
-                                        component={CustomLink}
-                                        to={
-                                            text === 'Vacancies'
-                                                ? '/vacancies'
-                                                : text === 'Employee'
-                                                ? '/employee'
-                                                : text === 'Home'
-                                                ? '/dashboard'
-                                                : text === 'Projects'
-                                                ? '/projects'
-                                                : text === 'Members Accounts'
-                                                ? '/membersaccounts'
-                                                : '/'
-                                        }
-                                    >
-                                        <ListItemIcon>
-                                            {index % 6 === 0 ? (
-                                                <HomeIcon />
-                                            ) : index % 6 === 1 ? (
-                                                <PeopleAltIcon />
-                                            ) : index % 6 === 2 ? (
-                                                <AccountTreeIcon />
-                                            ) : index % 6 === 3 ? (
-                                                <BackupTableIcon />
-                                            ) : index % 6 === 4 ? (
-                                                <WorkIcon />
-                                            ) : (
-                                                <InsertDriveFileIcon />
-                                            )}
-                                        </ListItemIcon>
-                                        <ListItemText primary={text} />
-                                    </ListItemButton>
-                                </ListItem>
-                            )
-                        )}
+
+                        {filteredMenuItems.map((item, index) => (
+                            <ListItem key={item.text} disablePadding>
+                                <ListItemButton
+                                    component={CustomLink}
+                                    to={item.path}
+                                >
+                                    <ListItemIcon>
+                                        {item.icon}
+                                    </ListItemIcon>
+                                    <ListItemText primary={item.text} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
                     </List>
                     <Divider />
 
-                    <Card sx={{ display: 'flex' }} className="mt-64">
+                    <Card sx={{ display: 'flex' }} className="mt-[310px]">
+
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <CardContent sx={{ flex: '1 0 auto' }}>
-                                <Typography component="div">Username</Typography>
+                                <Typography component="div">{userName}</Typography>
                                 <Typography variant="subtitle1" color="text.secondary" component="div">
-                                    Designation
+                                    {userRole.charAt(0).toUpperCase() + userRole.slice(1)} - {userDepartment}
                                 </Typography>
                             </CardContent>
                         </Box>
-                        <img src="" alt="Profile pic" className="mt-3 bg-green-500 rounded-full w-14 h-14" />
                     </Card>
                 </Drawer>
 
                 <Main open={open} className='bg-green-50 h-full'>
                     <DrawerHeader />
                     <Routes>
-                        <Route path="/membersaccounts" element={<MembersAccounts/>} />
-                        <Route path="/dashboard" element={<Dashboard/>} />
-                        <Route path="/vacancies" element={<Vacancies />} />
-                        <Route path="/vacanciesAdd" element={<AddVacancies />} />
-                        <Route path="/vacanciesUpdate" element={<UpdateVacancy />} />
-                        <Route path="/employee" element={<Employees />} />
-                        <Route path="/AddEmployee" element={<AddEmployee />} />
-                        <Route path="/applications" element={<Applications />} />
-                        <Route path="/projects" element={<Projects/>} />
-                        {/* <Route path="/departments" element={<Departments/>} /> */}
-                        <Route path="/projectsPending" element={<ProjectsPending/>} />
-                        <Route path="/addProject" element={<AddProject/>} />
-                        <Route path="/cvs/:applicationId" element={<CVs />} />
-                        <Route path="/vacancies/:id" element={<VacancyApplications />} />
+                        <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/vacancies" element={<ProtectedRoute element={<Vacancies />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/vacanciesAdd" element={<ProtectedRoute element={<AddVacancies />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/vacanciesUpdate" element={<ProtectedRoute element={<UpdateVacancy />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/employee" element={<ProtectedRoute element={<Employees />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/AddEmployee" element={<ProtectedRoute element={<AddEmployee />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/applications" element={<ProtectedRoute element={<Applications />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/projects" element={<ProtectedRoute element={<Projects />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/projectsPending" element={<ProtectedRoute element={<ProjectsPending />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/addProject" element={<ProtectedRoute element={<AddProject />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/cvs/:applicationId" element={<ProtectedRoute element={<CVs />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/vacancies/:id" element={<ProtectedRoute element={<VacancyApplications />} allowedRoles={['admin', 'member']} />} />
+                        
+                        {/* Only admin can access this route */}
+                        <Route path="/membersaccounts" element={<ProtectedRoute element={<Members />} allowedRoles={['admin']} />} />
+                        <Route path="/addmembersaccounts" element={<ProtectedRoute element={<MembersAccounts />} allowedRoles={['admin']} />} />
+                        
+                        {/* Redirect to dashboard if no matching route */}
+                        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                        
+                        {/* Unauthorized page */}
+                        <Route path="/unauthorized" element={<div className="text-center p-5">
+                            <h2 className="text-2xl font-bold text-red-600">Unauthorized Access</h2>
+                            <p className="mt-3">You don't have permission to access this page.</p>
+                            <button 
+                                className="mt-4 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" 
+                                onClick={() => navigate('/dashboard')}
+                            >
+                                Return to Dashboard
+                            </button>
+                        </div>} />
+
                     </Routes>
                 </Main>
             </Box>

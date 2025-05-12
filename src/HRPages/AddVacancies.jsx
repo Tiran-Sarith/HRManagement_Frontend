@@ -12,6 +12,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -277,6 +278,7 @@ export default function AddVacancies() {
         }
     };
 
+
     // Open cancel confirmation dialog
     const handleCancelClick = () => {
         // Check if there are unsaved changes
@@ -407,11 +409,13 @@ export default function AddVacancies() {
                                     onChange={(e) => setDepartment(e.target.value)}
                                 >
                                     {Department.map((option) => (
+
                                         <MenuItem key={option.value} value={option.value}>
                                             {option.label}
                                         </MenuItem>
                                     ))}
                                 </TextField>
+
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
@@ -615,5 +619,6 @@ export default function AddVacancies() {
 
             </Container>
         </ThemeProvider>
+
     );
 }

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import LoadingSnackbar from "../Components/LoadingSnackbar";
+import SuccessSnackbar from "../Components/SuccessSnackbar"; // Import the new SuccessSnackbar component
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -12,6 +14,8 @@ const QuestionsPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showLoadingSnackbar, setShowLoadingSnackbar] = useState(true); // Start with showing the loading snackbar
+  const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false); // For success snackbar
 
   useEffect(() => {
     // Check if we have a valid ID
@@ -19,22 +23,27 @@ const QuestionsPage = () => {
       console.error("Application ID is missing or invalid");
       setError("Application ID is missing. Please try applying again.");
       setLoading(false);
+      setShowLoadingSnackbar(false);
       return;
     }
 
     console.log("Fetching questions for application ID:", id);
 
+    // We're already showing the loading snackbar while fetching questions
     axios.get(`${API_BASE_URL}applications/Aquestions/${id}`)
       .then(res => {
         console.log("API response:", res.data);
         setQuestions(res.data.questions);
         setAnswers(new Array(res.data.questions.length).fill(""));
         setLoading(false);
+        // Hide the snackbar after questions are loaded
+        setShowLoadingSnackbar(false);
       })
       .catch(err => {
         console.error("Failed to fetch questions:", err);
         setError("Failed to load questions. Please try again later.");
         setLoading(false);
+        setShowLoadingSnackbar(false);
       });
   }, [id, navigate]);
 
@@ -53,6 +62,7 @@ const QuestionsPage = () => {
     }
 
     setIsSubmitting(true);
+    setShowLoadingSnackbar(true); // Show loading snackbar when submitting answers
     
     console.log("Submitting answers for application ID:", id);
     console.log("Answers:", answers);
@@ -60,24 +70,42 @@ const QuestionsPage = () => {
     axios.post(`${API_BASE_URL}applications/AsubmitAnswers/${id}`, { answers })
       .then((response) => {
         console.log("Submit response:", response.data);
-        alert("Answers submitted successfully! Redirecting to home page...");
-        // Redirect to home page after successful submission
-        navigate("/");
+        setShowLoadingSnackbar(false);
+        
+        // Show success snackbar instead of alert
+        setShowSuccessSnackbar(true);
+        
+        // Redirect to home page after the success snackbar is shown
+        // We don't need the alert anymore since we're showing the snackbar
       })
       .catch(err => {
         console.error("Failed to submit answers:", err);
         alert("Failed to submit answers. Please try again.");
         setIsSubmitting(false);
+        setShowLoadingSnackbar(false);
       });
+  };
+
+  // Function to handle what happens after success snackbar is closed
+  const handleSuccessSnackbarClose = () => {
+    // Navigate to home page after success snackbar is closed
+    navigate("/");
   };
 
   if (loading) {
     return (
       <div className="max-w-3xl p-6 mx-auto bg-white rounded-xl shadow-md">
-        <h2 className="mb-6 text-2xl font-bold text-emerald-700">Loading questions...</h2>
+        <h2 className="mb-6 text-2xl font-bold text-emerald-700">Generating Questions...</h2>
+        <p className="text-gray-600 mb-4">We're analyzing your CV and preparing relevant questions. This might take a few moments.</p>
         <div className="flex justify-center">
           <div className="w-8 h-8 border-4 border-emerald-500 rounded-full border-t-transparent animate-spin"></div>
         </div>
+        
+        {/* Show the loading snackbar during initial load */}
+        <LoadingSnackbar 
+          open={showLoadingSnackbar} 
+          message="Generating questions..."
+        />
       </div>
     );
   }
@@ -132,6 +160,20 @@ const QuestionsPage = () => {
           </button>
         </>
       )}
+      
+      {/* Loading Snackbar - shown when submitting answers */}
+      <LoadingSnackbar 
+        open={showLoadingSnackbar} 
+        message={isSubmitting ? "Submitting your answers..." : "Processing your application..."}
+      />
+      
+      {/* Success Snackbar - shown after successful submission */}
+      <SuccessSnackbar 
+        open={showSuccessSnackbar} 
+        message="Answers submitted successfully!" 
+        duration={2000} 
+        onClose={handleSuccessSnackbarClose}
+      />
     </div>
   );
 };
