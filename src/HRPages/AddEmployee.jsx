@@ -1,3 +1,7 @@
+
+
+
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
@@ -234,17 +238,22 @@ function AddEmployee() {
             employee_first_name: employeeFirstName,
             employee_last_name: employeeLastName,
             employee_id: employeeID,
-            employee_email: employeeEmail,
+            employee_email: employeePrivateEmail,
             employee_nic: employeeNIC,
             employee_telephone: employeeTelephone,
             employee_address: employeeAddress,
             employee_designation: employeeDesignation,
             employee_department: employeeDepartment,
             employee_current_project_id: "", // Empty by default for new employees
+            employee_age: employeeAge,
+            employeeepf: employeeEPF,
+            employee_hireddate: hiredDate.format('YYYY-MM-DD'), // Fixed: Format the date properly
+            employee_company_email: employeeEmail
         };
 
         try {
-            await axios.post(`${API_BASE_URL}employee/Eadd`, newEmployee);
+            const response = await axios.post(`${API_BASE_URL}employee/Eadd`, newEmployee);
+            console.log('Server response:', response.data);
             showSnackbar('Employee Added Successfully', 'success');
             
             setTimeout(() => {
@@ -252,6 +261,7 @@ function AddEmployee() {
                 navigate('/employee');
             }, 2000);
         } catch (err) {
+            console.error('Error details:', err.response?.data || err.message);
             showSnackbar(
                 "Error Adding Employee: " +
                 (err.response?.data?.message || err.message),
@@ -321,31 +331,22 @@ function AddEmployee() {
     return (
         <ThemeProvider theme={customTheme(outerTheme)}>
             <Container maxWidth="md">
-                {/* <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, cursor: 'pointer', width: 'fit-content' }} onClick={handleNavigation}>
-                    <IconButton size="small" sx={{ p: 0, pr: 1, color: 'primary.main' }}>
-                        <ArrowBackIcon />
-                    </IconButton>
-                    <Typography variant="body1" sx={{ color: 'primary.main' }}>
-                        Go Back
-                    </Typography>
-                </Box> */}
-                
-                <Paper elevation={3} sx={{ padding: 4, mb: 4,p: 4,
-            borderRadius: 2,
-            border: "1px solid",
-            borderColor: "primary.light",
-            position: "relative",
-            overflow: "hidden", }}>
+                <Paper elevation={3} sx={{ padding: 4, mb: 4, p: 4,
+                    borderRadius: 2,
+                    border: "1px solid",
+                    borderColor: "primary.light",
+                    position: "relative",
+                    overflow: "hidden" }}>
                 <Box
-                            sx={{
-                              position: "absolute",
-                              top: 0,
-                              left: 0,
-                              right: 0,
-                              height: "8px",
-                              bgcolor: "primary.main",
-                            }}
-                          />
+                    sx={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: "8px",
+                        bgcolor: "primary.main",
+                    }}
+                />
                     <Typography variant="h5" sx={{color:'primary.dark'}} className='text-left' gutterBottom>
                         <AddCircleIcon sx={{ mr: 1 }} />
                         Add New Employee
@@ -408,7 +409,7 @@ function AddEmployee() {
                                 />
                             </Grid>
 
-                            {/* <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="Age"
@@ -417,7 +418,7 @@ function AddEmployee() {
                                     value={employeeAge}
                                     onChange={(e) => setEmployeeAge(e.target.value)}
                                 />
-                            </Grid> */}
+                            </Grid>
 
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -441,7 +442,7 @@ function AddEmployee() {
                                 />
                             </Grid>
 
-                            {/* <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="EPF Number"
@@ -449,7 +450,7 @@ function AddEmployee() {
                                     value={employeeEPF}
                                     onChange={(e) => setEmployeeEPF(e.target.value)}
                                 />
-                            </Grid> */}
+                            </Grid>
 
                             <Grid item xs={12}>
                                 <TextField
@@ -497,6 +498,7 @@ function AddEmployee() {
                                 <TextField
                                     fullWidth
                                     select
+                                    sx={{ textAlign: 'left' }}
                                     label="Designation"
                                     variant="outlined"
                                     required
@@ -515,6 +517,7 @@ function AddEmployee() {
                                 <TextField
                                     fullWidth
                                     select
+                                    sx={{ textAlign: 'left' }}
                                     label="Department"
                                     variant="outlined"
                                     required

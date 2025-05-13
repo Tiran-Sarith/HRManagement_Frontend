@@ -53,11 +53,11 @@ function Employees() {
   };
 
   const columns = [
-    { field: "employeeId", headerName: "Employee ID", width: 130 },
-    { field: "name", headerName: "Name", width: 160 },
-    { field: "email", headerName: "E-mail", width: 200 },
+    { field: "employeeId", headerName: "Employee ID", width: 150 },
+    { field: "name", headerName: "Name", width: 200 },
+    { field: "email", headerName: "E-mail", width: 250 },
     { field: "department", headerName: "Department", width: 130 },
-    { field: "projectId", headerName: "Project ID", width: 130 },
+    // { field: "projectId", headerName: "Project ID", width: 130 },
     { field: "designation", headerName: "Designation", width: 130 },
     {
       field: "update",
