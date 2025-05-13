@@ -34,7 +34,7 @@ import {
 } from '@mui/material';
 
 // Update this to match your server configuration
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8070/api/';
 
 // Modern theme with green accents and white base
 const customTheme = (outerTheme) =>
@@ -203,17 +203,17 @@ function UpdateEmployee() {
         employee_name_with_initials: '',
         employee_first_name: '',
         employee_last_name: '',
-        employee_age: '',
+        employee_Age: '',
         employee_telephone: '',
         employee_nic: '',
-        employee_epf: '',
+        employeeEPF: '',
         employee_address: '',
-        employee_private_email: '',
-        employee_email: '',
+        employee_email: '', // Private email
+        employee_Company_Email: '', // Company email
         employee_designation: '',
         employee_department: '',
         employee_id: '',
-        hired_date: null,
+        employee_HiredDate: dayjs(),
         employee_current_project_id: '',
     });
 
@@ -231,25 +231,53 @@ function UpdateEmployee() {
         // Get employee data from localStorage
         const employeeData = JSON.parse(localStorage.getItem('employeeToUpdate'));
         if (employeeData) {
+            console.log("Employee data from localStorage:", employeeData);
+            
+            // Handle different possible field name formats in the stored data
+            // This provides fallbacks for different naming conventions
             setFormData({
                 employee_full_name: employeeData.employee_full_name || '',
                 employee_name_with_initials: employeeData.employee_name_with_initials || '',
                 employee_first_name: employeeData.employee_first_name || '',
                 employee_last_name: employeeData.employee_last_name || '',
-                employee_age: employeeData.employee_age || '',
+                // Try all possible Age field name variations
+                employee_Age: employeeData.employee_Age || employeeData.employee_age || '',
                 employee_telephone: employeeData.employee_telephone || '',
                 employee_nic: employeeData.employee_nic || '',
-                employee_epf: employeeData.employee_epf || '',
+                // Try all possible EPF field name variations
+                employeeEPF: employeeData.employeeEPF || employeeData.employee_epf || employeeData.employee_EPF || '',
                 employee_address: employeeData.employee_address || '',
-                employee_private_email: employeeData.employee_private_email || '',
-                employee_email: employeeData.employee_email || '',
+                // Private email
+                employee_email: employeeData.employee_email || employeeData.employee_private_email || '',
+                // Company email - try all possible variations
+                employee_Company_Email: employeeData.employee_Company_Email || 
+                                       employeeData.employee_company_email || 
+                                       employeeData.employee_Company_email ||
+                                       employeeData.Company_Email || '',
                 employee_designation: employeeData.employee_designation || '',
                 employee_department: employeeData.employee_department || '',
                 employee_id: employeeData.employee_id || '',
-                hired_date: employeeData.hired_date ? dayjs(employeeData.hired_date) : null,
+                // Try all possible date field variations
+                employee_HiredDate: employeeData.employee_HiredDate ? 
+                                   dayjs(employeeData.employee_HiredDate) : 
+                                   (employeeData.employee_hired_date ? 
+                                   dayjs(employeeData.employee_hired_date) :
+                                   (employeeData.hired_date ?
+                                   dayjs(employeeData.hired_date) : dayjs())),
                 employee_current_project_id: employeeData.employee_current_project_id || '',
             });
             setEmployeeId(employeeData._id);
+            
+            // Debug logging to help identify field issues
+            console.log("Set form data:", {
+                "Age field (employee_Age)": employeeData.employee_Age,
+                "Age field (employee_age)": employeeData.employee_age,
+                "EPF field (employeeEPF)": employeeData.employeeEPF,
+                "EPF field (employee_epf)": employeeData.employee_epf,
+                "EPF field (employee_EPF)": employeeData.employee_EPF,
+                "Company Email (employee_Company_Email)": employeeData.employee_Company_Email,
+                "Company Email (employee_company_email)": employeeData.employee_company_email
+            });
         } else {
             // If no data found, show error and navigate back
             showSnackbar('No employee data found to update', 'error');
@@ -265,10 +293,10 @@ function UpdateEmployee() {
         }));
     };
 
-    const handleDateChange = (field, newValue) => {
+    const handleDateChange = (newValue) => {
         setFormData(prevState => ({
             ...prevState,
-            [field]: newValue
+            employee_HiredDate: newValue
         }));
     };
 
@@ -281,13 +309,33 @@ function UpdateEmployee() {
         }
 
         setLoading(true);
+        
         try {
             // Prepare the updated employee data
             const updatedEmployeeData = {
-                ...formData
+                employee_full_name: formData.employee_full_name,
+                employee_name_with_initials: formData.employee_name_with_initials,
+                employee_first_name: formData.employee_first_name,
+                employee_last_name: formData.employee_last_name,
+                employee_id: formData.employee_id,
+                employee_email: formData.employee_email, // Private email
+                employee_nic: formData.employee_nic,
+                employee_telephone: formData.employee_telephone,
+                employee_address: formData.employee_address,
+                employee_designation: formData.employee_designation,
+                employee_department: formData.employee_department,
+                employee_current_project_id: formData.employee_current_project_id,
+                employee_Age: formData.employee_Age,
+                employeeEPF: formData.employeeEPF,
+                employee_HiredDate: formData.employee_HiredDate.format('YYYY-MM-DD'),
+                employee_Company_Email: formData.employee_Company_Email
             };
 
-            await axios.put(`${API_BASE_URL}employee/Eupdate/${employeeId}`, updatedEmployeeData);
+            console.log('Sending updated data:', updatedEmployeeData);
+            
+            const response = await axios.put(`${API_BASE_URL}employee/Eupdate/${employeeId}`, updatedEmployeeData);
+            console.log('Server response:', response.data);
+            
             showSnackbar('Employee Updated Successfully', 'success');
             
             // Clean up and navigate after delay to show the success message
@@ -296,6 +344,7 @@ function UpdateEmployee() {
                 navigate('/employee');
             }, 2000);
         } catch (err) {
+            console.error('Error details:', err.response?.data || err.message);
             showSnackbar(
                 "Error Updating Employee: " +
                 (err.response?.data?.message || err.message),
@@ -303,6 +352,11 @@ function UpdateEmployee() {
             );
             setLoading(false);
         }
+    };
+
+    // Handle navigation back
+    const handleNavigation = () => {
+        navigate('/employee');
     };
 
     // Open cancel confirmation dialog
@@ -342,7 +396,7 @@ function UpdateEmployee() {
     return (
         <ThemeProvider theme={customTheme(outerTheme)}>
             <Container maxWidth="md">
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, cursor: 'pointer', width: 'fit-content' }} onClick={() => navigate('/employee')}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, cursor: 'pointer', width: 'fit-content' }} onClick={handleNavigation}>
                     <IconButton size="small" sx={{ p: 0, pr: 1, color: 'primary.main' }}>
                         <ArrowBackIcon />
                     </IconButton>
@@ -436,17 +490,17 @@ function UpdateEmployee() {
                                 />
                             </Grid>
 
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="Age"
                                     variant="outlined"
                                     type="number"
-                                    name="employee_age"
-                                    value={formData.employee_age}
+                                    name="employee_Age"
+                                    value={formData.employee_Age}
                                     onChange={handleInputChange}
                                 />
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -472,16 +526,16 @@ function UpdateEmployee() {
                                 />
                             </Grid>
 
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="EPF Number"
                                     variant="outlined"
-                                    name="employee_epf"
-                                    value={formData.employee_epf}
+                                    name="employeeEPF"
+                                    value={formData.employeeEPF}
                                     onChange={handleInputChange}
                                 />
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item xs={12}>
                                 <TextField
@@ -501,36 +555,36 @@ function UpdateEmployee() {
                                     label="Private Email"
                                     variant="outlined"
                                     type="email"
-                                    name="employee_private_email"
-                                    value={formData.employee_private_email}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-
-                            {/* Company Information Section */}
-                            <Grid item xs={12}>
-                                <Typography variant="body1" fontSize={18} align='left' fontWeight={700} color="text.primary" sx={{ mt: 2 }}>
-                                    Company Information
-                                </Typography>
-                                <Divider />
-                            </Grid>
-
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Company Email"
-                                    variant="outlined"
-                                    required
-                                    type="email"
                                     name="employee_email"
                                     value={formData.employee_email}
                                     onChange={handleInputChange}
                                 />
                             </Grid>
 
+                            {/* Company Information Section */}
+                            <Grid item xs={12}>
+                                <Typography variant="body1" fontSize={18} align='left' fontWeight={700} color="text.primary">
+                                    Company Information
+                                </Typography>
+                                <Divider />
+                            </Grid>
+
+                            {/* <Grid item xs={12} sm={6}>
+                                <TextField
+                                    fullWidth
+                                    label="Company Email"
+                                    variant="outlined"
+                                    required
+                                    name="employee_Company_Email"
+                                    value={formData.employee_Company_Email}
+                                    onChange={handleInputChange}
+                                />
+                            </Grid> */}
+
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
+                                    sx={{ textAlign: 'left' }}
                                     select
                                     label="Designation"
                                     variant="outlined"
@@ -552,6 +606,7 @@ function UpdateEmployee() {
                                     fullWidth
                                     select
                                     label="Department"
+                                    sx={{ textAlign: 'left' }}
                                     variant="outlined"
                                     required
                                     name="employee_department"
@@ -578,18 +633,18 @@ function UpdateEmployee() {
                                 />
                             </Grid>
 
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={['DatePicker']} sx={{ padding: '0 1 0 0' }}>
                                         <DatePicker
                                             label="Hired Date"
-                                            value={formData.hired_date}
-                                            onChange={(newValue) => handleDateChange('hired_date', newValue)}
+                                            value={formData.employee_HiredDate}
+                                            onChange={handleDateChange}
                                             sx={{ width: '100%' }}
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item xs={12} sm={6}>
                                 <TextField
