@@ -336,13 +336,15 @@ function CVCard() {
 
   // Content for Interview Questions tab
   const renderInterviewQuestions = () => (
-    <Box>
+    <Box sx={{ mt: 2 , width: '100%' }}>
       {application.questions && application.questions.length > 0 ? (
         application.questions.map((question, index) => (
           <Accordion 
             key={index} 
             sx={{ 
               mb: 2, 
+              textAlign: 'justify',
+              width: '100%',
               borderRadius: '6px !important',
               overflow: 'hidden',
               boxShadow: 'none',
@@ -402,7 +404,8 @@ function CVCard() {
   return (
     <ThemeProvider theme={theme}>
       <Card sx={{ 
-        maxWidth: 900, 
+        width: '100%',
+        padding: 2,
         margin: '24px auto',
         overflow: 'visible',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)'
