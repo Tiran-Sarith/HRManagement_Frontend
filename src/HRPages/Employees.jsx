@@ -43,7 +43,11 @@ function Employees() {
         lastName: employee.employee_last_name,
         nic: employee.employee_nic,
         telephone: employee.employee_telephone,
-        address: employee.employee_address
+        address: employee.employee_address,
+        age: employee.employee_age,
+        epf: employee.employeeepf,
+        hiredDate: employee.employee_hireddate,
+        companyemail: employee.employee_company_email
       }));
       setRows(formattedEmployees);
     } catch (error) {
@@ -106,15 +110,17 @@ const handleUpdate = (id) => {
     employee_age: employeeToUpdate.age || "",
     employee_telephone: employeeToUpdate.telephone || "",
     employee_nic: employeeToUpdate.nic || "",
-    employee_epf: employeeToUpdate.epf || "",
+    employeeepf: employeeToUpdate.epf || "",
     employee_address: employeeToUpdate.address || "",
     employee_private_email: employeeToUpdate.privateEmail || "",
     employee_email: employeeToUpdate.email || "",
     employee_designation: employeeToUpdate.designation || "",
     employee_department: employeeToUpdate.department || "",
     employee_id: employeeToUpdate.employeeId || "",
-    hired_date: employeeToUpdate.hiredDate || null,
+    employee_hireddate: employeeToUpdate.hiredDate || null,
     employee_current_project_id: employeeToUpdate.projectId || "",
+    employee_company_email: employeeToUpdate.companyemail || "",
+    
   };
   
   localStorage.setItem("employeeToUpdate", JSON.stringify(formattedEmployeeData));

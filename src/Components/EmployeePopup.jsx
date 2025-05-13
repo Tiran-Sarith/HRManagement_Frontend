@@ -53,13 +53,18 @@ function EmployeePopup({ visible, onClose, data, onDelete, onUpdate }) {
                             <Info label="NIC Number" value={data.nic} />
                             <Info label="Department" value={data.department} />
                             <Info label="Designation" value={data.designation} />
+                            <Info label="Age" value={data.age} />
+                            <Info label="Hired Date" value={data.hiredDate} />
+                            <Info label="EPF Number" value={data.epf} />
+
                         </Grid>
                     </Section>
 
                     {/* Contact Info */}
                     <Section title="Contact Information">
                         <Grid>
-                            <Info label="Email" value={data.email} />
+                            <Info label="Company Email" value={data.companyemail} />
+                            <Info label="Private Email" value={data.email} />
                             <Info label="Telephone" value={data.telephone} />
                             <Info label="Address" value={data.address} colSpan />
                         </Grid>
