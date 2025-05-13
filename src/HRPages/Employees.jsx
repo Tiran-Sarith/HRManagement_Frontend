@@ -4,7 +4,6 @@ import Typography from "@mui/material/Typography";
 import { DataGrid } from "@mui/x-data-grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -13,6 +12,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import EmployeePopup from "../Components/EmployeePopup";
+import { Button, message, Popconfirm } from 'antd';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function Employees() {
@@ -127,6 +127,15 @@ const handleUpdate = (id) => {
   const handleRowClick = (params) => {
     setSelectedRow(params.row);
     setShowMyModel(true);
+  };
+
+  const confirm = e => {
+    console.log(e);
+    message.success('Click on Yes');
+  };
+  const cancel = e => {
+    console.log(e);
+    message.error('Click on No');
   };
 
   return (

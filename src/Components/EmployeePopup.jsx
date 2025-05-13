@@ -1,7 +1,7 @@
 import React from 'react';
-import Button from '@mui/material/Button';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { Button, message, Popconfirm } from 'antd';
 
 function EmployeePopup({ visible, onClose, data, onDelete, onUpdate }) {
     const handleOnClose = (e) => {
@@ -9,6 +9,15 @@ function EmployeePopup({ visible, onClose, data, onDelete, onUpdate }) {
     };
 
     if (!visible || !data) return null;
+
+    const confirm = e => {
+    console.log(e);
+    message.success('Click on Yes');
+    };
+    const cancel = e => {
+    console.log(e);
+    message.error('Click on No');
+    };
 
     return (
         <div
@@ -59,9 +68,16 @@ function EmployeePopup({ visible, onClose, data, onDelete, onUpdate }) {
 
                 {/* Buttons */}
                 <div className="mt-4 mb-4 flex justify-end gap-4">
-                    <Button onClick={() => onDelete(data.id)} variant="contained" color="error">
-                        Delete
-                    </Button>
+                    <Popconfirm
+                        title="Delete the task"
+                        description="Are you sure to delete this employee?"
+                        onConfirm={confirm}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button danger onClick={() => onDelete(data.id)}>Delete</Button>
+                    </Popconfirm>
                     <Button onClick={() => onUpdate(data.id)} variant="outlined" color="success">
                         Update
                     </Button>
