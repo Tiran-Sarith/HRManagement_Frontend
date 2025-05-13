@@ -45,6 +45,7 @@ import Dashboard from './Dashboard';
 import MembersAccounts from './MembersAccounts';
 import VacancyApplications from './vacancyApplications';
 import Members from './Members';
+import UpdateEmployee from './UpdateEmployee';
 
 const drawerWidth = 240;
 
@@ -274,6 +275,7 @@ export default function MainHR() {
                         <Route path="/vacanciesAdd" element={<ProtectedRoute element={<AddVacancies />} allowedRoles={['admin', 'member']} />} />
                         <Route path="/vacanciesUpdate" element={<ProtectedRoute element={<UpdateVacancy />} allowedRoles={['admin', 'member']} />} />
                         <Route path="/employee" element={<ProtectedRoute element={<Employees />} allowedRoles={['admin', 'member']} />} />
+                        <Route path="/employeeUpdate" element={<ProtectedRoute element={<UpdateEmployee />} allowedRoles={['admin', 'member']} />} />
                         <Route path="/AddEmployee" element={<ProtectedRoute element={<AddEmployee />} allowedRoles={['admin', 'member']} />} />
                         <Route path="/applications" element={<ProtectedRoute element={<Applications />} allowedRoles={['admin', 'member']} />} />
                         <Route path="/projects" element={<ProtectedRoute element={<Projects />} allowedRoles={['admin', 'member']} />} />

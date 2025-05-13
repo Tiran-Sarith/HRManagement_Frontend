@@ -80,12 +80,12 @@
 //         responsibilities: '',
 //         whatweoffer: '',
 //         benefits: '',
-        
+
 //     });
 
 //     // Cancel confirmation dialog state
 //     const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
-    
+
 //     // Snackbar state
 //     const [snackbar, setSnackbar] = useState({
 //         open: false,
@@ -135,7 +135,7 @@
 
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
-        
+
 //         if (!vacancyId) {
 //             showSnackbar('Invalid vacancy data', 'error');
 //             return;
@@ -153,7 +153,7 @@
 
 //             await axios.put(`${API_BASE_URL}vacancies/Vupdate/${vacancyId}`, updatedData);
 //             showSnackbar('Vacancy Updated Successfully', 'success');
-            
+
 //             // Clean up and navigate after delay to show the success message
 //             setTimeout(() => {
 //                 localStorage.removeItem('vacancyToUpdate');
@@ -180,7 +180,7 @@
 //         localStorage.removeItem('vacancyToUpdate');
 //         navigate('/vacancies');
 //     };
-    
+
 //     // Show snackbar with custom message and severity
 //     const showSnackbar = (message, severity = "success") => {
 //         setSnackbar({
@@ -189,7 +189,7 @@
 //             severity
 //         });
 //     };
-    
+
 //     // Close snackbar
 //     const handleCloseSnackbar = () => {
 //         setSnackbar({
@@ -215,7 +215,7 @@
 //                     backgroundColor: "#fafafa"
 //                   }}>
 //             <h2 className='text-2xl font-semibold mb-4 text-center text-green-700'>Update Vacancy</h2>
-            
+
 //             <form onSubmit={handleSubmit}>
 //                 <div className='w-[560px]'>
 //                     <div className='mb-4 flex justify-start ml-12'>
@@ -264,7 +264,7 @@
 //                     <div className='mb-4 flex justify-start ml-12'>
 //                         <Box sx={{ display: 'grid', gridTemplateColumns: { sm: '1fr 1fr 1fr' }, gap: 2 }}>
 //                             <ThemeProvider theme={customTheme(outerTheme)}>
-                                
+
 //                             </ThemeProvider>
 //                             <ThemeProvider theme={customTheme(outerTheme)}>
 //                                 <TextField 
@@ -309,11 +309,11 @@
 //                                     required
 //                                 />
 //                             </ThemeProvider>
-                            
+
 //                         </Box>
 //                     </div>
 
-                    
+
 //                     <div className='mb-4 flex justify-start ml-10'>
 //                         <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '847px' } }} noValidate autoComplete="off">
 //                             <div>
@@ -391,7 +391,7 @@
 //                             </div>
 //                         </Box>
 //                     </div>
-                    
+
 //                     <div className='mb-4 flex justify-start ml-10'>
 //                         <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '847px' } }} noValidate autoComplete="off">
 //                             <div>
@@ -438,7 +438,7 @@
 //                 </div>
 //             </form>
 //             </Paper>
-            
+
 //             {/* Cancel Confirmation Dialog */}
 //             <Dialog
 //                 open={cancelDialogOpen}
@@ -473,7 +473,7 @@
 //                     </Button>
 //                 </DialogActions>
 //             </Dialog>
-            
+
 //             {/* Snackbar for notifications */}
 //             <Snackbar 
 //                 open={snackbar.open} 
@@ -498,7 +498,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
-import {Typography} from '@mui/material';
+import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -509,6 +509,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
 import MenuItem from '@mui/material/MenuItem';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -549,9 +550,9 @@ const customTheme = (outerTheme) =>
         palette: {
             mode: outerTheme.palette.mode,
             primary: {
-                main: '#4caf50', // Slightly lighter green for modern look
-                dark: '#2e7d32',
-                light: '#81c784',
+                main: "#2e7d32", // Green for primary
+                dark: "#1b5e20",
+                light: "#4caf50",
                 contrastText: '#ffffff',
             },
             success: {
@@ -602,7 +603,7 @@ const customTheme = (outerTheme) =>
                             borderColor: '#81c784',
                         },
                         '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: '#4caf50',
+                            borderColor: "#2e7d32",
                             borderWidth: 2,
                         },
                     },
@@ -616,7 +617,7 @@ const customTheme = (outerTheme) =>
                     root: {
                         marginBottom: 16,
                         '& label.Mui-focused': {
-                            color: '#4caf50',
+                            color: "#2e7d32",
                         },
                     },
                 },
@@ -634,14 +635,14 @@ const customTheme = (outerTheme) =>
                         },
                     },
                     containedPrimary: {
-                        backgroundColor: '#4caf50',
+                        backgroundColor: "#2e7d32",
                         '&:hover': {
                             backgroundColor: '#2e7d32',
                         },
                     },
                     outlinedPrimary: {
                         borderColor: '#4caf50',
-                        color: '#4caf50',
+                        color: "#2e7d32",
                         '&:hover': {
                             borderColor: '#2e7d32',
                             backgroundColor: 'rgba(76, 175, 80, 0.04)',
@@ -726,7 +727,7 @@ export default function UpdateVacancies() {
 
     // Cancel confirmation dialog state
     const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
-    
+
     // Snackbar state
     const [snackbar, setSnackbar] = useState({
         open: false,
@@ -747,15 +748,15 @@ export default function UpdateVacancies() {
                 department: vacancyData.department || '',
                 about: vacancyData.about || '',
                 // Convert arrays back to |-separated strings for editing
-                requirements: Array.isArray(vacancyData.requirements) 
-                    ? vacancyData.requirements.join('| ') 
+                requirements: Array.isArray(vacancyData.requirements)
+                    ? vacancyData.requirements.join('| ')
                     : vacancyData.requirements || '',
-                responsibilities: Array.isArray(vacancyData.responsibilities) 
-                    ? vacancyData.responsibilities.join('| ') 
+                responsibilities: Array.isArray(vacancyData.responsibilities)
+                    ? vacancyData.responsibilities.join('| ')
                     : vacancyData.responsibilities || '',
                 whatweoffer: vacancyData.whatweoffer || '',
-                benefits: Array.isArray(vacancyData.benefits) 
-                    ? vacancyData.benefits.join('| ') 
+                benefits: Array.isArray(vacancyData.benefits)
+                    ? vacancyData.benefits.join('| ')
                     : vacancyData.benefits || ''
             });
             setVacancyId(vacancyData._id);
@@ -783,7 +784,7 @@ export default function UpdateVacancies() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!vacancyId) {
             showSnackbar('Invalid vacancy data', 'error');
             return;
@@ -801,7 +802,7 @@ export default function UpdateVacancies() {
 
             await axios.put(`${API_BASE_URL}vacancies/Vupdate/${vacancyId}`, updatedData);
             showSnackbar('Vacancy Updated Successfully', 'success');
-            
+
             // Clean up and navigate after delay to show the success message
             setTimeout(() => {
                 localStorage.removeItem('vacancyToUpdate');
@@ -829,7 +830,7 @@ export default function UpdateVacancies() {
         setCancelDialogOpen(false);
         navigate('/vacancies');
     };
-    
+
     // Show snackbar with custom message and severity
     const showSnackbar = (message, severity = "success") => {
         setSnackbar({
@@ -838,7 +839,7 @@ export default function UpdateVacancies() {
             severity
         });
     };
-    
+
     // Close snackbar
     const handleCloseSnackbar = () => {
         setSnackbar({
@@ -858,15 +859,35 @@ export default function UpdateVacancies() {
                         Back to Vacancies
                     </Typography>
                 </Box>
-                
-                <Paper elevation={0} sx={{ padding: 4, mb: 4 }}>
-                    <Typography variant="h5" gutterBottom>
+
+                <Paper elevation={0} sx={{
+                    padding: 4,
+                    mb: 4,
+                    borderRadius: 2,
+                    border: "1px solid",
+                    borderColor: "primary.light",
+                    position: "relative",
+                    overflow: "hidden"
+                }}>
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: "8px",
+                            bgcolor: "primary.main",
+                        }}
+                    />
+                    <Typography variant="h5" sx={{color:'primary.dark'}} className='text-left' gutterBottom>
+                                                <EditIcon sx={{ mr: 1 }} />
+
                         Update Vacancy
                     </Typography>
-                    <Typography variant="subtitle1" gutterBottom sx={{ mb: 3 }}>
+                    <Typography variant="subtitle1" gutterBottom sx={{ mb: 3, color: 'text.secondary', fontWeight: 400 }} className='text-left font-semibold'>
                         Edit the vacancy information below
                     </Typography>
-                    
+
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
                             {/* Job Basic Information Section */}
@@ -876,7 +897,7 @@ export default function UpdateVacancies() {
                                 </Typography>
                                 <Divider />
                             </Grid>
-                            
+
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -888,7 +909,7 @@ export default function UpdateVacancies() {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            
+
                             <Grid item xs={12} sm={6} align='left'>
                                 <TextField
                                     fullWidth
@@ -907,7 +928,7 @@ export default function UpdateVacancies() {
                                     ))}
                                 </TextField>
                             </Grid>
-                            
+
                             <Grid item xs={12} sm={6} align='left'>
                                 <TextField
                                     fullWidth
@@ -926,8 +947,8 @@ export default function UpdateVacancies() {
                                     ))}
                                 </TextField>
                             </Grid>
-                            
-                           
+
+
 
                             <Grid item xs={12} sm={6} align='left'>
                                 <TextField
@@ -967,7 +988,7 @@ export default function UpdateVacancies() {
                                     ))}
                                 </TextField>
                             </Grid>
-                             <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} sm={6}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={['DatePicker']} sx={{ padding: '1 0 0 0' }}>
                                         {/* <TextField
@@ -985,8 +1006,8 @@ export default function UpdateVacancies() {
                                     </DemoContainer>
                                 </LocalizationProvider>
                             </Grid>
-                            
-                            
+
+
                             {/* Department & Role Section */}
                             {/* <Grid item xs={12}>
                                 <Typography variant="body1" fontWeight={500} color="text.primary" sx={{ mt: 2 }}>
@@ -994,7 +1015,7 @@ export default function UpdateVacancies() {
                                 </Typography>
                                 <Divider />
                             </Grid> */}
-                            
+
                             {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
@@ -1013,7 +1034,7 @@ export default function UpdateVacancies() {
                                     ))}
                                 </TextField>
                             </Grid> */}
-                            
+
                             {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
@@ -1032,7 +1053,7 @@ export default function UpdateVacancies() {
                                     ))}
                                 </TextField>
                             </Grid> */}
-                            
+
                             {/* Job Description Section */}
                             <Grid item xs={12}>
                                 <Typography variant="body1" align='left' fontWeight={700} color="text.primary" sx={{ mt: 2 }}>
@@ -1040,7 +1061,7 @@ export default function UpdateVacancies() {
                                 </Typography>
                                 <Divider />
                             </Grid>
-                            
+
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -1055,7 +1076,7 @@ export default function UpdateVacancies() {
                                     placeholder="Enter complete job description"
                                 />
                             </Grid>
-                            
+
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -1071,7 +1092,7 @@ export default function UpdateVacancies() {
                                     helperText="Example: Bachelor's degree in Computer Science | 3+ years experience | Strong communication skills"
                                 />
                             </Grid>
-                            
+
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -1086,7 +1107,7 @@ export default function UpdateVacancies() {
                                     placeholder="Use | symbol to separate different responsibilities"
                                 />
                             </Grid>
-                            
+
                             {/* Additional Details Section */}
                             <Grid item xs={12}>
                                 <Typography variant="body1" align='left' fontWeight={700} color="text.primary" sx={{ mt: 2 }}>
@@ -1094,7 +1115,7 @@ export default function UpdateVacancies() {
                                 </Typography>
                                 <Divider />
                             </Grid>
-                            
+
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -1108,7 +1129,7 @@ export default function UpdateVacancies() {
                                     placeholder="Use | symbol to separate different benefits"
                                 />
                             </Grid>
-                            
+
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
@@ -1122,21 +1143,21 @@ export default function UpdateVacancies() {
                                     placeholder="Describe company culture and additional perks"
                                 />
                             </Grid>
-                            
+
                             {/* Form Actions */}
                             <Grid item xs={12} sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                                <Button 
-                                    variant="outlined" 
-                                    color="primary" 
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
                                     onClick={handleCancelClick}
                                     disabled={loading}
                                     startIcon={<CancelIcon />}
                                 >
                                     Cancel
                                 </Button>
-                                <Button 
-                                    type="submit" 
-                                    variant="contained" 
+                                <Button
+                                    type="submit"
+                                    variant="contained"
                                     color="primary"
                                     disabled={loading}
                                     startIcon={loading ? <CircularProgress size={24} /> : <SaveIcon />}
@@ -1147,7 +1168,7 @@ export default function UpdateVacancies() {
                         </Grid>
                     </form>
                 </Paper>
-                
+
                 {/* Cancel Confirmation Dialog */}
                 <Dialog
                     open={cancelDialogOpen}
@@ -1183,7 +1204,7 @@ export default function UpdateVacancies() {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                
+
                 {/* Snackbar for notifications */}
                 <Snackbar
                     open={snackbar.open}

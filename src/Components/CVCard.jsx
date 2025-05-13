@@ -120,18 +120,44 @@ function CVCard() {
             }}
         >
             <CardContent>
-                <Typography variant="h5" sx={{ color: 'green', mb: 2, fontWeight: 'bold' }}>
-                    Application Details
-                </Typography>
+                <Grid container spacing={2} alignItems="center" justifyContent="space-between" sx={{ mb: 3 }}>
+                    <Grid item xs={12} md={6}>
+                        <Typography variant="h4" sx={{ textAlign: 'left', color: 'green', fontWeight: 'bold' }}>
+                            Application Details
+                        </Typography>
+
+                    </Grid>
+                    <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
+                        <Box sx={{ mt: 2 }}>
+                            <Button
+                                variant="contained"
+                                startIcon={<FileDownloadIcon />}
+                                onClick={handleDownload}
+                                sx={{
+                                    bgcolor: 'green',
+                                    '&:hover': {
+                                        bgcolor: 'darkgreen',
+                                    }
+                                }}
+                            >
+                                Download CV
+                            </Button>
+                        </Box>
+                    </Grid>
+
+                </Grid>
+
                 <Grid container spacing={4}>
                     {/* Left side - Application Info */}
+
                     <Grid item xs={12} md={6}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                             {/* Basic Information Section */}
                             <Box sx={{ mb: 3 }}>
-                                <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold' }}>
+                                <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold', textAlign: 'left' }}>
                                     Basic Information
                                 </Typography>
+                                <Divider sx={{ mb: 2 }} />
 
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -206,25 +232,14 @@ function CVCard() {
                                 </Box>
                             </Box>
 
-                            <Divider sx={{ my: 2 }} />
 
-                            <Box sx={{ mt: 2 }}>
-                                <Button
-                                    variant="contained"
-                                    startIcon={<FileDownloadIcon />}
-                                    onClick={handleDownload}
-                                    sx={{
-                                        bgcolor: 'green',
-                                        '&:hover': {
-                                            bgcolor: 'darkgreen',
-                                        }
-                                    }}
-                                >
-                                    Download CV
-                                </Button>
-                            </Box>
+
+
                         </Box>
+
                     </Grid>
+
+
 
                     {/* Right side - additional information */}
                     <Grid item xs={12} md={6}>
@@ -232,6 +247,7 @@ function CVCard() {
                             <Typography variant="h6" sx={{ color: 'black', mb: 2, fontWeight: 'bold' }}>
                                 Additional Information
                             </Typography>
+                            <Divider sx={{ mb: 2 }} />
 
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
@@ -252,41 +268,42 @@ function CVCard() {
 
                 {/* Questions and Answers Section */}
                 <Divider sx={{ my: 3 }} />
-                
+
                 <Box sx={{ mt: 4 }}>
                     <Typography variant="h6" sx={{ color: 'black', mb: 2, display: 'flex', alignItems: 'center', gap: 1, fontWeight: 'bold' }}>
                         <QuestionAnswerIcon sx={{ color: 'green' }} />
                         Interview Questions & Answers
                     </Typography>
-                    
-                    {application.questions && application.questions.length > 0 ? (
-                        application.questions.map((question, index) => (
-                            <Accordion key={index} sx={{ mb: 2, border: '1px solid #e8f5e9' }}>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon sx={{ color: 'green' }} />}
-                                    sx={{ bgcolor: '#f5f5f5' }}
-                                >
-                                    <Typography sx={{ fontWeight: 'bold' }}>
-                                        Question {index + 1}: {question}
-                                    </Typography>
-                                </AccordionSummary>
-                                <AccordionDetails sx={{ bgcolor: 'white', p: 2 }}>
-                                    <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1, color: 'green' }}>
-                                        Answer:
-                                    </Typography>
-                                    <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
-                                        {application.answers && application.answers[index] 
-                                            ? application.answers[index]
-                                            : 'No answer provided yet.'}
-                                    </Typography>
-                                </AccordionDetails>
-                            </Accordion>
-                        ))
-                    ) : (
-                        <Paper sx={{ p: 3, bgcolor: '#f5f5f5', color: 'gray' }}>
-                            No interview questions available for this application.
-                        </Paper>
-                    )}
+                    <div style={{ maxHeight: '400px', overflowY: 'auto' , padding: '0 16px',width: '100%'}}>
+                        {application.questions && application.questions.length > 0 ? (
+                            application.questions.map((question, index) => (
+                                <Accordion key={index} sx={{ mb: 2, border: '1px solid #e8f5e9', borderRadius: 2, boxShadow: 1, width: '100%' }}>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon sx={{ color: 'green' }} />}
+                                        sx={{ bgcolor: '#f5f5f5' }}
+                                    >
+                                        <Typography sx={{ fontWeight: 'bold', textAlign: 'justify' }}>
+                                            Question {index + 1}: {question}
+                                        </Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails sx={{ bgcolor: 'white', p: 2 }}>
+                                        <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1, color: 'green', textAlign: 'left' }}>
+                                            Applicant's Answer:
+                                        </Typography>
+                                        <Typography variant="body1" sx={{ whiteSpace: 'pre-line', textAlign: 'justify' }}>
+                                            {application.answers && application.answers[index]
+                                                ? application.answers[index]
+                                                : 'No answer provided yet.'}
+                                        </Typography>
+                                    </AccordionDetails>
+                                </Accordion>
+                            ))
+                        ) : (
+                            <Paper sx={{ p: 3, bgcolor: '#f5f5f5', color: 'gray' }}>
+                                No interview questions available for this application.
+                            </Paper>
+                        )}
+                    </div>
                 </Box>
             </CardContent>
         </Card>

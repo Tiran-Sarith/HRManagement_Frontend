@@ -408,7 +408,7 @@ function AddEmployee() {
                                 />
                             </Grid>
 
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="Age"
@@ -417,7 +417,7 @@ function AddEmployee() {
                                     value={employeeAge}
                                     onChange={(e) => setEmployeeAge(e.target.value)}
                                 />
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -441,7 +441,7 @@ function AddEmployee() {
                                 />
                             </Grid>
 
-                            <Grid item xs={12} sm={6}>
+                            {/* <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="EPF Number"
@@ -449,7 +449,7 @@ function AddEmployee() {
                                     value={employeeEPF}
                                     onChange={(e) => setEmployeeEPF(e.target.value)}
                                 />
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item xs={12}>
                                 <TextField
