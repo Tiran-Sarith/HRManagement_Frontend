@@ -135,7 +135,7 @@ const QuestionsPage = () => {
         <>
           {questions.map((q, index) => (
             <div key={index} className="mb-4">
-              <p className="mb-2 font-medium text-gray-800">{index + 1}. {q}</p>
+              <p className="mb-2 font-medium text-md font-roboto text-gray-800 text-justify font-bold">{index + 1}. {q}</p>
               <textarea
                 className="w-full p-3 border rounded-lg focus:outline-emerald-500"
                 rows="3"
