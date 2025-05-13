@@ -92,21 +92,35 @@ function Employees() {
     }
   };
 
-  const handleUpdate = (id) => {
-    navigate(`/employeeUpdate/${id}`);
+const handleUpdate = (id) => {
+  const employeeToUpdate = rows.find((row) => row.id === id);
+  if (!employeeToUpdate) return;
+  
+  // Restructure the data to match what UpdateEmployee component expects
+  const formattedEmployeeData = {
+    _id: employeeToUpdate.id,
+    employee_full_name: employeeToUpdate.fullName,
+    employee_name_with_initials: employeeToUpdate.name,
+    employee_first_name: employeeToUpdate.firstName,
+    employee_last_name: employeeToUpdate.lastName,
+    employee_age: employeeToUpdate.age || "",
+    employee_telephone: employeeToUpdate.telephone || "",
+    employee_nic: employeeToUpdate.nic || "",
+    employee_epf: employeeToUpdate.epf || "",
+    employee_address: employeeToUpdate.address || "",
+    employee_private_email: employeeToUpdate.privateEmail || "",
+    employee_email: employeeToUpdate.email || "",
+    employee_designation: employeeToUpdate.designation || "",
+    employee_department: employeeToUpdate.department || "",
+    employee_id: employeeToUpdate.employeeId || "",
+    hired_date: employeeToUpdate.hiredDate || null,
+    employee_current_project_id: employeeToUpdate.projectId || "",
   };
+  
+  localStorage.setItem("employeeToUpdate", JSON.stringify(formattedEmployeeData));
+  navigate("/employeeUpdate");
+};
 
-  //for future edits
-
-  //  const handleUpdate = (id) => {
-  //   const vacancyToUpdate = rows.find((row) => row.id === id);
-  //   if (!vacancyToUpdate) return;
-  //   localStorage.setItem(
-  //     "vacancyToUpdate",
-  //     JSON.stringify(vacancyToUpdate.originalData)
-  //   );
-  //   navigate("/vacanciesUpdate");
-  // };
 
   const handleOnClose = () => setShowMyModel(false);
 
