@@ -186,26 +186,52 @@ function CVCard() {
     }
   };
 
+  // const handleDownload = async () => {
+  //   try {
+  //     if (!application?.filename) {
+  //       throw new Error('No file available for download');
+  //     }
+
+  //     const response = await axios.get(`${API_BASE_URL}applications/get-s3-cv-url/${application.filename}`);
+  //     const url = response.data.url;
+
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.setAttribute('download', application.filename);
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     link.remove();
+  //   } catch (err) {
+  //     console.error('Error downloading file:', err);
+  //     alert('Error downloading file: ' + (err.response?.data?.message || err.message));
+  //   }
+  // };
+
   const handleDownload = async () => {
-    try {
-      if (!application?.filename) {
-        throw new Error('No file available for download');
-      }
-
-      const response = await axios.get(`${API_BASE_URL}applications/get-s3-cv-url/${application.filename}`);
-      const url = response.data.url;
-
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', application.filename);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (err) {
-      console.error('Error downloading file:', err);
-      alert('Error downloading file: ' + (err.response?.data?.message || err.message));
+  try {
+    if (!application?.filename) {
+      throw new Error("No file available for download");
     }
-  };
+
+    const url = `${API_BASE_URL}applications/download-cv/${application.filename}`;
+
+    const response = await axios.get(url, { responseType: "blob" });
+
+    const blob = new Blob([response.data]);
+    const downloadUrl = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = application.filename;
+    link.click();
+
+    window.URL.revokeObjectURL(downloadUrl);
+  } catch (err) {
+    console.error("Download error:", err);
+    alert("Error downloading file: " + (err.response?.data?.message || err.message));
+  }
+};
+
 
   if (loading) return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
